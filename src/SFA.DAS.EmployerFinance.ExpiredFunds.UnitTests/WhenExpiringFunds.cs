@@ -1,0 +1,312 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
+using SFA.DAS.EmployerFinance.Domain.ExpiredFunds;
+
+namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests
+{
+    public class WhenExpiringFunds
+    {
+        private ExpiredFunds _expiredFunds;
+
+        [SetUp]
+        public void Arrange()
+        {
+            _expiredFunds = new ExpiredFunds();
+        }
+
+        [Test]
+        public void Then_An_Exception_Is_Returned_When_Params_Are_Not_Supplied()
+        {
+            var actualFundsInException = Assert.Throws<ArgumentNullException>(() =>
+                _expiredFunds.GetExpiringFunds(null, new Dictionary<CalendarPeriod, decimal>(),
+                    new Dictionary<CalendarPeriod, decimal>()));
+            Assert.IsTrue(actualFundsInException.Message.Contains("fundsIn"));
+            var actualFundsOutException = Assert.Throws<ArgumentNullException>(() =>
+                _expiredFunds.GetExpiringFunds(new Dictionary<CalendarPeriod, decimal>(), null,
+                    new Dictionary<CalendarPeriod, decimal>()));
+            Assert.IsTrue(actualFundsOutException.Message.Contains("fundsOut"));
+        }
+
+        [Test]
+        public void Then_If_There_Are_No_Funds_In_Then_There_Is_No_Expiry()
+        {
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(new Dictionary<CalendarPeriod, decimal>(), new Dictionary<CalendarPeriod, decimal>());
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(0, actual.Count);
+        }
+
+        [Test]
+        public void Then_Expired_Funds_Are_Returned_If_There_Are_Funds_In_Depending_On_The_Expiry_Period()
+        {
+            //Arrange
+            var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), 8},
+                {new CalendarPeriod(2019, 1), 5}
+            };
+            var expiryPeriod = 1;
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(fundsIn, new Dictionary<CalendarPeriod, decimal>(), null,
+                expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(4, actual.Count);
+            Assert.AreEqual(10, actual.First().Value);
+            Assert.AreEqual(5, actual.Last().Value);
+        }
+
+        [Test]
+        public void Then_If_I_Have_Funds_In_They_Are_Taken_Off_My_Expiry_Amount()
+        {
+            //Arrange
+            var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), 8},
+                {new CalendarPeriod(2019, 1), 5}
+            };
+            var expiryPeriod = 2;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            {
+                {new CalendarPeriod(2018, 10), 10}
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null,
+                expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(4, actual.Count);
+            Assert.AreEqual(0, actual.First().Value);
+            Assert.AreEqual(9, actual.Skip(1).First().Value);
+            Assert.AreEqual(5, actual.Last().Value);
+        }
+
+
+        [Test]
+        public void Then_If_I_Have_More_Funds_In_They_Are_Taken_Off_My_Expiry_Amounts_For_Multiple_Months()
+        {
+            //Arrange
+            var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), 8},
+                {new CalendarPeriod(2019, 1), 5}
+            };
+            var expiryPeriod = 2;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            {
+                {new CalendarPeriod(2018, 10), 12}
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null,
+                expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(4, actual.Count);
+            Assert.AreEqual(0, actual.First().Value);
+            Assert.AreEqual(7, actual.Skip(1).First().Value);
+            Assert.AreEqual(5, actual.Last().Value);
+        }
+
+
+        [Test]
+        public void Then_If_I_Have_A_Large_Carry_Over_Funds_In_They_Are_Taken_Off_My_Expiry_Amounts_For_Multiple_Months_And_Expiry_Periods()
+        {
+            //Arrange
+            var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), 8},
+                {new CalendarPeriod(2019, 1), 5},
+                {new CalendarPeriod(2019, 2), 5},
+                {new CalendarPeriod(2019, 3), 5},
+                {new CalendarPeriod(2020, 3), 5}
+            };
+            var expiryPeriod = 2;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            {
+                {new CalendarPeriod(2018, 11), 120}
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null,
+                expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(7, actual.Count);
+            Assert.IsTrue(actual.All(c=>c.Value.Equals(0)));
+        }
+
+        [Test]
+        public void Then_My_Funds_Out_Are_Taken_Off_The_Correct_Funds_In_Period()
+        {
+            //Arrange
+            var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), 8},
+                {new CalendarPeriod(2019, 1), 5}
+            };
+            var expiryPeriod = 2;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            {
+                {new CalendarPeriod(2019, 1), 12}
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null,
+                expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(4, actual.Count);
+            Assert.AreEqual(10, actual.First().Value);
+            Assert.AreEqual(9, actual.Skip(1).First().Value);
+            Assert.AreEqual(0, actual.Skip(2).First().Value);
+            Assert.AreEqual(1, actual.Last().Value);
+        }
+
+
+        [Test]
+        public void Then_If_I_Have_Multiple_Funds_Out_Are_Taken_Off_The_Correct_Funds_In_Period()
+        {
+            //Arrange
+            var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), 8},
+                {new CalendarPeriod(2019, 1), 5}
+            };
+            var expiryPeriod = 2;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            {
+                {new CalendarPeriod(2019, 1), 12},
+                {new CalendarPeriod(2019, 2), 3}
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null,
+                expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(4, actual.Count);
+            Assert.AreEqual(10, actual.First().Value);
+            Assert.AreEqual(9, actual.Skip(1).First().Value);
+            Assert.AreEqual(0, actual.Skip(2).First().Value);
+            Assert.AreEqual(0, actual.Last().Value);
+        }
+
+        [Test]
+        public void Then_If_I_Have_Multiple_Funds_Out_Not_For_The_Valid_Period_Then_Funds_Expire()
+        {
+            //Arrange
+            var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2019, 1), 5},
+                { new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), 8},
+                {new CalendarPeriod(2018, 10), 10}
+            };
+            var expiryPeriod = 2;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            {
+                {new CalendarPeriod(2019, 4), 12},
+                {new CalendarPeriod(2019, 5), 3}
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null,
+                expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(4, actual.Count);
+            Assert.AreEqual(10, actual.First().Value);
+            Assert.AreEqual(9, actual.Skip(1).First().Value);
+            Assert.AreEqual(8, actual.Skip(2).First().Value);
+            Assert.AreEqual(5, actual.Last().Value);
+        }
+
+        [Test]
+        public void Then_If_I_Have_Seasonal_Values_The_Funds_Expire_Correctly()
+        {
+            //Arrange
+            var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 9), 10},
+                {new CalendarPeriod(2018, 12), 8},
+                {new CalendarPeriod(2019, 1), 5},
+                {new CalendarPeriod(2019, 4), 2}
+            };
+            var expiryPeriod = 2;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            {
+                {new CalendarPeriod(2019, 1), 12},
+                {new CalendarPeriod(2019, 2), 3}
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null, expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(4, actual.Count);
+            Assert.AreEqual(10, actual.First().Value);
+            Assert.AreEqual(0, actual.Skip(1).First().Value);
+            Assert.AreEqual(0, actual.Skip(2).First().Value);
+            Assert.AreEqual(0, actual.Skip(3).First().Value);
+            Assert.AreEqual(0, actual.Last().Value);
+        }
+
+        [Test]
+        public void Then_If_I_Have_Adujustments_On_My_Funds_In_It_Is_Applied_To_The_Earliest_Funds_In()
+        {
+            ////Arrange
+            //var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            //{
+            //    {new CalendarPeriod(2018, 10), 10},
+            //    {new CalendarPeriod(2018, 11), 9},
+            //    {new CalendarPeriod(2018, 12), -10},
+            //    {new CalendarPeriod(2019, 1), 5},
+            //    {new CalendarPeriod(2019, 2), -5},
+            //};
+            //var expiryPeriod = 6;
+            //var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            //{
+                
+            //};
+
+            ////Act
+            //var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null, expiryPeriod);
+
+            ////Assert
+            //Assert.IsNotNull(actual);
+            //Assert.AreEqual(5, actual.Count);
+            //Assert.AreEqual(0, actual.First().Value);
+            //Assert.AreEqual(4, actual.Skip(1).First().Value);
+            //Assert.AreEqual(0, actual.Skip(2).First().Value);
+            //Assert.AreEqual(5, actual.Skip(3).First().Value);
+            //Assert.AreEqual(0, actual.Last().Value);
+        }
+    }
+}
