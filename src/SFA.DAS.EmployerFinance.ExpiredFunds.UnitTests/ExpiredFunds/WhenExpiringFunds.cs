@@ -4,16 +4,16 @@ using System.Linq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Domain.ExpiredFunds;
 
-namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests
+namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
 {
     public class WhenExpiringFunds
     {
-        private ExpiredFunds _expiredFunds;
+        private EmployerFinance.ExpiredFunds.ExpiredFunds _expiredFunds;
 
         [SetUp]
         public void Arrange()
         {
-            _expiredFunds = new ExpiredFunds();
+            _expiredFunds = new EmployerFinance.ExpiredFunds.ExpiredFunds();
         }
 
         [Test]
@@ -281,32 +281,122 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests
         [Test]
         public void Then_If_I_Have_Adujustments_On_My_Funds_In_It_Is_Applied_To_The_Earliest_Funds_In()
         {
-            ////Arrange
-            //var fundsIn = new Dictionary<CalendarPeriod, decimal>
-            //{
-            //    {new CalendarPeriod(2018, 10), 10},
-            //    {new CalendarPeriod(2018, 11), 9},
-            //    {new CalendarPeriod(2018, 12), -10},
-            //    {new CalendarPeriod(2019, 1), 5},
-            //    {new CalendarPeriod(2019, 2), -5},
-            //};
-            //var expiryPeriod = 6;
-            //var fundsOut = new Dictionary<CalendarPeriod, decimal>()
-            //{
-                
-            //};
+            //Arrange
+            var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), -10},
+                {new CalendarPeriod(2019, 1), 5},
+                {new CalendarPeriod(2019, 2), -5},
+            };
+            var expiryPeriod = 6;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            {
 
-            ////Act
-            //var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null, expiryPeriod);
+            };
 
-            ////Assert
-            //Assert.IsNotNull(actual);
-            //Assert.AreEqual(5, actual.Count);
-            //Assert.AreEqual(0, actual.First().Value);
-            //Assert.AreEqual(4, actual.Skip(1).First().Value);
-            //Assert.AreEqual(0, actual.Skip(2).First().Value);
-            //Assert.AreEqual(5, actual.Skip(3).First().Value);
-            //Assert.AreEqual(0, actual.Last().Value);
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null, expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(5, actual.Count);
+            Assert.AreEqual(0, actual.First().Value);
+            Assert.AreEqual(4, actual.Skip(1).First().Value);
+            Assert.AreEqual(0, actual.Skip(2).First().Value);
+            Assert.AreEqual(5, actual.Skip(3).First().Value);
+            Assert.AreEqual(0, actual.Last().Value);
+        }
+
+
+        [Test]
+        public void Then_If_I_Have_Large_Adujustments_On_My_Funds_In_It_Is_Applied_To_The_Earliest_Funds_In()
+        {
+            //Arrange
+            var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), -19},
+                {new CalendarPeriod(2019, 1), 5},
+                {new CalendarPeriod(2019, 2), -5},
+            };
+            var expiryPeriod = 6;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            {
+
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null, expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(5, actual.Count);
+            Assert.AreEqual(0, actual.First().Value);
+            Assert.AreEqual(0, actual.Skip(1).First().Value);
+            Assert.AreEqual(0, actual.Skip(2).First().Value);
+            Assert.AreEqual(0, actual.Skip(3).First().Value);
+            Assert.AreEqual(0, actual.Last().Value);
+        }
+
+        [Test]
+        public void Then_Only_Adjustments_In_The_Correct_Period_Are_Applied()
+        {
+            //Arrange
+            var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 12), 10},
+                {new CalendarPeriod(2019, 12), -10}
+            };
+            var expiryPeriod = 6;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            {
+
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null, expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(2, actual.Count);
+            Assert.AreEqual(10, actual.First().Value);
+            Assert.AreEqual(0, actual.Last().Value);
+        }
+
+
+        [Test]
+        public void Then_Adjustments_And_Funds_Out_Are_Applied_In_The_Correct_Periods()
+        {
+            //Arrange
+            var fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 20},
+                {new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), -5},
+                {new CalendarPeriod(2019, 1), 5},
+                {new CalendarPeriod(2019, 2), -5},
+            };
+            var expiryPeriod = 6;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            {
+                {new CalendarPeriod(2019, 1), 12},
+                {new CalendarPeriod(2019, 2), 3}
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null, expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(5, actual.Count);
+            Assert.AreEqual(0, actual.First().Value);
+            Assert.AreEqual(4, actual.Skip(1).First().Value);
+            Assert.AreEqual(0, actual.Skip(2).First().Value);
+            Assert.AreEqual(5, actual.Skip(3).First().Value);
+            Assert.AreEqual(0, actual.Last().Value);
         }
     }
 }
