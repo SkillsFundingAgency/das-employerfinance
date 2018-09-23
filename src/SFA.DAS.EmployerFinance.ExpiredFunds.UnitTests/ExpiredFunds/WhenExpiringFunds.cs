@@ -9,11 +9,20 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
     public class WhenExpiringFunds
     {
         private EmployerFinance.ExpiredFunds.ExpiredFunds _expiredFunds;
+        private Dictionary<CalendarPeriod, decimal> _fundsIn;
 
         [SetUp]
         public void Arrange()
         {
             _expiredFunds = new EmployerFinance.ExpiredFunds.ExpiredFunds();
+
+            _fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), 8},
+                {new CalendarPeriod(2019, 1), 5}
+            };
         }
 
         [Test]
@@ -44,17 +53,10 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
         public void Then_Expired_Funds_Are_Returned_If_There_Are_Funds_In_Depending_On_The_Expiry_Period()
         {
             //Arrange
-            var fundsIn = new Dictionary<CalendarPeriod, decimal>
-            {
-                {new CalendarPeriod(2018, 10), 10},
-                {new CalendarPeriod(2018, 11), 9},
-                {new CalendarPeriod(2018, 12), 8},
-                {new CalendarPeriod(2019, 1), 5}
-            };
             var expiryPeriod = 1;
 
             //Act
-            var actual = _expiredFunds.GetExpiringFunds(fundsIn, new Dictionary<CalendarPeriod, decimal>(), null,
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, new Dictionary<CalendarPeriod, decimal>(), null,
                 expiryPeriod);
 
             //Assert
@@ -68,13 +70,6 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
         public void Then_If_I_Have_Funds_In_They_Are_Taken_Off_My_Expiry_Amount()
         {
             //Arrange
-            var fundsIn = new Dictionary<CalendarPeriod, decimal>
-            {
-                {new CalendarPeriod(2018, 10), 10},
-                {new CalendarPeriod(2018, 11), 9},
-                {new CalendarPeriod(2018, 12), 8},
-                {new CalendarPeriod(2019, 1), 5}
-            };
             var expiryPeriod = 2;
             var fundsOut = new Dictionary<CalendarPeriod, decimal>()
             {
@@ -82,7 +77,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
             };
 
             //Act
-            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null,
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, null,
                 expiryPeriod);
 
             //Assert
@@ -98,13 +93,6 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
         public void Then_If_I_Have_More_Funds_In_They_Are_Taken_Off_My_Expiry_Amounts_For_Multiple_Months()
         {
             //Arrange
-            var fundsIn = new Dictionary<CalendarPeriod, decimal>
-            {
-                {new CalendarPeriod(2018, 10), 10},
-                {new CalendarPeriod(2018, 11), 9},
-                {new CalendarPeriod(2018, 12), 8},
-                {new CalendarPeriod(2019, 1), 5}
-            };
             var expiryPeriod = 2;
             var fundsOut = new Dictionary<CalendarPeriod, decimal>()
             {
@@ -112,7 +100,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
             };
 
             //Act
-            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null,
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, null,
                 expiryPeriod);
 
             //Assert
@@ -158,13 +146,6 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
         public void Then_My_Funds_Out_Are_Taken_Off_The_Correct_Funds_In_Period()
         {
             //Arrange
-            var fundsIn = new Dictionary<CalendarPeriod, decimal>
-            {
-                {new CalendarPeriod(2018, 10), 10},
-                {new CalendarPeriod(2018, 11), 9},
-                {new CalendarPeriod(2018, 12), 8},
-                {new CalendarPeriod(2019, 1), 5}
-            };
             var expiryPeriod = 2;
             var fundsOut = new Dictionary<CalendarPeriod, decimal>()
             {
@@ -172,7 +153,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
             };
 
             //Act
-            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null,
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, null,
                 expiryPeriod);
 
             //Assert
@@ -189,13 +170,6 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
         public void Then_If_I_Have_Multiple_Funds_Out_Are_Taken_Off_The_Correct_Funds_In_Period()
         {
             //Arrange
-            var fundsIn = new Dictionary<CalendarPeriod, decimal>
-            {
-                {new CalendarPeriod(2018, 10), 10},
-                {new CalendarPeriod(2018, 11), 9},
-                {new CalendarPeriod(2018, 12), 8},
-                {new CalendarPeriod(2019, 1), 5}
-            };
             var expiryPeriod = 2;
             var fundsOut = new Dictionary<CalendarPeriod, decimal>()
             {
@@ -204,7 +178,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
             };
 
             //Act
-            var actual = _expiredFunds.GetExpiringFunds(fundsIn, fundsOut, null,
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, null,
                 expiryPeriod);
 
             //Assert
@@ -279,7 +253,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
         }
 
         [Test]
-        public void Then_If_I_Have_Adujustments_On_My_Funds_In_It_Is_Applied_To_The_Earliest_Funds_In()
+        public void Then_If_I_Have_Adjustments_On_My_Funds_In_It_Is_Applied_To_The_Earliest_Funds_In()
         {
             //Arrange
             var fundsIn = new Dictionary<CalendarPeriod, decimal>
@@ -311,7 +285,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
 
 
         [Test]
-        public void Then_If_I_Have_Large_Adujustments_On_My_Funds_In_It_Is_Applied_To_The_Earliest_Funds_In()
+        public void Then_If_I_Have_Large_Adjustments_On_My_Funds_In_It_Is_Applied_To_The_Earliest_Funds_In()
         {
             //Arrange
             var fundsIn = new Dictionary<CalendarPeriod, decimal>
