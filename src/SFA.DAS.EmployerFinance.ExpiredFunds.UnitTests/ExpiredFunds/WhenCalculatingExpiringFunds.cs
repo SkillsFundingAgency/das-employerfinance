@@ -6,7 +6,7 @@ using SFA.DAS.EmployerFinance.Domain.ExpiredFunds;
 
 namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
 {
-    public class WhenExpiringFunds
+    public class WhenCalculatingExpiringFunds
     {
         private EmployerFinance.ExpiredFunds.ExpiredFunds _expiredFunds;
         private Dictionary<CalendarPeriod, decimal> _fundsIn;
