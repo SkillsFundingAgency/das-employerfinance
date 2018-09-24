@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
 
             var expiredFunds = new Dictionary<CalendarPeriod, decimal>();
 
-            CalculateAdjustments(fundsIn, expiryPeriod);
+            CalculateAndApplyAdjustments(fundsIn, expiryPeriod);
 
             foreach (var fundsInPair in fundsIn.OrderBy(c => c.Key))
             {
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
             return expiredFunds;
         }
 
-        private void CalculateAdjustments(Dictionary<CalendarPeriod, decimal> fundsIn, int expiryPeriod)
+        private void CalculateAndApplyAdjustments(Dictionary<CalendarPeriod, decimal> fundsIn, int expiryPeriod)
         {
             if (fundsIn.Any(c => c.Value < 0))
             {
@@ -55,11 +55,11 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
                     var adjustmentEndPeriod = new DateTime(adjustment.Key.Year, adjustment.Key.Month, 1);
                     var adjustmentAmount = adjustment.Value * -1;
 
-                    foreach (var fundsInValue in fundsIn.Where(c => c.Value > 0).ToDictionary(c => c.Key, c => c.Value)
-                        .OrderBy(c => c.Key))
+                    foreach (var fundsInValue in fundsIn.Where(c => c.Value > 0)
+                                                        .ToDictionary(c => c.Key, c => c.Value)
+                                                        .OrderBy(c => c.Key))
                     {
-                        if (new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) >= adjustmentStartPeriod &&
-                            new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) <= adjustmentEndPeriod)
+                        if (FundsAreInAdjustmentPeriod(fundsInValue, adjustmentStartPeriod, adjustmentEndPeriod))
                         {
                             if (fundsInValue.Value >= adjustmentAmount)
                             {
@@ -78,17 +78,23 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
             }
         }
 
+        private static bool FundsAreInAdjustmentPeriod(KeyValuePair<CalendarPeriod, decimal> fundsInValue, DateTime adjustmentStartPeriod, DateTime adjustmentEndPeriod)
+        {
+            return new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) >= adjustmentStartPeriod &&
+                   new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) <= adjustmentEndPeriod;
+        }
+
         private static decimal CalculateExpiryAmount(IDictionary<CalendarPeriod, decimal> fundsOut, DateTime expiryDate, decimal expiryAmount)
         {
             var fundsOutAvailable = fundsOut
-                .Where(c => new DateTime(c.Key.Year, c.Key.Month, 1) < expiryDate && c.Value > 0).ToList();
+                .Where(c => new DateTime(c.Key.Year, c.Key.Month, 1) < expiryDate && c.Value > 0)
+                .ToList();
 
             if (!fundsOutAvailable.Any())
             {
                 return expiryAmount;
             }
-
-
+            
             foreach (var spentFunds in fundsOutAvailable)
             {
                 if (spentFunds.Value >= expiryAmount)
