@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExpiredFunds\WhenCalculatingExpiringFunds.cs" />
+    <Compile Include="ExpiredFunds\WhenGetExpiredFundsByDate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

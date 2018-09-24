@@ -9,6 +9,17 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
     {
         public decimal GetExpiringFundsByDate(Dictionary<CalendarPeriod, decimal> fundsIn, Dictionary<CalendarPeriod, decimal> fundsOut, DateTime date, Dictionary<CalendarPeriod, decimal> expired = null, int expiryPeriod = 24)
         {
+            var expiredFunds = GetExpiringFunds(fundsIn, fundsOut, expired, expiryPeriod);
+
+            if (expiredFunds.Any())
+            {
+                var expiredFundsKey = expiredFunds.Keys.SingleOrDefault(key => key.Year.Equals(date.Year) && key.Month.Equals(date.Month));
+                if (expiredFundsKey != null)
+                {
+                    return expiredFunds[expiredFundsKey];
+                }
+            }
+
             return 0;
         }
 
