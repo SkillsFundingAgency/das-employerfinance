@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
         {
             //Arrange
             var expiryPeriod = 2;
-            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
                 {new CalendarPeriod(2018, 10), 10}
             };
@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
         {
             //Arrange
             var expiryPeriod = 2;
-            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
                 {new CalendarPeriod(2018, 10), 12}
             };
@@ -127,7 +127,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
                 {new CalendarPeriod(2020, 3), 5}
             };
             var expiryPeriod = 2;
-            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
                 {new CalendarPeriod(2018, 11), 120}
             };
@@ -147,7 +147,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
         {
             //Arrange
             var expiryPeriod = 2;
-            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
                 {new CalendarPeriod(2019, 1), 12}
             };
@@ -171,7 +171,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
         {
             //Arrange
             var expiryPeriod = 2;
-            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
                 {new CalendarPeriod(2019, 1), 12},
                 {new CalendarPeriod(2019, 2), 3}
@@ -202,7 +202,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
                 {new CalendarPeriod(2018, 10), 10}
             };
             var expiryPeriod = 2;
-            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
                 {new CalendarPeriod(2019, 4), 12},
                 {new CalendarPeriod(2019, 5), 3}
@@ -233,7 +233,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
                 {new CalendarPeriod(2019, 4), 2}
             };
             var expiryPeriod = 2;
-            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
                 {new CalendarPeriod(2019, 1), 12},
                 {new CalendarPeriod(2019, 2), 3}
@@ -265,7 +265,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
                 {new CalendarPeriod(2019, 2), -5},
             };
             var expiryPeriod = 6;
-            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
 
             };
@@ -297,7 +297,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
                 {new CalendarPeriod(2019, 2), -5},
             };
             var expiryPeriod = 6;
-            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
 
             };
@@ -325,7 +325,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
                 {new CalendarPeriod(2019, 12), -10}
             };
             var expiryPeriod = 6;
-            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
 
             };
@@ -354,7 +354,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
                 {new CalendarPeriod(2019, 2), -5},
             };
             var expiryPeriod = 6;
-            var fundsOut = new Dictionary<CalendarPeriod, decimal>()
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
                 {new CalendarPeriod(2019, 1), 12},
                 {new CalendarPeriod(2019, 2), 3}
