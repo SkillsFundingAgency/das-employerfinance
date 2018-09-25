@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
 
         private void CalculateAndApplyExpiredFundsToFundsOut(Dictionary<CalendarPeriod, decimal> fundsOut, Dictionary<CalendarPeriod, decimal> expired, int expiryPeriod)
         {
-            if (expired.Any(c=>c.Value> 0))
+            if (expired!=null && expired.Any(c=>c.Value> 0))
             {
 
                 foreach (var expiredAmount in expired)
