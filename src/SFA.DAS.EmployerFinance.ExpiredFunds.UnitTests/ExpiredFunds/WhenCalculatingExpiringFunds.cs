@@ -372,5 +372,40 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
             Assert.AreEqual(5, actual.Skip(3).First().Value);
             Assert.AreEqual(0, actual.Last().Value);
         }
+
+        [Test]
+        public void Then_When_Already_Have_Expired_Funds_These_Are_Included_In_The_Calculation()
+        {
+            //Arrange
+            var expiryPeriod = 2;
+            _fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), 8},
+                {new CalendarPeriod(2019, 1), 5}
+            };
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 11), 12},
+                {new CalendarPeriod(2019, 1), 3}
+            };
+            var expiredFunds = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 12), 9},
+                {new CalendarPeriod(2019, 1), 4},
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, expiredFunds, expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(4, actual.Count);
+            Assert.AreEqual(9, actual.First().Value);
+            Assert.AreEqual(4, actual.Skip(1).First().Value);
+            Assert.AreEqual(5, actual.Skip(2).First().Value);
+            Assert.AreEqual(5, actual.Last().Value);
+        }
     }
 }
