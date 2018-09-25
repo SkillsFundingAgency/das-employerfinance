@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
                     var amount = expiredAmount.Value;
 
                     var fundsOutAvailable = fundsOut
-                        .Where(c => new DateTime(c.Key.Year, c.Key.Month, 1) < new DateTime(expiredAmount.Key.Year, expiredAmount.Key.Month, 1)  && c.Value > 0)
+                        .Where(c => c.Value > 0 && c.Key < expiredAmount.Key)
                         .ToList();
 
                     foreach (var payment in fundsOutAvailable)
@@ -105,15 +105,14 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
 
                 foreach (var adjustment in adjustmentsIn.OrderBy(c => c.Key))
                 {
-                    var adjustmentStartPeriod = new DateTime(adjustment.Key.Year, adjustment.Key.Month, 1).AddMonths(expiryPeriod * -1);
-                    var adjustmentEndPeriod = new DateTime(adjustment.Key.Year, adjustment.Key.Month, 1);
+                    
                     var adjustmentAmount = adjustment.Value * -1;
 
                     foreach (var fundsInValue in fundsIn.Where(c => c.Value > 0)
                                                         .ToDictionary(c => c.Key, c => c.Value)
                                                         .OrderBy(c => c.Key))
                     {
-                        if (FundsAreInAdjustmentPeriod(fundsInValue, adjustmentStartPeriod, adjustmentEndPeriod))
+                        if (FundsAreInAdjustmentPeriod(fundsInValue, adjustment.Key, expiryPeriod))
                         {
                             if (fundsInValue.Value >= adjustmentAmount)
                             {
@@ -132,8 +131,12 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
             }
         }
 
-        private static bool FundsAreInAdjustmentPeriod(KeyValuePair<CalendarPeriod, decimal> fundsInValue, DateTime adjustmentStartPeriod, DateTime adjustmentEndPeriod)
+        private static bool FundsAreInAdjustmentPeriod(KeyValuePair<CalendarPeriod, decimal> fundsInValue, CalendarPeriod adjustment, int expiryPeriod)
         {
+            var adjustmentStartPeriod = new DateTime(adjustment.Year, adjustment.Month, 1).AddMonths(expiryPeriod * -1);
+            var adjustmentEndPeriod = new DateTime(adjustment.Year, adjustment.Month, 1);
+
+
             return new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) >= adjustmentStartPeriod &&
                    new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) <= adjustmentEndPeriod;
         }

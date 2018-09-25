@@ -12,14 +12,26 @@ namespace SFA.DAS.EmployerFinance.Domain.ExpiredFunds
             Year = year;
             Month = month;
         }
+
         public int Year { get; }
         public int Month { get; }
+
         public int CompareTo(CalendarPeriod compareTo)
         {
             return Compare(this, compareTo);
         }
 
-        private int Compare(CalendarPeriod calendarPeriod1, CalendarPeriod calendarPeriod2)
+        public static bool operator >(CalendarPeriod period1, CalendarPeriod period2)
+        {
+            return Compare(period1, period2) == 1;
+        }
+
+        public static bool operator <(CalendarPeriod period1, CalendarPeriod period2)
+        {
+            return Compare(period1, period2) == -1;
+        }
+
+        private static int Compare(CalendarPeriod calendarPeriod1, CalendarPeriod calendarPeriod2)
         {
             if (calendarPeriod1 == null || calendarPeriod2 == null)
             {
@@ -30,6 +42,7 @@ namespace SFA.DAS.EmployerFinance.Domain.ExpiredFunds
             {
                 return 1;
             }
+
             if (calendarPeriod1.Year < calendarPeriod2.Year)
             {
                 return -1;
@@ -41,6 +54,7 @@ namespace SFA.DAS.EmployerFinance.Domain.ExpiredFunds
                 {
                     return 1;
                 }
+
                 if (calendarPeriod1.Month < calendarPeriod2.Month)
                 {
                     return -1;
