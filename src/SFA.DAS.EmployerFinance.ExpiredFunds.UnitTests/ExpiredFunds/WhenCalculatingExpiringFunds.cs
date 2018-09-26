@@ -441,10 +441,87 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
             Assert.AreEqual(6, actual.Count);
             Assert.AreEqual(9, actual.First().Value);
             Assert.AreEqual(4, actual.Skip(1).First().Value);
-            Assert.AreEqual(6, actual.Skip(2).First().Value);
+            Assert.AreEqual(2, actual.Skip(2).First().Value);
             Assert.AreEqual(0, actual.Skip(3).First().Value);
             Assert.AreEqual(5, actual.Skip(4).First().Value);
             Assert.AreEqual(0, actual.Last().Value);
+        }
+
+
+        [Test]
+        public void Then_The_Balance_Is_Correctly_Calculated_Over_A_Large_Expiry_Period()
+        {
+            //Arrange
+            var expiryPeriod = 24;
+            _fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 5), 15000},
+                {new CalendarPeriod(2017, 6), 14000},
+                {new CalendarPeriod(2017, 7), 15000},
+                {new CalendarPeriod(2017, 8), 10000},
+                {new CalendarPeriod(2017, 9), 15000},
+                {new CalendarPeriod(2017, 10), 12000},
+                {new CalendarPeriod(2017, 11), 13000},
+                {new CalendarPeriod(2017, 12), 12000},
+                {new CalendarPeriod(2018, 1), 13000},
+                {new CalendarPeriod(2018, 2), 15000},
+                {new CalendarPeriod(2018, 3), 15000},
+                {new CalendarPeriod(2018, 4), 13000},
+                {new CalendarPeriod(2018, 5), 15000},
+                {new CalendarPeriod(2018, 6), 10000},
+                {new CalendarPeriod(2018, 7), 10000},
+                {new CalendarPeriod(2018, 8), 15000},
+                {new CalendarPeriod(2018, 9), 15000},
+                {new CalendarPeriod(2018, 10), 15000},
+                {new CalendarPeriod(2018, 11), 15000},
+                {new CalendarPeriod(2018, 12), 15000},
+                {new CalendarPeriod(2019, 1), 15000},
+                {new CalendarPeriod(2019, 2), 15000},
+                {new CalendarPeriod(2019, 3), 15000},
+                {new CalendarPeriod(2019, 4), 15000},
+                {new CalendarPeriod(2019, 5), 15000},
+                {new CalendarPeriod(2019, 6), -2000},
+                {new CalendarPeriod(2019, 7), -2000},
+            };
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 9), 300}, 
+                {new CalendarPeriod(2017, 10), 300},
+                {new CalendarPeriod(2017, 11), 300},
+                {new CalendarPeriod(2017, 12), 300},
+                {new CalendarPeriod(2018, 1), 300}, 
+                {new CalendarPeriod(2018, 2), 300}, 
+                {new CalendarPeriod(2018, 3), 300}, 
+                {new CalendarPeriod(2018, 4), 300}, 
+                {new CalendarPeriod(2018, 5), 300}, 
+                {new CalendarPeriod(2018, 6), 300}, 
+                {new CalendarPeriod(2018, 7), 300}, 
+                {new CalendarPeriod(2018, 8), 300}, 
+                {new CalendarPeriod(2018, 9), 300}, 
+                {new CalendarPeriod(2018, 10), 300},
+                {new CalendarPeriod(2018, 11), 300},
+                {new CalendarPeriod(2018, 12), 300},
+                {new CalendarPeriod(2019, 1), 300}, 
+                {new CalendarPeriod(2019, 2), 300}, 
+                {new CalendarPeriod(2019, 3), 300}, 
+                {new CalendarPeriod(2019, 4), 300}, 
+                {new CalendarPeriod(2019, 5), 300},
+                {new CalendarPeriod(2019, 6), 300} ,
+                {new CalendarPeriod(2019, 7), 500}, 
+                {new CalendarPeriod(2019, 8), 500} 
+            };
+            var expired = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2019, 5), 8700} ,
+                {new CalendarPeriod(2019, 6), 13700},
+                {new CalendarPeriod(2019, 7), 12500}
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, expired, expiryPeriod);
+
+            //Assert
+            Assert.AreEqual(7500, actual.Skip(3).First().Value);
         }
     }
 }

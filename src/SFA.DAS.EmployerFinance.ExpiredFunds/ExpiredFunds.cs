@@ -105,13 +105,6 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
 
                 foreach (var adjustment in adjustmentsIn.OrderBy(c => c.Key))
                 {
-
-                    if (expired?.FirstOrDefault(c =>
-                            c.Key.Year.Equals(adjustment.Key.Year) && c.Key.Month.Equals(adjustment.Key.Month)) != null)
-                    {
-                        continue;
-                    }
-
                     var adjustmentAmount = adjustment.Value * -1;
 
                     foreach (var fundsInValue in fundsIn.Where(c => c.Value > 0)
@@ -143,9 +136,8 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
         {
             var adjustmentStartPeriod = new DateTime(adjustment.Year, adjustment.Month, 1).AddMonths(expiryPeriod * -1);
             var adjustmentEndPeriod = new DateTime(adjustment.Year, adjustment.Month, 1);
-
-
-            return new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) >= adjustmentStartPeriod &&
+            
+            return new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) > adjustmentStartPeriod &&
                    new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) <= adjustmentEndPeriod;
         }
 
