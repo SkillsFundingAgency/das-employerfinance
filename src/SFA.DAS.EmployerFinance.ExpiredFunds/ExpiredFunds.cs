@@ -35,20 +35,20 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
                 throw new ArgumentNullException(nameof(fundsOut));
             }
 
+            CalculateAndApplyExpiredFundsToFundsOut(fundsOut, expired);
+
+            CalculateAndApplyAdjustmentsToFundsIn(fundsIn, expired, expiryPeriod);
+            
             var expiredFunds = new Dictionary<CalendarPeriod, decimal>();
 
-            CalculateAndApplyAdjustments(fundsIn, expiryPeriod);
-
-            CalculateAndApplyExpiredFundsToFundsOut(fundsOut, expired, expiryPeriod);
-            
             foreach (var fundsInPair in fundsIn.OrderBy(c => c.Key))
             {
-                var expiryDate = new DateTime(fundsInPair.Key.Year, fundsInPair.Key.Month, 1).AddMonths(expiryPeriod);
+                var expiryDateOfFundsIn = new DateTime(fundsInPair.Key.Year, fundsInPair.Key.Month, 1).AddMonths(expiryPeriod);
                 var amountDueToExpire = fundsInPair.Value;
 
 
-                var alreadyExpiredAmount = expired?.Keys.FirstOrDefault(c => c.Year.Equals(expiryDate.Year)
-                                                                         && c.Month.Equals(expiryDate.Month));
+                var alreadyExpiredAmount = expired?.Keys.FirstOrDefault(c => c.Year.Equals(expiryDateOfFundsIn.Year)
+                                                                         && c.Month.Equals(expiryDateOfFundsIn.Month));
 
                 if (alreadyExpiredAmount != null)
                 {
@@ -57,18 +57,18 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
                 else
                 {
                     amountDueToExpire = amountDueToExpire > 0
-                        ? CalculateExpiryAmount(fundsOut, expiryDate, amountDueToExpire)
+                        ? CalculateExpiryAmount(fundsOut, expiryDateOfFundsIn, amountDueToExpire)
                         : 0;
                 }
                 
 
-                expiredFunds.Add(new CalendarPeriod(expiryDate.Year, expiryDate.Month), amountDueToExpire);
+                expiredFunds.Add(new CalendarPeriod(expiryDateOfFundsIn.Year, expiryDateOfFundsIn.Month), amountDueToExpire);
             }
 
             return expiredFunds;
         }
 
-        private void CalculateAndApplyExpiredFundsToFundsOut(Dictionary<CalendarPeriod, decimal> fundsOut, Dictionary<CalendarPeriod, decimal> expired, int expiryPeriod)
+        private void CalculateAndApplyExpiredFundsToFundsOut(Dictionary<CalendarPeriod, decimal> fundsOut, Dictionary<CalendarPeriod, decimal> expired)
         {
             if (expired!=null && expired.Any(c=>c.Value> 0))
             {
@@ -97,7 +97,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
             }
         }
 
-        private void CalculateAndApplyAdjustments(Dictionary<CalendarPeriod, decimal> fundsIn, int expiryPeriod)
+        private void CalculateAndApplyAdjustmentsToFundsIn(Dictionary<CalendarPeriod, decimal> fundsIn, Dictionary<CalendarPeriod, decimal> expired, int expiryPeriod)
         {
             if (fundsIn.Any(c => c.Value < 0))
             {
@@ -105,13 +105,21 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
 
                 foreach (var adjustment in adjustmentsIn.OrderBy(c => c.Key))
                 {
-                    
+
+                    if (expired?.FirstOrDefault(c =>
+                            c.Key.Year.Equals(adjustment.Key.Year) && c.Key.Month.Equals(adjustment.Key.Month)) != null)
+                    {
+                        continue;
+                    }
+
                     var adjustmentAmount = adjustment.Value * -1;
 
                     foreach (var fundsInValue in fundsIn.Where(c => c.Value > 0)
                                                         .ToDictionary(c => c.Key, c => c.Value)
                                                         .OrderBy(c => c.Key))
                     {
+                        
+
                         if (FundsAreInAdjustmentPeriod(fundsInValue, adjustment.Key, expiryPeriod))
                         {
                             if (fundsInValue.Value >= adjustmentAmount)
