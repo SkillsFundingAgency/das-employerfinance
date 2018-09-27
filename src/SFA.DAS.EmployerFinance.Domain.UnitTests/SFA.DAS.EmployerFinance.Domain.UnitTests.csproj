@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExpiredFunds\WhenComparingCalendarPeriods.cs" />
     <Compile Include="ExpiredFunds\WhenSortingByCalendarPeriod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

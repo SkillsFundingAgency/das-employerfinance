@@ -20,12 +20,22 @@ namespace SFA.DAS.EmployerFinance.Domain.ExpiredFunds
 
         public static bool operator >(CalendarPeriod period1, CalendarPeriod period2)
         {
-            return Compare(period1, period2) == 1;
+            return Compare(period1, period2) > 0;
         }
 
         public static bool operator <(CalendarPeriod period1, CalendarPeriod period2)
         {
-            return Compare(period1, period2) == -1;
+            return Compare(period1, period2) < 0;
+        }
+
+        public static bool operator <=(CalendarPeriod period1, CalendarPeriod period2)
+        {
+            return Compare(period1, period2) <= 0;
+        }
+
+        public static bool operator >=(CalendarPeriod period1, CalendarPeriod period2)
+        {
+            return Compare(period1, period2) >= 0;
         }
 
         private static int Compare(CalendarPeriod calendarPeriod1, CalendarPeriod calendarPeriod2)
