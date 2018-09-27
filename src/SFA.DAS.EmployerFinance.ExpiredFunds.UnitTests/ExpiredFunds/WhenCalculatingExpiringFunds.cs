@@ -508,7 +508,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
                 {new CalendarPeriod(2019, 5), 300},
                 {new CalendarPeriod(2019, 6), 300} ,
                 {new CalendarPeriod(2019, 7), 500}, 
-                {new CalendarPeriod(2019, 8), 500} 
+                {new CalendarPeriod(2019, 8), 500}
             };
             var expired = new Dictionary<CalendarPeriod, decimal>
             {

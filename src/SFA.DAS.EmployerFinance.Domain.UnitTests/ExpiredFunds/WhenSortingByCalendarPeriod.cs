@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Domain.ExpiredFunds;
 
@@ -10,12 +7,6 @@ namespace SFA.DAS.EmployerFinance.Domain.UnitTests.ExpiredFunds
 {
     public class WhenSortingByCalendarPeriod
     {
-        [SetUp]
-        public void Arrange()
-        {
-
-        }
-
         [Test]
         public void Then_Calendar_Periods_Are_Sorted_Ascending_For_Months()
         {
