@@ -88,6 +88,29 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
             Assert.AreEqual(5, actual.Last().Value);
         }
 
+        [Test]
+        public void Then_The_Expiry_Date_Returned_Is_Correct_Based_On_The_Expiry_Period()
+        {
+            //Arrange
+            var expiryPeriod = 2;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10}
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, null,
+                expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(4, actual.Count);
+            Assert.AreEqual(2018, actual.First().Key.Year);
+            Assert.AreEqual(12, actual.First().Key.Month);
+            Assert.AreEqual(2019, actual.Skip(1).First().Key.Year);
+            Assert.AreEqual(1, actual.Skip(1).First().Key.Month);
+        }
+
 
         [Test]
         public void Then_If_I_Have_More_Funds_In_They_Are_Taken_Off_My_Expiry_Amounts_For_Multiple_Months()
