@@ -30,11 +30,11 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
         {
             var actualFundsInException = Assert.Throws<ArgumentNullException>(() =>
                 _expiredFunds.GetExpiringFunds(null, new Dictionary<CalendarPeriod, decimal>(),
-                    new Dictionary<CalendarPeriod, decimal>()));
+                    new Dictionary<CalendarPeriod, decimal>(),24));
             Assert.IsTrue(actualFundsInException.Message.Contains("fundsIn"));
             var actualFundsOutException = Assert.Throws<ArgumentNullException>(() =>
                 _expiredFunds.GetExpiringFunds(new Dictionary<CalendarPeriod, decimal>(), null,
-                    new Dictionary<CalendarPeriod, decimal>()));
+                    new Dictionary<CalendarPeriod, decimal>(),24));
             Assert.IsTrue(actualFundsOutException.Message.Contains("fundsOut"));
         }
 
