@@ -88,6 +88,58 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
             Assert.AreEqual(5, actual.Last().Value);
         }
 
+
+        [Test]
+        public void Then_If_I_Have_Refunds_In_They_Are_Taken_Off_My_Expiry_Amount()
+        {
+            //Arrange
+            var expiryPeriod = 3;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), -5}
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, null,
+                expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(5, actual.Count);
+            Assert.AreEqual(0, actual.First().Value);
+            Assert.AreEqual(9, actual.Skip(1).First().Value);
+            Assert.AreEqual(5, actual.Skip(2).First().Value);
+            Assert.AreEqual(5, actual.Last().Value);
+        }
+
+
+        [Test]
+        public void Then_If_I_Have_Multiple_Refunds_In_They_Are_Taken_Off_My_Expiry_Amount()
+        {
+            //Arrange
+            var expiryPeriod = 3;
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), -5},
+                {new CalendarPeriod(2018, 12), -2}
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, null,
+                expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(6, actual.Count);
+            Assert.AreEqual(0, actual.First().Value);
+            Assert.AreEqual(9, actual.Skip(1).First().Value);
+            Assert.AreEqual(5, actual.Skip(2).First().Value);
+            Assert.AreEqual(8, actual.Skip(3).First().Value);
+            Assert.AreEqual(5, actual.Last().Value);
+        }
+
         [Test]
         public void Then_The_Expiry_Date_Returned_Is_Correct_Based_On_The_Expiry_Period()
         {
@@ -470,6 +522,45 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
             Assert.AreEqual(0, actual.Last().Value);
         }
 
+        [Test]
+        public void Then_When_I_Already_Have_Expired_Funds_And_Adjustments_And_Refunds_They_Are_Applied_To_The_None_Expired_FundsIn()
+        {
+            //Arrange
+            var expiryPeriod = 4;
+            _fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 10), 10},
+                {new CalendarPeriod(2018, 11), 9},
+                {new CalendarPeriod(2018, 12), 8},
+                {new CalendarPeriod(2019, 1), -5},
+                {new CalendarPeriod(2019, 2), 5},
+                {new CalendarPeriod(2019, 3), -4}
+            };
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2018, 11), 12}, //0
+                {new CalendarPeriod(2019, 1), 3}, //3
+                {new CalendarPeriod(2019, 2), -1} //
+            };
+            var expiredFunds = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2019, 2), 9},
+                {new CalendarPeriod(2019, 3), 4},
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, expiredFunds, expiryPeriod);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(7, actual.Count);
+            Assert.AreEqual(9, actual.First().Value);
+            Assert.AreEqual(4, actual.Skip(1).First().Value);
+            Assert.AreEqual(2, actual.Skip(2).First().Value);
+            Assert.AreEqual(0, actual.Skip(3).First().Value);
+            Assert.AreEqual(5, actual.Skip(4).First().Value);
+            Assert.AreEqual(0, actual.Last().Value);
+        }
 
         [Test]
         public void Then_The_Balance_Is_Correctly_Calculated_Over_A_Large_Expiry_Period()
