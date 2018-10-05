@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
         public void Then_If_There_Are_No_Funds_In_Then_There_Is_No_Expiry()
         {
             //Act
-            var actual = _expiredFunds.GetExpiringFunds(new Dictionary<CalendarPeriod, decimal>(), new Dictionary<CalendarPeriod, decimal>());
+            var actual = _expiredFunds.GetExpiringFunds(new Dictionary<CalendarPeriod, decimal>(), new Dictionary<CalendarPeriod, decimal>(), null, 3);
 
             //Assert
             Assert.IsNotNull(actual);

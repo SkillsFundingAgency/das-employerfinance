@@ -7,11 +7,6 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
 {
     public class ExpiredFunds : IExpiredFunds
     {
-        public decimal GetExpiringFundsByDate(Dictionary<CalendarPeriod, decimal> fundsIn, Dictionary<CalendarPeriod, decimal> fundsOut, DateTime date)
-        {
-          return GetExpiringFundsByDate(fundsIn, fundsOut,date, null, 24);
-        }
-
         public decimal GetExpiringFundsByDate(Dictionary<CalendarPeriod, decimal> fundsIn, Dictionary<CalendarPeriod, decimal> fundsOut, DateTime date, Dictionary<CalendarPeriod, decimal> expired, int expiryPeriod)
         {
             var expiredFunds = GetExpiringFunds(fundsIn, fundsOut, expired, expiryPeriod);
@@ -27,12 +22,6 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
 
             return 0;
         }
-
-        public Dictionary<CalendarPeriod, decimal> GetExpiringFunds(Dictionary<CalendarPeriod, decimal> fundsIn, Dictionary<CalendarPeriod, decimal> fundsOut)
-        {
-            return GetExpiringFunds(fundsIn, fundsOut, null, 24);
-        }
-
         public Dictionary<CalendarPeriod, decimal> GetExpiringFunds(Dictionary<CalendarPeriod, decimal> fundsIn, Dictionary<CalendarPeriod, decimal> fundsOut, Dictionary<CalendarPeriod, decimal> expired, int expiryPeriod)
         {
             if (fundsIn == null)
