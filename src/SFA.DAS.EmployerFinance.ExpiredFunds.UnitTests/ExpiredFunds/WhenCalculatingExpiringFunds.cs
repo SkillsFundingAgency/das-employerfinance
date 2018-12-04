@@ -500,12 +500,12 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
             var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
                 {new CalendarPeriod(2018, 11), 12}, 
-                {new CalendarPeriod(2019, 1), 9} 
+                {new CalendarPeriod(2019, 1), 5} //21
             };
             var expiredFunds = new Dictionary<CalendarPeriod, decimal>
             {
                 {new CalendarPeriod(2019, 2), 9},
-                {new CalendarPeriod(2019, 3), 4},
+                {new CalendarPeriod(2019, 3), 4},//13
             };
 
             //Act
@@ -516,7 +516,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
             Assert.AreEqual(6, actual.Count);
             Assert.AreEqual(9, actual.First().Value);
             Assert.AreEqual(4, actual.Skip(1).First().Value);
-            Assert.AreEqual(0, actual.Skip(2).First().Value);
+            Assert.AreEqual(4, actual.Skip(2).First().Value);
             Assert.AreEqual(0, actual.Skip(3).First().Value);
             Assert.AreEqual(1, actual.Skip(4).First().Value);
             Assert.AreEqual(0, actual.Last().Value);
