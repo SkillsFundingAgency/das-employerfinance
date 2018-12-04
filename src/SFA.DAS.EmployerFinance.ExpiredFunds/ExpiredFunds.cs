@@ -36,8 +36,6 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
             
             CalculateAndApplyExpiredFundsToFundsOut(fundsOut, expired);
 
-            //CalculateAndApplyRefundsToFundsOut(fundsOut);
-
             CalculatedAndApplyRefundsToFundsIn(fundsIn, fundsOut);
 
             CalculateAndApplyAdjustmentsToFundsIn(fundsIn, expiryPeriod);
@@ -70,33 +68,7 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
 
             return expiredFunds;
         }
-
-        private void CalculateAndApplyRefundsToFundsOut(Dictionary<CalendarPeriod, decimal> fundsOut)
-        {
-            if (fundsOut != null && fundsOut.Any(c => c.Value < 0))
-            {
-                foreach (var refund in fundsOut.Where(c => c.Value < 0)
-                    .ToDictionary(key => key.Key, value => value.Value))
-                {
-                    var refundAmount = refund.Value * -1;
-                    
-                    foreach (var fundsOutToAdjust in fundsOut.Where(c => c.Value > 0)
-                        .ToDictionary(key => key.Key, value => value.Value))
-                    {
-                        
-                        if (fundsOutToAdjust.Value >= refundAmount)
-                        {
-                            fundsOut[fundsOutToAdjust.Key] = fundsOutToAdjust.Value - refundAmount;
-                            break;
-                        }
-                        
-                        refundAmount = refundAmount - fundsOutToAdjust.Value;
-                        fundsOut[fundsOutToAdjust.Key] = 0;
-                    }
-                }
-            }
-        }
-
+        
         private void CalculatedAndApplyRefundsToFundsIn(Dictionary<CalendarPeriod, decimal> fundsIn, Dictionary<CalendarPeriod, decimal> fundsOut)
         {
             var refunds = fundsOut.Where(c => c.Value < 0).ToDictionary(key => key.Key, value => value.Value);
@@ -111,6 +83,40 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
                     else
                     {
                         fundsIn.Add(refund.Key,refund.Value*-1);
+                    }
+                }
+            }
+        }
+
+        private void CalculateAndApplyAdjustmentsToFundsIn(Dictionary<CalendarPeriod, decimal> fundsIn, int expiryPeriod)
+        {
+            if (fundsIn.Any(c => c.Value < 0))
+            {
+                var adjustmentsIn = fundsIn.Where(c => c.Value < 0).ToDictionary(key => key.Key, value => value.Value);
+
+                foreach (var adjustment in adjustmentsIn.OrderBy(c => c.Key))
+                {
+                    var adjustmentAmount = adjustment.Value * -1;
+                    
+                    foreach (var fundsInValue in fundsIn.Where(c => c.Value > 0)
+                        .ToDictionary(c => c.Key, c => c.Value)
+                        .OrderByDescending(c => c.Key))
+                    {
+                        
+                        if (FundsAreInExpiryPeriod(fundsInValue, adjustment.Key, expiryPeriod))
+                        {
+                            if (fundsInValue.Value >= adjustmentAmount)
+                            {
+                                fundsIn[fundsInValue.Key] = fundsInValue.Value - adjustmentAmount;
+                                break;
+                            }
+
+                            if (fundsInValue.Value < adjustmentAmount)
+                            {
+                                fundsIn[fundsInValue.Key] = 0;
+                                adjustmentAmount = adjustmentAmount - fundsInValue.Value;
+                            }
+                        }
                     }
                 }
             }
@@ -140,41 +146,6 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
                     }
 
                 }   
-            }
-        }
-
-        private void CalculateAndApplyAdjustmentsToFundsIn(Dictionary<CalendarPeriod, decimal> fundsIn, int expiryPeriod)
-        {
-            if (fundsIn.Any(c => c.Value < 0))
-            {
-                var adjustmentsIn = fundsIn.Where(c => c.Value < 0).ToDictionary(key => key.Key, value => value.Value);
-
-                foreach (var adjustment in adjustmentsIn.OrderBy(c => c.Key))
-                {
-                    var adjustmentAmount = adjustment.Value * -1;
-
-                    foreach (var fundsInValue in fundsIn.Where(c => c.Value > 0)
-                                                        .ToDictionary(c => c.Key, c => c.Value)
-                                                        .OrderBy(c => c.Key))
-                    {
-                        
-
-                        if (FundsAreInExpiryPeriod(fundsInValue, adjustment.Key, expiryPeriod))
-                        {
-                            if (fundsInValue.Value >= adjustmentAmount)
-                            {
-                                fundsIn[fundsInValue.Key] = fundsInValue.Value - adjustmentAmount;
-                                break;
-                            }
-
-                            if (fundsInValue.Value < adjustmentAmount)
-                            {
-                                fundsIn[fundsInValue.Key] = 0;
-                                adjustmentAmount = adjustmentAmount - fundsInValue.Value;
-                            }
-                        }
-                    }
-                }
             }
         }
 
@@ -209,9 +180,30 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
         {
             var adjustmentStartPeriod = new DateTime(adjustment.Year, adjustment.Month, 1).AddMonths(expiryPeriod * -1);
             var adjustmentEndPeriod = new DateTime(adjustment.Year, adjustment.Month, 1);
-            
+
+            if (!CheckPeriodsAreInSameTaxYear(adjustmentEndPeriod, new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1)))
+            {
+                return false;
+            }
+
             return new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) > adjustmentStartPeriod &&
                    new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) <= adjustmentEndPeriod;
+        }
+
+        private static bool CheckPeriodsAreInSameTaxYear(DateTime firstPeriod, DateTime secondPeriod)
+        {
+            var startPeriodTaxYear = GetTaxYearFromDate(firstPeriod);
+
+            var endPeriodTaxYear = GetTaxYearFromDate(secondPeriod);
+
+            return startPeriodTaxYear == endPeriodTaxYear;
+        }
+
+        private static int GetTaxYearFromDate(DateTime firstPeriod)
+        {
+            return firstPeriod.Month >= 1 && firstPeriod.Month <= 4
+                ? firstPeriod.Year + 1
+                : firstPeriod.Year;
         }
     }
 }
