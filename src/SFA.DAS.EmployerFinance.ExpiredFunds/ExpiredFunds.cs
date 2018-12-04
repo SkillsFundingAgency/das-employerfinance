@@ -179,31 +179,16 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
         private static bool FundsAreInExpiryPeriod(KeyValuePair<CalendarPeriod, decimal> fundsInValue, CalendarPeriod adjustment, int expiryPeriod)
         {
             var adjustmentStartPeriod = new DateTime(adjustment.Year, adjustment.Month, 1).AddMonths(expiryPeriod * -1);
-            var adjustmentEndPeriod = new DateTime(adjustment.Year, adjustment.Month, 1);
-
-            if (!CheckPeriodsAreInSameTaxYear(adjustmentEndPeriod, new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1)))
+            
+            if (!adjustment.AreSameTaxYear(fundsInValue.Key))
             {
                 return false;
             }
 
-            return new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) > adjustmentStartPeriod &&
-                   new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) <= adjustmentEndPeriod;
+            return fundsInValue.Key > new CalendarPeriod(adjustmentStartPeriod.Year, adjustmentStartPeriod.Month) 
+                   && fundsInValue.Key <= adjustment;
+
         }
 
-        private static bool CheckPeriodsAreInSameTaxYear(DateTime firstPeriod, DateTime secondPeriod)
-        {
-            var startPeriodTaxYear = GetTaxYearFromDate(firstPeriod);
-
-            var endPeriodTaxYear = GetTaxYearFromDate(secondPeriod);
-
-            return startPeriodTaxYear == endPeriodTaxYear;
-        }
-
-        private static int GetTaxYearFromDate(DateTime firstPeriod)
-        {
-            return firstPeriod.Month >= 1 && firstPeriod.Month <= 4
-                ? firstPeriod.Year + 1
-                : firstPeriod.Year;
-        }
     }
 }

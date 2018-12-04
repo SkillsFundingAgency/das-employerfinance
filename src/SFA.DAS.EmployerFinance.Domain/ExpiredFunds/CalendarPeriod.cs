@@ -38,6 +38,27 @@ namespace SFA.DAS.EmployerFinance.Domain.ExpiredFunds
             return Compare(period1, period2) >= 0;
         }
 
+        public bool AreSameTaxYear(CalendarPeriod compareTo)
+        {
+            return CheckPeriodsAreInSameTaxYear(new DateTime(Year, Month, 1), new DateTime(compareTo.Year, compareTo.Month, 1));
+        }
+
+        private static bool CheckPeriodsAreInSameTaxYear(DateTime firstPeriod, DateTime secondPeriod)
+        {
+            var startPeriodTaxYear = GetTaxYearFromDate(firstPeriod);
+
+            var endPeriodTaxYear = GetTaxYearFromDate(secondPeriod);
+
+            return startPeriodTaxYear == endPeriodTaxYear;
+        }
+
+        private static int GetTaxYearFromDate(DateTime firstPeriod)
+        {
+            return firstPeriod.Month >= 1 && firstPeriod.Month < 4
+                ? firstPeriod.Year -1
+                : firstPeriod.Year;
+        }
+
         private static int Compare(CalendarPeriod calendarPeriod1, CalendarPeriod calendarPeriod2)
         {
             if (calendarPeriod1 == null || calendarPeriod2 == null)
