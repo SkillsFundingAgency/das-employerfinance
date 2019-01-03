@@ -134,15 +134,15 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
                         .Where(c => c.Value > 0 && c.Key < expiredAmount.Key)
                         .ToList();
 
-                    foreach (var payment in fundsOutAvailable)
+                    foreach (var fundOut in fundsOutAvailable)
                     {
-                        if (payment.Value >= amount)
+                        if (fundOut.Value >= amount)
                         {
-                            fundsOut[payment.Key] = payment.Value - amount;
+                            fundsOut[fundOut.Key] = fundOut.Value - amount;
                             break;
                         }
-                        amount = amount - payment.Value;
-                        fundsOut[payment.Key] = 0;
+                        amount = amount - fundOut.Value;
+                        fundsOut[fundOut.Key] = 0;
                     }
 
                 }   
