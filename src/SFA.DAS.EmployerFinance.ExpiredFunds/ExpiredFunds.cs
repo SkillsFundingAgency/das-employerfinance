@@ -7,22 +7,28 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
 {
     public class ExpiredFunds : IExpiredFunds
     {
-        public decimal GetExpiringFundsByDate(Dictionary<CalendarPeriod, decimal> fundsIn, Dictionary<CalendarPeriod, decimal> fundsOut, DateTime date, Dictionary<CalendarPeriod, decimal> expired, int expiryPeriod)
+        public decimal GetExpiringFundsByDate(
+            IDictionary<CalendarPeriod, decimal> fundsIn, 
+            IDictionary<CalendarPeriod, decimal> fundsOut, 
+            DateTime date, 
+            IDictionary<CalendarPeriod, decimal> expired, int expiryPeriod)
         {
             var expiredFunds = GetExpiringFunds(fundsIn, fundsOut, expired, expiryPeriod);
 
-            if (expiredFunds.Any())
+            if (!expiredFunds.Any())
             {
-                var expiredFundsKey = expiredFunds.Keys.SingleOrDefault(key => key.Year.Equals(date.Year) && key.Month.Equals(date.Month));
-                if (expiredFundsKey != null)
-                {
-                    return expiredFunds[expiredFundsKey];
-                }
+                return 0;
             }
 
-            return 0;
+            var expiredFundsKey = expiredFunds.Keys.SingleOrDefault(key => key.Year.Equals(date.Year) && key.Month.Equals(date.Month));
+            
+            return expiredFundsKey != null ? expiredFunds[expiredFundsKey] : 0;
         }
-        public Dictionary<CalendarPeriod, decimal> GetExpiringFunds(Dictionary<CalendarPeriod, decimal> fundsIn, Dictionary<CalendarPeriod, decimal> fundsOut, Dictionary<CalendarPeriod, decimal> expired, int expiryPeriod)
+        
+        public IDictionary<CalendarPeriod, decimal> GetExpiringFunds(
+            IDictionary<CalendarPeriod, decimal> fundsIn, 
+            IDictionary<CalendarPeriod, decimal> fundsOut, 
+            IDictionary<CalendarPeriod, decimal> expired, int expiryPeriod)
         {
             if (fundsIn == null)
             {
@@ -36,144 +42,108 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
             
             CalculateAndApplyExpiredFundsToFundsOut(fundsOut, expired);
 
-            //CalculateAndApplyRefundsToFundsOut(fundsOut);
-
             CalculatedAndApplyRefundsToFundsIn(fundsIn, fundsOut);
 
             CalculateAndApplyAdjustmentsToFundsIn(fundsIn, expiryPeriod);
             
-            var expiredFunds = new Dictionary<CalendarPeriod, decimal>();
-
-            foreach (var fundsInPair in fundsIn.OrderBy(c => c.Key))
-            {
-                var expiryDateOfFundsIn = new DateTime(fundsInPair.Key.Year, fundsInPair.Key.Month, 1).AddMonths(expiryPeriod);
-                var amountDueToExpire = fundsInPair.Value;
-
-
-                var alreadyExpiredAmount = expired?.Keys.FirstOrDefault(c => c.Year.Equals(expiryDateOfFundsIn.Year)
-                                                                         && c.Month.Equals(expiryDateOfFundsIn.Month));
-
-                if (alreadyExpiredAmount != null)
-                {
-                    amountDueToExpire = expired[alreadyExpiredAmount];
-                }
-                else
-                {
-                    amountDueToExpire = amountDueToExpire > 0
-                        ? CalculateExpiryAmount(fundsOut, expiryDateOfFundsIn, amountDueToExpire)
-                        : 0;
-                }
-                
-
-                expiredFunds.Add(new CalendarPeriod(expiryDateOfFundsIn.Year, expiryDateOfFundsIn.Month), amountDueToExpire);
-            }
+            var expiredFunds = CalculatedExpiredFunds(fundsIn, fundsOut, expired, expiryPeriod);
 
             return expiredFunds;
         }
 
-        private void CalculateAndApplyRefundsToFundsOut(Dictionary<CalendarPeriod, decimal> fundsOut)
+        private static void CalculatedAndApplyRefundsToFundsIn(
+            IDictionary<CalendarPeriod, decimal> fundsIn, 
+            IDictionary<CalendarPeriod, decimal> fundsOut)
         {
-            if (fundsOut != null && fundsOut.Any(c => c.Value < 0))
+            var refunds = fundsOut.Where(c => c.Value < 0)
+                                  .ToDictionary(key => key.Key, value => value.Value);
+
+            if (!refunds.Any())
             {
-                foreach (var refund in fundsOut.Where(c => c.Value < 0)
-                    .ToDictionary(key => key.Key, value => value.Value))
+                return;
+            }
+            
+            foreach (var refund in refunds)
+            {
+                if (fundsIn.ContainsKey(refund.Key))
                 {
-                    var refundAmount = refund.Value * -1;
-                    
-                    foreach (var fundsOutToAdjust in fundsOut.Where(c => c.Value > 0)
-                        .ToDictionary(key => key.Key, value => value.Value))
-                    {
-                        
-                        if (fundsOutToAdjust.Value >= refundAmount)
-                        {
-                            fundsOut[fundsOutToAdjust.Key] = fundsOutToAdjust.Value - refundAmount;
-                            break;
-                        }
-                        
-                        refundAmount = refundAmount - fundsOutToAdjust.Value;
-                        fundsOut[fundsOutToAdjust.Key] = 0;
-                    }
+                    fundsIn[refund.Key] += refund.Value * -1;
+                }
+                else
+                {
+                    fundsIn.Add(refund.Key,refund.Value * -1);
                 }
             }
         }
 
-        private void CalculatedAndApplyRefundsToFundsIn(Dictionary<CalendarPeriod, decimal> fundsIn, Dictionary<CalendarPeriod, decimal> fundsOut)
+        private static void CalculateAndApplyAdjustmentsToFundsIn(IDictionary<CalendarPeriod, decimal> fundsIn, int expiryPeriod)
         {
-            var refunds = fundsOut.Where(c => c.Value < 0).ToDictionary(key => key.Key, value => value.Value);
-            if (refunds.Any())
+            if (!fundsIn.Any(c => c.Value < 0))
             {
-                foreach (var refund in refunds)
+                return;
+            }
+            
+            var adjustmentsIn = fundsIn.Where(c => c.Value < 0)
+                                       .ToDictionary(key => key.Key, value => value.Value);
+
+            foreach (var adjustment in adjustmentsIn.OrderBy(c => c.Key))
+            {
+                var adjustmentAmount = adjustment.Value * -1;
+
+                var orderFundsIn = fundsIn.Where(c => c.Value > 0)
+                                          .ToDictionary(c => c.Key, c => c.Value)
+                                          .OrderByDescending(c => c.Key);
+
+                foreach (var fundsInValue in orderFundsIn)
                 {
-                    if (fundsIn.ContainsKey(refund.Key))
+                    if (!FundsAreInExpiryPeriod(fundsInValue, adjustment.Key, expiryPeriod))
                     {
-                        fundsIn[refund.Key] += refund.Value * -1;
+                        continue;
                     }
-                    else
+
+                    if (fundsInValue.Value >= adjustmentAmount)
                     {
-                        fundsIn.Add(refund.Key,refund.Value*-1);
+                        fundsIn[fundsInValue.Key] = fundsInValue.Value - adjustmentAmount;
+                        break;
                     }
+
+                    if (fundsInValue.Value >= adjustmentAmount)
+                    {
+                        continue;
+                    }
+
+                    fundsIn[fundsInValue.Key] = 0;
+                    adjustmentAmount = adjustmentAmount - fundsInValue.Value;
                 }
             }
         }
 
-        private void CalculateAndApplyExpiredFundsToFundsOut(Dictionary<CalendarPeriod, decimal> fundsOut, Dictionary<CalendarPeriod, decimal> expired)
+        private static void CalculateAndApplyExpiredFundsToFundsOut(
+            IDictionary<CalendarPeriod, decimal> fundsOut, 
+            IDictionary<CalendarPeriod, decimal> expired)
         {
-            if (expired!=null && expired.Any(c=>c.Value> 0))
+            if (expired == null || !expired.Any(c => c.Value > 0))
             {
-                foreach (var expiredAmount in expired)
-                {
-                    var amount = expiredAmount.Value;
-
-                    var fundsOutAvailable = fundsOut
-                        .Where(c => c.Value > 0 && c.Key < expiredAmount.Key)
-                        .ToList();
-
-                    foreach (var payment in fundsOutAvailable)
-                    {
-                        if (payment.Value >= amount)
-                        {
-                            fundsOut[payment.Key] = payment.Value - amount;
-                            break;
-                        }
-                        amount = amount - payment.Value;
-                        fundsOut[payment.Key] = 0;
-                    }
-
-                }   
+                return;
             }
-        }
-
-        private void CalculateAndApplyAdjustmentsToFundsIn(Dictionary<CalendarPeriod, decimal> fundsIn, int expiryPeriod)
-        {
-            if (fundsIn.Any(c => c.Value < 0))
+           
+            foreach (var expiredAmount in expired)
             {
-                var adjustmentsIn = fundsIn.Where(c => c.Value < 0).ToDictionary(key => key.Key, value => value.Value);
+                var amount = expiredAmount.Value;
 
-                foreach (var adjustment in adjustmentsIn.OrderBy(c => c.Key))
+                var fundsOutAvailable = fundsOut
+                    .Where(c => c.Value > 0 && c.Key < expiredAmount.Key)
+                    .ToList();
+
+                foreach (var fundOut in fundsOutAvailable)
                 {
-                    var adjustmentAmount = adjustment.Value * -1;
-
-                    foreach (var fundsInValue in fundsIn.Where(c => c.Value > 0)
-                                                        .ToDictionary(c => c.Key, c => c.Value)
-                                                        .OrderBy(c => c.Key))
+                    if (fundOut.Value >= amount)
                     {
-                        
-
-                        if (FundsAreInExpiryPeriod(fundsInValue, adjustment.Key, expiryPeriod))
-                        {
-                            if (fundsInValue.Value >= adjustmentAmount)
-                            {
-                                fundsIn[fundsInValue.Key] = fundsInValue.Value - adjustmentAmount;
-                                break;
-                            }
-
-                            if (fundsInValue.Value < adjustmentAmount)
-                            {
-                                fundsIn[fundsInValue.Key] = 0;
-                                adjustmentAmount = adjustmentAmount - fundsInValue.Value;
-                            }
-                        }
+                        fundsOut[fundOut.Key] = fundOut.Value - amount;
+                        break;
                     }
+                    amount = amount - fundOut.Value;
+                    fundsOut[fundOut.Key] = 0;
                 }
             }
         }
@@ -205,13 +175,57 @@ namespace SFA.DAS.EmployerFinance.ExpiredFunds
             return expiryAmount;
         }
 
-        private static bool FundsAreInExpiryPeriod(KeyValuePair<CalendarPeriod, decimal> fundsInValue, CalendarPeriod adjustment, int expiryPeriod)
+        private static bool FundsAreInExpiryPeriod(
+            KeyValuePair<CalendarPeriod, decimal> fundsInValue,
+            CalendarPeriod adjustment, int expiryPeriod)
         {
             var adjustmentStartPeriod = new DateTime(adjustment.Year, adjustment.Month, 1).AddMonths(expiryPeriod * -1);
-            var adjustmentEndPeriod = new DateTime(adjustment.Year, adjustment.Month, 1);
             
-            return new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) > adjustmentStartPeriod &&
-                   new DateTime(fundsInValue.Key.Year, fundsInValue.Key.Month, 1) <= adjustmentEndPeriod;
+            if (!adjustment.AreSameTaxYear(fundsInValue.Key))
+            {
+                return false;
+            }
+
+            var fundsInExpiredPeriod = fundsInValue.Key > new CalendarPeriod(adjustmentStartPeriod.Year, adjustmentStartPeriod.Month) 
+                                       && fundsInValue.Key <= adjustment;
+
+            return fundsInExpiredPeriod;
+
+        }
+
+        private static IDictionary<CalendarPeriod, decimal> CalculatedExpiredFunds(
+            IDictionary<CalendarPeriod, decimal> fundsIn, 
+            IDictionary<CalendarPeriod, decimal> fundsOut, 
+            IDictionary<CalendarPeriod, decimal> expired,
+            int expiryPeriod)
+        {
+            var expiredFunds = new Dictionary<CalendarPeriod, decimal>();
+
+            foreach (var fundsInPair in fundsIn.OrderBy(c => c.Key))
+            {
+                var expiryDateOfFundsIn = new DateTime(fundsInPair.Key.Year, fundsInPair.Key.Month, 1)
+                                                    .AddMonths(expiryPeriod);
+                
+                var amountDueToExpire = fundsInPair.Value;
+
+                var alreadyExpiredAmount = expired?.Keys.FirstOrDefault(c => c.Year.Equals(expiryDateOfFundsIn.Year)
+                                                                             && c.Month.Equals(expiryDateOfFundsIn.Month));
+
+                if (alreadyExpiredAmount != null)
+                {
+                    amountDueToExpire = expired[alreadyExpiredAmount];
+                }
+                else
+                {
+                    amountDueToExpire = amountDueToExpire > 0
+                        ? CalculateExpiryAmount(fundsOut, expiryDateOfFundsIn, amountDueToExpire)
+                        : 0;
+                }
+
+                expiredFunds.Add(new CalendarPeriod(expiryDateOfFundsIn.Year, expiryDateOfFundsIn.Month), amountDueToExpire);
+            }
+
+            return expiredFunds;
         }
     }
 }
