@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerFinance.Domain.ExpiredFunds
 {
     public interface IExpiredFunds
     {
-        decimal GetExpiringFundsByDate(Dictionary<CalendarPeriod, decimal> fundsIn, Dictionary<CalendarPeriod, decimal> fundsOut, DateTime date, Dictionary<CalendarPeriod, decimal> expired, int expiryPeriod);
-        Dictionary<CalendarPeriod, decimal> GetExpiringFunds(Dictionary<CalendarPeriod, decimal> fundsIn, Dictionary<CalendarPeriod, decimal> fundsOut, Dictionary<CalendarPeriod, decimal> expired, int expiryPeriod);
+        decimal GetExpiringFundsByDate(IDictionary<CalendarPeriod, decimal> fundsIn, IDictionary<CalendarPeriod, decimal> fundsOut, DateTime date, IDictionary<CalendarPeriod, decimal> expired, int expiryPeriod);
+        IDictionary<CalendarPeriod, decimal> GetExpiringFunds(IDictionary<CalendarPeriod, decimal> fundsIn, IDictionary<CalendarPeriod, decimal> fundsOut, IDictionary<CalendarPeriod, decimal> expired, int expiryPeriod);
     }
 }
