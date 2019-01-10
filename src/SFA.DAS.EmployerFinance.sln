@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.Dom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Domain.UnitTests", "SFA.DAS.EmployerFinance.Domain.UnitTests\SFA.DAS.EmployerFinance.Domain.UnitTests.csproj", "{A641A260-1BAB-47BB-9067-997C8D02081E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Web", "SFA.DAS.EmployerFinance.Web\SFA.DAS.EmployerFinance.Web.csproj", "{AAED1418-FD81-4FB5-9BBD-756B7F636C73}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{A641A260-1BAB-47BB-9067-997C8D02081E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A641A260-1BAB-47BB-9067-997C8D02081E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A641A260-1BAB-47BB-9067-997C8D02081E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAED1418-FD81-4FB5-9BBD-756B7F636C73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAED1418-FD81-4FB5-9BBD-756B7F636C73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAED1418-FD81-4FB5-9BBD-756B7F636C73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAED1418-FD81-4FB5-9BBD-756B7F636C73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
