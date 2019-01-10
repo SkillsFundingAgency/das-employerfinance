@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web
 {
@@ -52,12 +48,18 @@ namespace SFA.DAS.EmployerFinance.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            //todo: attribute route, remove this
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+        
+        public void ConfigureContainer(Registry registry)
+        {
+            // Use StructureMap-specific APIs to register services in the registry.
         }
     }
 }
