@@ -48,13 +48,7 @@ namespace SFA.DAS.EmployerFinance.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            //todo: attribute route, remove this
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvc();
         }
         
         public void ConfigureContainer(Registry registry)
