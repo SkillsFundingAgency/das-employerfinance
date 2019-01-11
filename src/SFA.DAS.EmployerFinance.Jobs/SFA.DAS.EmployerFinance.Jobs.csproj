@@ -10,7 +10,9 @@
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.1.5" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="7.0.14" />
+    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="7.0.14" />
     <PackageReference Include="StructureMap" Version="4.7.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
