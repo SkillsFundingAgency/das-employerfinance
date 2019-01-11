@@ -6,10 +6,12 @@
     <title>@ViewData["Title"] - SFA.DAS.EmployerFinance.Web</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/application.css" />
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        @*todo setup minification: *@
+        @*<link rel="stylesheet" href="~/css/application.min.css" asp-append-version="true" />*@
+        <link rel="stylesheet" href="~/css/application.css" asp-append-version="true"/>
     </environment>
 </head>
 <body>

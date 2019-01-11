@@ -8,6 +8,8 @@ using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web
 {
+    //todo: plug in authentication using https://github.com/dotnet/core-setup/blob/master/Documentation/design-docs/host-startup-hook.md
+    // ^^ hopefully should allow very easy plugin in of generic oidc support!
     public class Startup
     {
         public Startup(IConfiguration configuration)
