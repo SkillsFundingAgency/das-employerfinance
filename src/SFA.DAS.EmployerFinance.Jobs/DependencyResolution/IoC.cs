@@ -1,4 +1,5 @@
-﻿using StructureMap;
+﻿using IContainer = StructureMap.IContainer;
+using Container = StructureMap.Container;
 
 namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
 {
