@@ -7,32 +7,32 @@
 /*! Copyright (c) 2011 by Margaret Calvert & Henrik Kubel. All rights reserved. The font has been customised for exclusive use on gov.uk. This cut is not commercially available. */
 @font-face {
   font-family: "nta";
-  src: url("/assets/fonts/light-2c037cf7e1-v1.eot");
-  src: url("/assets/fonts/light-2c037cf7e1-v1.eot?#iefix") format("embedded-opentype"), url("/assets/fonts/light-f38ad40456-v1.woff2") format("woff2"), url("/assets/fonts/light-458f8ea81c-v1.woff") format("woff");
+  src: url("/wwwroot/fonts/light-2c037cf7e1-v1.eot");
+  src: url("/wwwroot/fonts/light-2c037cf7e1-v1.eot?#iefix") format("embedded-opentype"), url("/wwwroot/fonts/light-f38ad40456-v1.woff2") format("woff2"), url("/wwwroot/fonts/light-458f8ea81c-v1.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: fallback; }
 
 @font-face {
   font-family: "nta";
-  src: url("/assets/fonts/bold-fb2676462a-v1.eot");
-  src: url("/assets/fonts/bold-fb2676462a-v1.eot?#iefix") format("embedded-opentype"), url("/assets/fonts/bold-a2452cb66f-v1.woff2") format("woff2"), url("/assets/fonts/bold-f38c792ac2-v1.woff") format("woff");
+  src: url("/wwwroot/fonts/bold-fb2676462a-v1.eot");
+  src: url("/wwwroot/fonts/bold-fb2676462a-v1.eot?#iefix") format("embedded-opentype"), url("/wwwroot/fonts/bold-a2452cb66f-v1.woff2") format("woff2"), url("/wwwroot/fonts/bold-f38c792ac2-v1.woff") format("woff");
   font-weight: bold;
   font-style: normal;
   font-display: fallback; }
 
 @font-face {
   font-family: "ntatabularnumbers";
-  src: url("/assets/fonts/light-tabular-498ea8ffe2-v1.eot");
-  src: url("/assets/fonts/light-tabular-498ea8ffe2-v1.eot?#iefix") format("embedded-opentype"), url("/assets/fonts/light-tabular-851b10ccdd-v1.woff2") format("woff2"), url("/assets/fonts/light-tabular-62cc6f0a28-v1.woff") format("woff");
+  src: url("/wwwroot/fonts/light-tabular-498ea8ffe2-v1.eot");
+  src: url("/wwwroot/fonts/light-tabular-498ea8ffe2-v1.eot?#iefix") format("embedded-opentype"), url("/wwwroot/fonts/light-tabular-851b10ccdd-v1.woff2") format("woff2"), url("/wwwroot/fonts/light-tabular-62cc6f0a28-v1.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: fallback; }
 
 @font-face {
   font-family: "ntatabularnumbers";
-  src: url("/assets/fonts/bold-tabular-357fdfbcc3-v1.eot");
-  src: url("/assets/fonts/bold-tabular-357fdfbcc3-v1.eot?#iefix") format("embedded-opentype"), url("/assets/fonts/bold-tabular-b89238d840-v1.woff2") format("woff2"), url("/assets/fonts/bold-tabular-784c21afb8-v1.woff") format("woff");
+  src: url("/wwwroot/fonts/bold-tabular-357fdfbcc3-v1.eot");
+  src: url("/wwwroot/fonts/bold-tabular-357fdfbcc3-v1.eot?#iefix") format("embedded-opentype"), url("/wwwroot/fonts/bold-tabular-b89238d840-v1.woff2") format("woff2"), url("/wwwroot/fonts/bold-tabular-784c21afb8-v1.woff") format("woff");
   font-weight: bold;
   font-style: normal;
   font-display: fallback; }
@@ -1106,7 +1106,7 @@
   padding-right: 40px;
   padding-bottom: 8px;
   padding-left: 15px;
-  background-image: url("/assets/images/icon-pointer.png");
+  background-image: url("/wwwroot/images/icon-pointer.png");
   background-repeat: no-repeat;
   background-position: 100% 50%; }
   @media (min-width: 40.0625em) {
@@ -1120,7 +1120,7 @@
       line-height: 1; } }
   @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
     .govuk-button--start {
-      background-image: url("/assets/images/icon-pointer-2x.png");
+      background-image: url("/wwwroot/images/icon-pointer-2x.png");
       background-size: 30px 19px; } }
 
 .govuk-button {
@@ -2082,7 +2082,7 @@
   display: inline-block;
   min-width: 125px;
   padding-top: 112px;
-  background-image: url("/assets/images/govuk-crest.png");
+  background-image: url("/wwwroot/images/govuk-crest.png");
   background-repeat: no-repeat;
   background-position: 50% 0%;
   background-size: 125px 102px;
@@ -2091,7 +2091,7 @@
   white-space: nowrap; }
   @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
     .govuk-footer__copyright-logo {
-      background-image: url("/assets/images/govuk-crest-2x.png"); } }
+      background-image: url("/wwwroot/images/govuk-crest-2x.png"); } }
 
 .govuk-footer__inline-list {
   margin-top: 0;

@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
     //todo: minification (https://docs.microsoft.com/en-us/aspnet/core/client-side/using-gulp?view=aspnetcore-2.2)
     //todo: typescript
-    //todo: gov.uk design frontend?
+    //todo: gov.uk design frontend? js + favicon from images & remove template 1
     
     [Route("")]
     public class HomeController : Controller

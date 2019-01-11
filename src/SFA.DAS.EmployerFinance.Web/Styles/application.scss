@@ -2,6 +2,8 @@
 // https://design-system.service.gov.uk/get-started/production/
 //$govuk-global-styles: true;
 
+$govuk-assets-path: '/wwwroot/';
+
 @import "govuk-frontend/all";
 
 /*** Overide GDS styles to match DAS **/

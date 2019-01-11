@@ -13,4 +13,8 @@
         <PackageReference Include="StructureMap.AspNetCore" Version="1.4.0" />
     </ItemGroup>
 
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+      <Exec Command="mkdir $(ProjectDir)wwwroot\fonts&#xD;&#xA;copy $(ProjectDir)node_modules\govuk-frontend\assets\fonts\* $(ProjectDir)wwwroot\fonts /Y&#xD;&#xA;mkdir $(ProjectDir)wwwroot\images&#xD;&#xA;copy $(ProjectDir)node_modules\govuk-frontend\assets\images\* $(ProjectDir)wwwroot\images /Y&#xD;&#xA;" />
+    </Target>
+
 </Project>
