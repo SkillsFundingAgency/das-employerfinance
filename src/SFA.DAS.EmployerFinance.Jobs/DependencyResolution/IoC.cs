@@ -12,6 +12,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
             {
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<LoggingRegistry>();
+                c.AddRegistry<StartupRegistry>();
             });
         }
     }

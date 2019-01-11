@@ -3,6 +3,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
+using SFA.DAS.EmployerFinance.Startup;
 
 namespace SFA.DAS.EmployerFinance.Jobs
 {
@@ -16,6 +17,7 @@ namespace SFA.DAS.EmployerFinance.Jobs
                 var config = new JobHostConfiguration { JobActivator = new StructureMapJobActivator(container) };
                 var environmentService = container.GetInstance<IEnvironmentService>();
                 var loggerFactory = container.GetInstance<ILoggerFactory>();
+                var startup = container.GetInstance<IStartup>();
 
                 if (environmentService.IsCurrent(DasEnv.LOCAL))
                 {
@@ -25,9 +27,13 @@ namespace SFA.DAS.EmployerFinance.Jobs
                 config.LoggerFactory = loggerFactory;
                 config.UseTimers();
 
+                await startup.StartAsync();
+
                 var jobHost = new JobHost(config);
                 
                 jobHost.RunAndBlock();
+
+                await startup.StopAsync();
             }
         }
     }
