@@ -1,4 +1,5 @@
-﻿using IContainer = StructureMap.IContainer;
+﻿using SFA.DAS.EmployerFinance.DependencyResolution;
+using IContainer = StructureMap.IContainer;
 using Container = StructureMap.Container;
 
 namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
@@ -10,6 +11,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
             return new Container(c =>
             {
                 c.AddRegistry<DefaultRegistry>();
+                c.AddRegistry<LoggingRegistry>();
             });
         }
     }

@@ -8,11 +8,16 @@
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="2.3.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="2.3.0" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.1.5" />
     <PackageReference Include="StructureMap" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ScheduledJobs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
   </ItemGroup>
 
 </Project>
