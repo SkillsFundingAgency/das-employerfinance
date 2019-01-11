@@ -1,6 +1,10 @@
-/*** Overide GDS styles to match DAS **/
+//todo: js & assets...
+// https://design-system.service.gov.uk/get-started/production/
+//$govuk-global-styles: true;
 
-//todo: include gov.uk design system variables
+@import "govuk-frontend/all";
+
+/*** Overide GDS styles to match DAS **/
 
 body {
   font-family: nta, Arial, sans-serif;

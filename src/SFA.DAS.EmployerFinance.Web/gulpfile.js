@@ -8,7 +8,9 @@ var gulp = require("gulp"),
 	sass = require("gulp-sass");
 
 gulp.task("sass", function () {
-	return gulp.src('Styles/application.scss')
-		.pipe(sass())
+	return gulp.src('Styles/*.scss')
+		.pipe(sass({
+			includePaths: 'node_modules'
+		}))
 		.pipe(gulp.dest('wwwroot/css'));
 });
