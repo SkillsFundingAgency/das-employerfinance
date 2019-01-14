@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     //todo: fonts issue (edge)
     //todo: minification (https://docs.microsoft.com/en-us/aspnet/core/client-side/using-gulp?view=aspnetcore-2.2)
     //todo: document/script setting up node modules (switch git to e:)
-    //todo: typescript
+    //todo: typescript (use BuildBundlerMinifier-Typescript?
     //todo: gov.uk design frontend? js
     
     [Route("")]
