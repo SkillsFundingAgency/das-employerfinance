@@ -10,6 +10,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
         {
             return new Container(c =>
             {
+                c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<LoggingRegistry>();

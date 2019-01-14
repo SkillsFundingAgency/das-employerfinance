@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
     {
         public DefaultRegistry()
         {
-          
+            
         }
     }
 }
