@@ -4107,25 +4107,9 @@ body {
   .header-inner {
     margin: 0 auto 50px; } }
 
-.header-user {
-  background: #f8f8f8;
-  border-bottom: 1px solid #bfc1c3;
-  border-top: 10px solid #005ea5; }
-
-.header-user h2 {
-  margin: 10px 0; }
-
 nav ul {
   list-style: none;
   margin: 0; }
-
-@media (min-width: 40.0625em) {
-  .header-user #user-nav {
-    float: right; } }
-
-@media (min-width: 40.0625em) {
-  .header-user h2 {
-    float: left; } }
 
 @media (min-width: 40.0625em) {
   #user-nav {
@@ -4165,9 +4149,12 @@ nav ul {
 .header-organisation {
   border-bottom: 1px solid #6f777b;
   font-size: 14px; }
-
-.header-organisation ul {
-  margin: 0 -15px; }
+  .header-organisation ul {
+    margin: 0 -15px; }
+    .header-organisation ul li a {
+      display: block;
+      padding: 12px 15px 10px;
+      position: relative; }
 
 @media (min-width: 40.0625em) {
   .header-organisation ul li {
@@ -4182,11 +4169,6 @@ nav ul {
 @media (min-width: 62.5em) {
   .header-organisation ul li {
     font-size: 19px; } }
-
-.header-organisation ul li a {
-  display: block;
-  padding: 12px 15px 10px;
-  position: relative; }
 
 .header-organisation ul li a:link {
   color: #005ea5; }
@@ -4550,10 +4532,6 @@ li.menu-link.sub-menu-open ul li a {
 
 .govuk-info-summary__list a:focus, .govuk-success-summary__list a:focus {
   color: #0b0c0c; }
-
-/**Float right permissions table **/
-.das-permissions-fieldset--float-right {
-  float: right; }
 
 .govuk-\!-text-align-center {
   text-align: center; }
