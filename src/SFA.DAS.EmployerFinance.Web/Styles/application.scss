@@ -596,19 +596,11 @@ li.menu-link.sub-menu-open ul li a {
 }
 
 .govuk-info-summary__body, .govuk-success-summary__body {
-  font-family: $govuk-font-family;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  @include govuk-typography-common($govuk-font-family-nta);
   font-weight: $govuk-font-weight-regular;
   font-size: 16px;
   font-size: 1rem;
   line-height: 1.25
-}
-
-@media print {
-  .govuk-info-summary__body, .govuk-success-summary__body {
-    font-family: $govuk-font-family-print
-  }
 }
 
 @media (min-width: 40.0625em) {

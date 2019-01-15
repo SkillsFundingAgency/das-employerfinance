@@ -4517,10 +4517,9 @@ li.menu-link.sub-menu-open ul li a {
   font-size: 16px;
   font-size: 1rem;
   line-height: 1.25; }
-
-@media print {
-  .govuk-info-summary__body, .govuk-success-summary__body {
-    font-family: sans-serif; } }
+  @media print {
+    .govuk-info-summary__body, .govuk-success-summary__body {
+      font-family: sans-serif; } }
 
 @media (min-width: 40.0625em) {
   .govuk-info-summary__body, .govuk-success-summary__body {
