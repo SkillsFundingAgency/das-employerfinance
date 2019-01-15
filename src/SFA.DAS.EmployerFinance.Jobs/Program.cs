@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
 
@@ -27,30 +28,36 @@ namespace SFA.DAS.EmployerFinance.Jobs
 
                 var jobActivator = new StructureMapJobActivator(container);
 
-                var builder = new HostBuilder()
-                    .UseEnvironment("Development")
-                    .ConfigureWebJobs(b =>
+                var environmentService = container.GetInstance<IEnvironmentService>();
+
+                var environmentName = environmentService.IsCurrent(DasEnv.LOCAL)
+                    ? EnvironmentName.Development
+                    : EnvironmentName.Production;
+
+                var hostBuilder = new HostBuilder()
+                    .UseEnvironment(environmentName)
+                    .ConfigureWebJobs(builder =>
                     {
-                        b.AddAzureStorageCoreServices()
-                         .AddTimers();
+                        builder.AddAzureStorageCoreServices()
+                               .AddTimers();
                     })
-                    .ConfigureAppConfiguration(configurationBuilder =>
+                    .ConfigureAppConfiguration(builder =>
                     {
-                        configurationBuilder.AddJsonFile(AppSettingFilePath);
+                        builder.AddJsonFile(AppSettingFilePath);
                     })
-                    .ConfigureLogging((context, loggerBuilder) => 
+                    .ConfigureLogging(builder => 
                     { 
-                        loggerBuilder.SetMinimumLevel(LogLevel.Debug);
-                        loggerBuilder.AddNLog();
+                        builder.SetMinimumLevel(LogLevel.Debug)
+                               .AddNLog();
                     })
-                    .ConfigureServices((context, collection) =>
+                    .ConfigureServices(collection =>
                     {
                         //Wire up the IOC container to the built in web job IOC container
                         collection.AddSingleton<IJobActivator>(jobActivator);
                     })
                     .UseConsoleLifetime();
 
-                var host = builder.Build();
+                var host = hostBuilder.Build();
 
                 using (host)
                 {
