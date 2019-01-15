@@ -10,14 +10,20 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
-    <None Remove="nlog.config" />
+    <None Remove="NLog.config" />
+    <None Include="NLog.Debug.config">
+      <DependentUpon>NLog.config</DependentUpon>
+    </None>
+    <None Include="NLog.Release.config">
+      <DependentUpon>NLog.config</DependentUpon>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="nlog.config">
+    <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -27,6 +33,7 @@
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="3.0.1" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.2" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="1.1.13" />
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.1.5" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="7.0.14" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="7.0.14" />
     <PackageReference Include="StructureMap" Version="4.7.0" />
