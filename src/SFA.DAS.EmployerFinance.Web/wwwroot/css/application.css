@@ -4139,7 +4139,7 @@ nav ul {
 #user-nav > ul > li {
   float: left; }
 
-@media (min-width: 641px) {
+@media (min-width: 40.0625em) {
   #user-nav > ul > li {
     border: none;
     float: left; } }

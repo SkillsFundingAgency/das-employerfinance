@@ -122,8 +122,8 @@ nav ul {
   float: left
 }
 
-@media(min-width: 641px) {
-  #user-nav > ul > li {
+#user-nav > ul > li {
+  @include govuk-media-query($from: tablet) {
     border: none;
     float: left
   }
