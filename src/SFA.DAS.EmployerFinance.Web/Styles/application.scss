@@ -2,6 +2,7 @@
 //$govuk-global-styles: true;
 
 //todo: combine same media queries into 1?
+//todo: nesting
 
 $govuk-assets-path: '/wwwroot/';
 
@@ -161,22 +162,16 @@ nav ul {
   margin: 0 -15px
 }
 
-@media(min-width: 641px) {
-  .header-organisation ul li {
+.header-organisation ul li {
+  @include govuk-media-query($from: tablet) {
     float: left;
     font-size: 16px;
-    width: 50%
+    width: 50%;
   }
-}
-
-@media(min-width: 769px) {
-  .header-organisation ul li {
-    width: auto
+  @include govuk-media-query($from: desktop) {
+    width: auto;
   }
-}
-
-@media(min-width: 1000px) {
-  .header-organisation ul li {
+  @include govuk-media-query($from: 1000px) {
     font-size: 19px
   }
 }
