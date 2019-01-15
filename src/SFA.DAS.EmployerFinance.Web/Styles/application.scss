@@ -158,10 +158,50 @@ nav ul {
   ul {
     margin: 0 -15px;
 
-    li a {
-      display: block;
-      padding: 12px 15px 10px;
-      position: relative
+    li {
+      a {
+        display: block;
+        padding: 12px 15px 10px;
+        position: relative
+      }
+
+      a:link {
+        color: govuk-colour("blue");
+      }
+
+      a:visited {
+        color: das-colour("purple");
+      }
+
+      a:hover {
+        // replace custom colour with nearly identical govuk theme colour
+        //color: das-colour("blue");
+        color: govuk-colour("light-blue");
+      }
+
+      a:active {
+        // replace custom colour with nearly identical govuk theme colour
+        //color: das-colour("blue");
+        color: govuk-colour("light-blue");
+      }
+
+      a.selected {
+        color: govuk-colour("black");
+        @include govuk-typography-weight-bold();
+        text-decoration: none;
+      }
+
+      a.selected:after {
+        background: govuk-colour("blue");
+        bottom: -1px;
+        content: "";
+        display: block;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 5px;
+        z-index: 0
+      }
     }
   }
 }
@@ -178,44 +218,6 @@ nav ul {
   @include govuk-media-query($from: 1000px) {
     font-size: 19px
   }
-}
-
-.header-organisation ul li a:link {
-  color: govuk-colour("blue");
-}
-
-.header-organisation ul li a:visited {
-  color: das-colour("purple");
-}
-
-.header-organisation ul li a:hover {
-  // replace custom colour with nearly identical govuk theme colour
-  //color: das-colour("blue");
-  color: govuk-colour("light-blue");
-}
-
-.header-organisation ul li a:active {
-  // replace custom colour with nearly identical govuk theme colour
-  //color: das-colour("blue");
-  color: govuk-colour("light-blue");
-}
-
-.header-organisation ul li a.selected {
-  color: govuk-colour("black");
-  @include govuk-typography-weight-bold();
-  text-decoration: none
-}
-
-.header-organisation ul li a.selected:after {
-  background: govuk-colour("blue");
-  bottom: -1px;
-  content: "";
-  display: block;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 5px;
-  z-index: 0
 }
 
 .header-organisation ul li a.selected:after {
