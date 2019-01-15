@@ -4119,9 +4119,11 @@ nav ul {
   list-style: none;
   margin: 0; }
 
-@media (min-width: 641px) {
+@media (min-width: 40.0625em) {
   .header-user #user-nav {
-    float: right; }
+    float: right; } }
+
+@media (min-width: 40.0625em) {
   .header-user h2 {
     float: left; } }
 

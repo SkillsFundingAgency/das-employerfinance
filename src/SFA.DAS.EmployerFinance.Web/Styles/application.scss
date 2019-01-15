@@ -1,6 +1,8 @@
 // https://design-system.service.gov.uk/get-started/production/
 //$govuk-global-styles: true;
 
+//todo: combine same media queries into 1?
+
 $govuk-assets-path: '/wwwroot/';
 
 @import "govuk-frontend/all";
@@ -60,6 +62,7 @@ body {
   margin: 0;
   padding: 0;
 }
+
 .header-inner {
   font-size: 14px;
   max-width: 960px;
@@ -91,12 +94,14 @@ nav ul {
   margin: 0
 }
 
-@media(min-width: 641px) {
-  .header-user #user-nav {
+.header-user #user-nav {
+  @include govuk-media-query($from: tablet) {
     float: right
   }
+}
 
-  .header-user h2 {
+.header-user h2 {
+  @include govuk-media-query($from: tablet) {
     float: left
   }
 }
