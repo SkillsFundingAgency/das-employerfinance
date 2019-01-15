@@ -4216,7 +4216,7 @@ nav ul {
   width: 5px;
   z-index: 0; }
 
-@media (min-width: 769px) {
+@media (min-width: 48.0625em) {
   .header-organisation ul li a.selected:after {
     height: 5px;
     left: 15px;
@@ -4233,21 +4233,21 @@ nav ul {
 .js-enabled #user-nav li, .js-enabled #user-nav a, .js-enabled #user-nav li ul {
   float: none; }
 
-@media (min-width: 641px) {
+@media (min-width: 40.0625em) {
   .js-enabled #user-nav > ul > li {
     float: left; } }
 
 .js-enabled #user-nav.close {
   display: none; }
 
-@media (min-width: 641px) {
+@media (min-width: 40.0625em) {
   .js-enabled #user-nav.close {
     display: block; } }
 
 .js-enabled #user-nav > ul > li > a {
   z-index: 2; }
 
-@media (min-width: 641px) {
+@media (min-width: 40.0625em) {
   .js-enabled #user-nav > ul > li > a {
     border: 1px solid #f8f8f8; } }
 
@@ -4283,7 +4283,7 @@ nav ul {
   top: 50%;
   width: 0; }
 
-@media (min-width: 641px) {
+@media (min-width: 40.0625em) {
   .js-enabled #user-nav li.has-sub-menu ul {
     background: #f8f8f8;
     border: 1px solid #bfc1c3;
@@ -4292,17 +4292,18 @@ nav ul {
     position: absolute;
     right: 0;
     width: 200px;
-    z-index: 1; }
+    z-index: 1; } }
+
+@media (min-width: 40.0625em) {
   .js-enabled #user-nav li.has-sub-menu ul li:first-child {
     border-top: none; } }
 
 .js-enabled .header-organisation ul {
   position: relative; }
+  .js-enabled .header-organisation ul li {
+    float: left; }
 
-.js-enabled .header-organisation ul li {
-  float: left; }
-
-@media (min-width: 641px) {
+@media (min-width: 40.0625em) {
   .js-enabled .header-organisation ul li {
     width: auto; } }
 
@@ -4470,7 +4471,9 @@ li.menu-link.sub-menu-open ul li a {
 
 @media (min-width: 40.0625em) {
   .govuk-info-summary {
-    border: 5px solid #2e358b; }
+    border: 5px solid #2e358b; } }
+
+@media (min-width: 40.0625em) {
   .govuk-success-summary {
     border: 5px solid #28a197; } }
 
@@ -4503,7 +4506,6 @@ li.menu-link.sub-menu-open ul li a {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
-  font-size: 16px;
   font-size: 1rem;
   line-height: 1.25; }
   @media print {
@@ -4512,7 +4514,6 @@ li.menu-link.sub-menu-open ul li a {
 
 @media (min-width: 40.0625em) {
   .govuk-info-summary__body, .govuk-success-summary__body {
-    font-size: 19px;
     font-size: 1.1875rem;
     line-height: 1.31579; } }
 
