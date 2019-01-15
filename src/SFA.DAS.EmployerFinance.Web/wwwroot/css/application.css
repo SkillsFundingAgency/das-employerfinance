@@ -4198,10 +4198,10 @@ nav ul {
   color: #4c2c92; }
 
 .header-organisation ul li a:hover {
-  color: #2e8aca; }
+  color: #2b8cc4; }
 
 .header-organisation ul li a:active {
-  color: #2e8aca; }
+  color: #2b8cc4; }
 
 .header-organisation ul li a.selected {
   color: #0b0c0c;
@@ -4265,7 +4265,7 @@ nav ul {
 
 .js-enabled #user-nav li.has-sub-menu.open > a:before {
   border-left-color: transparent;
-  border-top-color: #000;
+  border-top-color: #0b0c0c;
   border-width: 7px 4px; }
 
 .js-enabled #user-nav li.has-sub-menu > a {
@@ -4274,7 +4274,7 @@ nav ul {
 
 .js-enabled #user-nav li.has-sub-menu > a:before {
   border-color: transparent;
-  border-left-color: #fff;
+  border-left-color: #ffffff;
   border-style: solid;
   border-width: 4px 7px;
   content: "";
@@ -4331,7 +4331,7 @@ nav ul {
 .floating-menu {
   background: #6f72af;
   clear: both;
-  color: #fff;
+  color: #ffffff;
   margin: 0 auto;
   max-width: 960px;
   width: 100%;
@@ -4344,7 +4344,7 @@ nav ul {
 
 .header-organisation ul li.menu-link.sub-menu-open > a:before {
   border-left-color: transparent;
-  border-top-color: #000;
+  border-top-color: #0b0c0c;
   border-width: 7px 4px; }
 
 .header-organisation ul li.menu-link > a {
@@ -4355,7 +4355,7 @@ nav ul {
 
 .header-organisation ul li.menu-link > a:before {
   border-color: transparent;
-  border-left-color: #000;
+  border-left-color: #0b0c0c;
   border-style: solid;
   border-width: 4px 7px;
   content: "";
@@ -4410,14 +4410,14 @@ li.menu-link.sub-menu-open ul li a {
 
 .floating-menu nav#user-nav li .has-sub-menu a.menu-main {
   border: 0;
-  color: #fff; }
+  color: #ffffff; }
 
 .floating-menu nav#user-nav li .open a.menu-main {
   color: #4c2c92; }
 
 .floating-menu nav#user-nav li a {
   border: 0;
-  color: #fff; }
+  color: #ffffff; }
 
 .floating-menu p.floating-head-text {
   float: left;
@@ -4460,7 +4460,7 @@ li.menu-link.sub-menu-open ul li a {
 
 @media print {
   .govuk-info-summary, .govuk-success-summary {
-    color: #000; } }
+    color: #000000; } }
 
 @media (min-width: 40.0625em) {
   .govuk-info-summary, .govuk-success-summary {
