@@ -4177,6 +4177,8 @@ nav ul {
       top: 0;
       width: 5px;
       z-index: 0; }
+    .header-organisation ul li a:focus {
+      outline: 0; }
 
 @media (min-width: 40.0625em) {
   .header-organisation ul li {
@@ -4199,9 +4201,6 @@ nav ul {
     right: 15px;
     top: auto;
     width: auto; } }
-
-.header-organisation ul li a:focus {
-  outline: 0; }
 
 .js-enabled #user-nav {
   text-align: left; }
