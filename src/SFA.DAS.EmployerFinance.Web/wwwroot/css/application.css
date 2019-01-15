@@ -4130,7 +4130,7 @@ nav ul {
   .header-user h2 {
     float: left; } }
 
-@media (min-width: 641px) {
+@media (min-width: 40.0625em) {
   #user-nav {
     font-size: 16px;
     margin: 5px 0; } }

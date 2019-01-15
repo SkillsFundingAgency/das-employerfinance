@@ -112,8 +112,15 @@ nav ul {
   }
 }
 
-@media(min-width: 641px) {
-  #user-nav {
+// note: using the govuk-media-query changes the media query unit to em from px
+// there is debate as to which is the best to use,
+// this site claims Safari has issues using px for media queries...
+// https://zellwk.com/blog/media-query-units/
+// whereas this site recommends using px...
+// https://adamwathan.me/dont-use-em-for-media-queries/
+// however, if we use govuk's mixin, at least the whole page will break consistently!
+#user-nav {
+  @include govuk-media-query($from: tablet) {
     font-size: 16px;
     margin: 5px 0
   }
