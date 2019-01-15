@@ -4095,7 +4095,8 @@ body {
 
 .header-inner {
   font-size: 14px;
-  max-width: 960px; }
+  max-width: 960px;
+  margin-bottom: 0; }
 
 @media (min-width: 40.0625em) {
   .header-inner {
@@ -4105,9 +4106,6 @@ body {
 @media (min-width: 63.75em) {
   .header-inner {
     margin: 0 auto 50px; } }
-
-.header-inner {
-  margin-bottom: 0; }
 
 .header-user {
   background: #f8f8f8;
