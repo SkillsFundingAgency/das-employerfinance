@@ -339,19 +339,19 @@ nav ul {
 
 #floating-menu-holder {
   background: govuk-colour("light-purple");
-  width: 100%
-}
+  width: 100%;
 
-#floating-menu-holder .fixed-header {
-  left: 0;
-  max-width: 100%;
-  position: fixed;
-  top: 0
-}
+  .fixed-header {
+    left: 0;
+    max-width: 100%;
+    position: fixed;
+    top: 0
+  }
 
-#floating-menu-holder .width-adjust {
-  margin: 0 auto;
-  max-width: 960px
+  .width-adjust {
+    margin: 0 auto;
+    max-width: 960px
+  }
 }
 
 .account-information:after, .header-organisation ul:after {
@@ -367,13 +367,13 @@ nav ul {
   margin: 0 auto;
   max-width: 960px;
   width: 100%;
-  z-index: 1
-}
+  z-index: 1;
 
-.floating-menu nav#user-nav {
-  clear: both;
-  float: left;
-  margin: 0 0 0 20px
+  nav#user-nav {
+    clear: both;
+    float: left;
+    margin: 0 0 0 20px
+  }
 }
 
 .header-organisation ul li.menu-link.sub-menu-open > a:before {
@@ -412,40 +412,40 @@ nav ul {
   width: auto
 }
 
-.js-enabled .header-organisation ul li.menu-link.sub-menu-open {
-  clear: left;
-  width: 100%
-}
-
-.js-enabled .header-organisation ul li.menu-link.sub-menu-open ul li {
-  border-top: 1px solid govuk-colour("grey-3");
-}
-
-.js-enabled .header-organisation ul li.menu-link.sub-menu-open ul li a.selected:after {
-  height: auto;
-  left: 0;
-  right: auto;
-  top: 0;
-  width: 5px
-}
-
-li.menu-link ul {
-  display: none
-}
-
-li.menu-link.sub-menu-open ul {
-  display: block;
-  margin: 0
-}
-
-li.menu-link.sub-menu-open ul li {
-  display: block;
-  float: none
-}
-
-li.menu-link.sub-menu-open ul li a {
-  display: block
-}
+//.js-enabled .header-organisation ul li.menu-link.sub-menu-open {
+//  clear: left;
+//  width: 100%
+//}
+//
+//.js-enabled .header-organisation ul li.menu-link.sub-menu-open ul li {
+//  border-top: 1px solid govuk-colour("grey-3");
+//}
+//
+//.js-enabled .header-organisation ul li.menu-link.sub-menu-open ul li a.selected:after {
+//  height: auto;
+//  left: 0;
+//  right: auto;
+//  top: 0;
+//  width: 5px
+//}
+//
+//li.menu-link ul {
+//  display: none
+//}
+//
+//li.menu-link.sub-menu-open ul {
+//  display: block;
+//  margin: 0
+//}
+//
+//li.menu-link.sub-menu-open ul li {
+//  display: block;
+//  float: none
+//}
+//
+//li.menu-link.sub-menu-open ul li a {
+//  display: block
+//}
 
 .floating-menu nav#user-nav {
   @include govuk-media-query($from: tablet) {
