@@ -549,18 +549,17 @@ li.menu-link.sub-menu-open ul li a {
 .govuk-info-summary__title, .govuk-success-summary__title {
   @include govuk-typography-common($govuk-font-family-nta);
   @include govuk-typography-weight-bold();
-  font-size: 18px;
   font-size: 1.125rem;
   line-height: 1.11111;
   margin-top: 0;
   margin-bottom: 15px
 }
 
-@media (min-width: 40.0625em) {
-  .govuk-info-summary__title, .govuk-success-summary__title {
-    font-size:24px;
+.govuk-info-summary__title, .govuk-success-summary__title {
+  @include govuk-media-query($from: tablet) {
     font-size: 1.5rem;
-    line-height: 1.25
+    line-height: 1.25;
+    margin-bottom: 20px;
   }
 }
 
@@ -568,12 +567,6 @@ li.menu-link.sub-menu-open ul li a {
   .govuk-info-summary__title, .govuk-success-summary__title {
     font-size: 18pt;
     line-height: 1.15
-  }
-}
-
-@media (min-width: 40.0625em) {
-  .govuk-info-summary__title, .govuk-success-summary__title {
-    margin-bottom:20px
   }
 }
 
