@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Domain\SFA.DAS.EmployerFinance.Domain.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Types\SFA.DAS.EmployerFinance.Types.csproj" />
   </ItemGroup>
 
 </Project>

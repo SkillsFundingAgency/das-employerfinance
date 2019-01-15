@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EmployerFinance.Domain.ExpiredFunds
+namespace SFA.DAS.EmployerFinance.Types.ExpiredFunds
 {
     public class CalendarPeriod : IComparable<CalendarPeriod>
     {

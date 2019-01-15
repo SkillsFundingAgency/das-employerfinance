@@ -1,19 +1,19 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using SFA.DAS.EmployerFinance.Domain.ExpiredFunds;
+using SFA.DAS.EmployerFinance.Types.ExpiredFunds;
 
 namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
 {
     public class WhenGetExpiredFundsByDate
     {
-        private EmployerFinance.ExpiredFunds.ExpiredFunds _expiredFunds;
+        private Types.ExpiredFunds.ExpiredFunds _expiredFunds;
         private Dictionary<CalendarPeriod, decimal> _fundsIn;
 
         [SetUp]
         public void Arrange()
         {
-            _expiredFunds = new EmployerFinance.ExpiredFunds.ExpiredFunds();
+            _expiredFunds = new Types.ExpiredFunds.ExpiredFunds();
 
             _fundsIn = new Dictionary<CalendarPeriod, decimal>
             {

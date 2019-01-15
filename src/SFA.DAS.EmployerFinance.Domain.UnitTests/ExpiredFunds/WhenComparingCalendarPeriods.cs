@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using SFA.DAS.EmployerFinance.Domain.ExpiredFunds;
+using SFA.DAS.EmployerFinance.Types.ExpiredFunds;
 
 namespace SFA.DAS.EmployerFinance.Domain.UnitTests.ExpiredFunds
 {
