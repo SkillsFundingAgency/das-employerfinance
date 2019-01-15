@@ -525,15 +525,10 @@ li.menu-link.sub-menu-open ul li a {
   }
 }
 
-@media (min-width: 40.0625em) {
-  .govuk-info-summary, .govuk-success-summary {
-    padding:20px
-  }
-}
-
-@media (min-width: 40.0625em) {
-  .govuk-info-summary, .govuk-success-summary {
-    margin-bottom:50px
+.govuk-info-summary, .govuk-success-summary {
+  @include govuk-media-query($from: tablet) {
+    padding: 20px;
+    margin-bottom: 50px;
   }
 }
 
