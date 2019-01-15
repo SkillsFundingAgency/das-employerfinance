@@ -4071,7 +4071,7 @@
 
 /*** Overide GDS styles to match DAS **/
 body {
-  font-family: nta, Arial, sans-serif; }
+  font-family: "nta", Arial, sans-serif; }
 
 .govuk-header {
   border-bottom: 0; }
@@ -4481,7 +4481,7 @@ li.menu-link.sub-menu-open ul li a {
     border: 5px solid #28a197; } }
 
 .govuk-info-summary__title, .govuk-success-summary__title {
-  font-family: "nta",Arial,sans-serif;
+  font-family: "nta", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 700;
@@ -4511,7 +4511,7 @@ li.menu-link.sub-menu-open ul li a {
     margin-bottom: 20px; } }
 
 .govuk-info-summary__body, .govuk-success-summary__body {
-  font-family: "nta",Arial,sans-serif;
+  font-family: "nta", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;

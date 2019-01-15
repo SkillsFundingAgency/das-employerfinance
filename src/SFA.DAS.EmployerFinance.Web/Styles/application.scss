@@ -32,7 +32,7 @@ $das-colours: (
 }
 
 body {
-  font-family: nta, Arial, sans-serif;
+  font-family: $govuk-font-family;
 }
 
 .govuk-header {
@@ -215,7 +215,7 @@ nav ul {
 
 .header-organisation ul li a.selected {
   color: govuk-colour("black");
-  font-weight: 700;
+  font-weight: $govuk-font-weight-bold;
   text-decoration: none
 }
 
@@ -483,7 +483,7 @@ li.menu-link.sub-menu-open ul li a {
 .floating-menu p.floating-head-text {
   float: left;
   font-size: 19px;
-  font-weight: 700;
+  font-weight: $govuk-font-weight-bold;
   margin: 10px 0 0 10px
 }
 
@@ -563,10 +563,10 @@ li.menu-link.sub-menu-open ul li a {
 }
 
 .govuk-info-summary__title, .govuk-success-summary__title {
-  font-family: "nta",Arial,sans-serif;
+  font-family: $govuk-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-weight: 700;
+  font-weight: $govuk-font-weight-bold;
   font-size: 18px;
   font-size: 1.125rem;
   line-height: 1.11111;
@@ -576,7 +576,7 @@ li.menu-link.sub-menu-open ul li a {
 
 @media print {
   .govuk-info-summary__title, .govuk-success-summary__title {
-    font-family: sans-serif
+    font-family: $govuk-font-family-print
   }
 }
 
@@ -602,10 +602,10 @@ li.menu-link.sub-menu-open ul li a {
 }
 
 .govuk-info-summary__body, .govuk-success-summary__body {
-  font-family: "nta",Arial,sans-serif;
+  font-family: $govuk-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-weight: 400;
+  font-weight: $govuk-font-weight-regular;
   font-size: 16px;
   font-size: 1rem;
   line-height: 1.25
@@ -613,7 +613,7 @@ li.menu-link.sub-menu-open ul li a {
 
 @media print {
   .govuk-info-summary__body, .govuk-success-summary__body {
-    font-family: sans-serif
+    font-family: $govuk-font-family-print
   }
 }
 
@@ -649,7 +649,7 @@ li.menu-link.sub-menu-open ul li a {
 }
 
 .govuk-info-summary__list a, .govuk-success-summary__list a {
-  font-weight: 700
+  font-weight: $govuk-font-weight-bold
 }
 
 .govuk-info-summary__list a:focus, .govuk-success-summary__list a:focus {
