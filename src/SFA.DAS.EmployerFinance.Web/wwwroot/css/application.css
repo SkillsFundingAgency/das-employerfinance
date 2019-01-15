@@ -4399,7 +4399,7 @@ li.menu-link.sub-menu-open ul li {
 li.menu-link.sub-menu-open ul li a {
   display: block; }
 
-@media (min-width: 641px) {
+@media (min-width: 40.0625em) {
   .floating-menu nav#user-nav {
     clear: none;
     float: right;
@@ -4422,11 +4422,11 @@ li.menu-link.sub-menu-open ul li a {
   font-weight: 700;
   margin: 10px 0 0 10px; }
 
-@media (min-width: 641px) {
+@media (min-width: 40.0625em) {
   .floating-menu p.floating-head-text {
     margin: 10px 0; } }
 
-@media (min-width: 641px) {
+@media (min-width: 40.0625em) {
   .floating-menu nav#user-nav #settings-menu a.sub-menu-item {
     color: #4c2c92 !important; } }
 
