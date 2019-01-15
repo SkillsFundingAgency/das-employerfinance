@@ -4097,20 +4097,17 @@ body {
   font-size: 14px;
   max-width: 960px; }
 
-@media (min-width: 641px) {
+@media (min-width: 40.0625em) {
   .header-inner {
-    margin: 0 30px 30px; } }
+    margin: 0 30px 30px;
+    font-size: 19px; } }
 
-@media (min-width: 1020px) {
+@media (min-width: 63.75em) {
   .header-inner {
     margin: 0 auto 50px; } }
 
 .header-inner {
   margin-bottom: 0; }
-
-@media (min-width: 641px) {
-  .header-inner {
-    font-size: 19px; } }
 
 .header-user {
   background: #f8f8f8;
