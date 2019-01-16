@@ -23,6 +23,8 @@ ProjectSection(SolutionItems) = preProject
 	..\LICENSE = ..\LICENSE
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance", "SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj", "{0CB7ACE6-22DF-44CC-8A2E-D56269F60777}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{AAED1418-FD81-4FB5-9BBD-756B7F636C73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAED1418-FD81-4FB5-9BBD-756B7F636C73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAED1418-FD81-4FB5-9BBD-756B7F636C73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CB7ACE6-22DF-44CC-8A2E-D56269F60777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CB7ACE6-22DF-44CC-8A2E-D56269F60777}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CB7ACE6-22DF-44CC-8A2E-D56269F60777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CB7ACE6-22DF-44CC-8A2E-D56269F60777}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
