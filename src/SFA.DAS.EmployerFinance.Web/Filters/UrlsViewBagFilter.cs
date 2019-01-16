@@ -1,75 +1,30 @@
 using System;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Web.Urls;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web.Filters
 {
-    public class UrlsViewBagFilter : IAsyncActionFilter, IAsyncPageFilter
+    public class UrlsViewBagFilter : IAsyncActionFilter
     {
-//        private readonly Func<IEmployerUrls> _employerUrls;
-//        private readonly ILogger _logger;
-
-//        public UrlsViewBagFilter(IServiceProvider serviceProvider, Func<IEmployerUrls> employerUrls/*, ILogger logger*/)
-//        {
-//            _employerUrls = employerUrls;
-//
-//            _employerUrls = (Func<IEmployerUrls>)serviceProvider.GetRequiredService<IEmployerUrls>();
-////            _logger = logger;
-//        }
-
-        public UrlsViewBagFilter(IContainer container/*, ILogger logger*/)
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            //_employerUrls = container.GetInstance<Func<IEmployerUrls>>();
-//            _logger = logger;
-        }
-
-        public async Task OnActionExecutionAsync
-            (ActionExecutingContext context, ActionExecutionDelegate next)
-        {
-            var container = context.HttpContext.RequestServices.GetService<IContainer>();
-            var x_employerUrls = container.GetInstance<Func<IEmployerUrls>>();
-            
             var controller = context.Controller as Controller;
             if (controller == null)
                 return;
 
-            var employerUrls = x_employerUrls();
-            //var employerUrls = _employerUrls();
-            controller.ViewData["EmployerUrls"] = employerUrls;
+            // options: https://stackoverflow.com/questions/32459670/resolving-instances-with-asp-net-core-di
 
-            var resultContext = await next();
-        }
-        
-        public async Task OnPageHandlerSelectionAsync(
-            PageHandlerSelectedContext context)
-        {
-            await Task.CompletedTask;
-        }
+            //todo: no need for func if we get it each time, rather than using ctor injection
+            var container = context.HttpContext.RequestServices.GetService<IContainer>();
+            var getEmployerUrls = container.GetInstance<Func<IEmployerUrls>>();
 
-        public async Task OnPageHandlerExecutionAsync(
-            PageHandlerExecutingContext context,
-            PageHandlerExecutionDelegate next)
-        {
-            //var employerUrls = _employerUrls();
-//            var accountHashedId = (string)context.RouteData.Values[RouteValueKeys.AccountHashedId];
-            
-//            employerUrls.Initialize(accountHashedId);
-            
-//            context.HttpContext.Controller.ViewBag.EmployerUrls = employerUrls;
+            controller.ViewData["EmployerUrls"] = getEmployerUrls();
 
-            var page = context.HandlerInstance as PageModel;
-            if (page == null)
-                return;
-            
-            //page.ViewData["EmployerUrls"] = employerUrls;
-            
-            await next.Invoke();
+            await next();
         }
     }
 }

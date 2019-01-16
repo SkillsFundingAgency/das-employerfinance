@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Web.DependencyResolution;
 using SFA.DAS.EmployerFinance.Web.Filters;
-using SFA.DAS.EmployerFinance.Web.Urls;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web
@@ -31,19 +30,14 @@ namespace SFA.DAS.EmployerFinance.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-            // options: https://stackoverflow.com/questions/32459670/resolving-instances-with-asp-net-core-di
-            var serviceProvider = services.BuildServiceProvider();
             
             services.AddMvc(options =>
                 {
-//                    options.Filters.Add(new UrlsViewBagFilter(() => serviceProvider.GetService<IEmployerUrls>()));
-                    options.Filters.Add(new UrlsViewBagFilter(serviceProvider.GetService<IContainer>()));
+                    options.Filters.Add(new UrlsViewBagFilter());
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
