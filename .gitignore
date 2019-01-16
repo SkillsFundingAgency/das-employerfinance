@@ -268,3 +268,4 @@ desktop.ini
 App.Debug.config
 *.json
 !appsettings.json
+!appsettings.[Dd]evelopment.json
