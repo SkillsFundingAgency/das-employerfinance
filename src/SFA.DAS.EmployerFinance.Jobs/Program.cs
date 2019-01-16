@@ -52,7 +52,6 @@ namespace SFA.DAS.EmployerFinance.Jobs
                     })
                     .ConfigureServices(collection =>
                     {
-                        //Wire up the IOC container to the built in web job IOC container
                         collection.AddSingleton<IJobActivator>(jobActivator);
                     })
                     .UseConsoleLifetime();
