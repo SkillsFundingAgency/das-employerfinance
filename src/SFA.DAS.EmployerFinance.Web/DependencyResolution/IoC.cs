@@ -1,17 +1,14 @@
-using SFA.DAS.EmployerFinance.DependencyResolution;
 using StructureMap;
+using SFA.DAS.EmployerFinance.DependencyResolution;
 
 namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
 {
     public static class IoC
     {
-        public static IContainer Initialize()
+        public static void Initialize(Registry registry)
         {
-            return new Container(c =>
-            {
-                c.AddRegistry<ConfigurationRegistry>();
-                c.AddRegistry<DefaultRegistry>();
-            });
+            registry.IncludeRegistry<ConfigurationRegistry>();
+            registry.IncludeRegistry<DefaultRegistry>();
         }
     }
 }
