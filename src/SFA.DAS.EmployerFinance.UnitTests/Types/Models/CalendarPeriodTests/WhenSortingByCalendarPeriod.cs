@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Types.Models;
 
-namespace SFA.DAS.EmployerFinance.UnitTests.Types.CalendarPeriodTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.CalendarPeriodTests
 {
     public class WhenSortingByCalendarPeriod
     {

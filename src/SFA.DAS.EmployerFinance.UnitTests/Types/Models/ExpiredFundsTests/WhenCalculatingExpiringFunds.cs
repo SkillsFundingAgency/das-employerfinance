@@ -4,8 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Types.Models;
 
-
-namespace SFA.DAS.EmployerFinance.UnitTests.Types.ExpiredFundsTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
 {
     public class WhenCalculatingExpiringFunds
     {
