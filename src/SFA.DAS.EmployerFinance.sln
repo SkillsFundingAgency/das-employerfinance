@@ -3,13 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B9600BBE-2E67-4588-839E-C556C35CD682}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.Types", "SFA.DAS.EmployerFinance.Types\SFA.DAS.EmployerFinance.Types.csproj", "{7F7B16FA-30E8-4AAF-A7C7-F6A843850BAB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests", "SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests\SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.csproj", "{DC423DEF-5A17-43EA-9B87-87C10B141DFE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.Domain.UnitTests", "SFA.DAS.EmployerFinance.Domain.UnitTests\SFA.DAS.EmployerFinance.Domain.UnitTests.csproj", "{A641A260-1BAB-47BB-9067-997C8D02081E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Types", "SFA.DAS.EmployerFinance.Types\SFA.DAS.EmployerFinance.Types.csproj", "{7F7B16FA-30E8-4AAF-A7C7-F6A843850BAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.UnitTests", "SFA.DAS.EmployerFinance.UnitTests\SFA.DAS.EmployerFinance.UnitTests.csproj", "{2BD44ADA-8758-45D7-9987-48402C921D36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,25 +13,17 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DC423DEF-5A17-43EA-9B87-87C10B141DFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC423DEF-5A17-43EA-9B87-87C10B141DFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC423DEF-5A17-43EA-9B87-87C10B141DFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC423DEF-5A17-43EA-9B87-87C10B141DFE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A641A260-1BAB-47BB-9067-997C8D02081E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A641A260-1BAB-47BB-9067-997C8D02081E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A641A260-1BAB-47BB-9067-997C8D02081E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A641A260-1BAB-47BB-9067-997C8D02081E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7F7B16FA-30E8-4AAF-A7C7-F6A843850BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7F7B16FA-30E8-4AAF-A7C7-F6A843850BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F7B16FA-30E8-4AAF-A7C7-F6A843850BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F7B16FA-30E8-4AAF-A7C7-F6A843850BAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BD44ADA-8758-45D7-9987-48402C921D36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BD44ADA-8758-45D7-9987-48402C921D36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BD44ADA-8758-45D7-9987-48402C921D36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BD44ADA-8758-45D7-9987-48402C921D36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{DC423DEF-5A17-43EA-9B87-87C10B141DFE} = {B9600BBE-2E67-4588-839E-C556C35CD682}
-		{A641A260-1BAB-47BB-9067-997C8D02081E} = {B9600BBE-2E67-4588-839E-C556C35CD682}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C17E7E9F-0BDD-448B-9E0F-44E81E91B1C1}
