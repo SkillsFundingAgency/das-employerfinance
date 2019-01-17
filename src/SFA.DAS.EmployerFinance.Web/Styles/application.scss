@@ -4,7 +4,7 @@
 //todo: combine same media queries into 1?
 //todo: nesting
 
-$govuk-assets-path: '/wwwroot/';
+$govuk-assets-path: 'https://das-prd-frnt-end.azureedge.net/assets/';
 
 @import "govuk-frontend/all";
 
