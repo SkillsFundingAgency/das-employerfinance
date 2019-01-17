@@ -222,7 +222,8 @@ nav ul {
   @include govuk-media-query($from: desktop) {
     width: auto;
   }
-  @include govuk-media-query($from: 1000px) {
+  //this value needs to be high enough so that when shrinking the browser window, the font size shrinks before the line splits onto 2 lines
+  @include govuk-media-query($from: 1050px) {
     font-size: 19px
   }
 }
