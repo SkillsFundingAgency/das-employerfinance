@@ -68,10 +68,10 @@
                                 <a href="/" role="menuitem" class="menu-main">Settings</a>
                                 <ul role="menu" id="settings-menu" class="js-hidden">
                                     <li><a href="@Html.EmployerUrls().YourAccounts()" class="sub-menu-item" role="menuitem">Your accounts</a></li>
-@*todo                                     @if (ViewContext.RouteData.Values.ContainsKey(RouteValueKeys.AccountHashedId)) *@
-@*                                     { *@
+                                     @if (ViewContext.RouteData.Values.ContainsKey(RouteValueKeys.AccountHashedId))
+                                     {
                                          <li><a href="@Html.EmployerUrls().RenameAccount()" class="sub-menu-item">Rename account</a></li>
-@*                                     } *@
+                                     }
                                     <li><a href="@Html.EmployerUrls().ChangePassword()" class="sub-menu-item">Change your password</a></li>
                                     <li><a href="@Html.EmployerUrls().ChangeEmail()" class="sub-menu-item">Change your email address</a></li>
                                     <li><a href="@Html.EmployerUrls().NotificationSettings()" class="sub-menu-item">Notifications settings</a></li>
@@ -88,8 +88,8 @@
             </div>
         </div>
     </div>
-@*todo @if (Context.User.Identity.IsAuthenticated && ViewContext.RouteData.Values.ContainsKey(RouteValueKeys.AccountHashedId)) *@
-@*     { *@
+    @if (Context.User.Identity.IsAuthenticated && ViewContext.RouteData.Values.ContainsKey(RouteValueKeys.AccountHashedId))
+    {
         <div class="header-organisation" role="navigation">
             <nav class="header-inner">
                 <ul role="menubar" id="global-nav-links">
@@ -103,7 +103,7 @@
                 </ul>
             </nav>
         </div>
-    @* } *@
+    }
     <div class="govuk-width-container">
         @RenderSection("breadcrumb", false)
         <main class="govuk-main-wrapper " id="main-content" role="main">
@@ -150,12 +150,20 @@
         </div>
     </footer>
 
-    <environment include="Development">
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
+<environment include="Development">
+    <script src="~/lib/jquery/jquery.js"></script>
+    @* todo split site out into 2 js files, and pick up all.js from the cdn? what about versioning? separate files will make it more likely to hit the 6 concurrent downloads limit and slow the site down, but serving all.js from cdn should be cheaper?*@
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</environment>
+<environment exclude="Development">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+            asp-fallback-src="~/lib/jquery/jquery.min.js"
+            asp-fallback-test="window.jQuery"
+            crossorigin="anonymous"
+            integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+    </script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+</environment>
 
     @RenderSection("Scripts", required: false)
 </body>

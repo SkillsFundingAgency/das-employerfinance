@@ -2,9 +2,10 @@
 //$govuk-global-styles: true;
 
 //todo: combine same media queries into 1?
-//todo: nesting
 
 $govuk-assets-path: 'https://das-prd-frnt-end.azureedge.net/assets/';
+
+//todo: only import mixins, variables etc. and fetch base frontend css from cdn
 
 @import "govuk-frontend/all";
 
