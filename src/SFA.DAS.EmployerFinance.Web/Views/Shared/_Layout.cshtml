@@ -70,7 +70,7 @@
                                     <li><a href="@Html.EmployerUrls().YourAccounts()" class="sub-menu-item" role="menuitem">Your accounts</a></li>
 @*todo                                     @if (ViewContext.RouteData.Values.ContainsKey(RouteValueKeys.AccountHashedId)) *@
 @*                                     { *@
-@*                                         <li><a href="@Html.EmployerUrls().RenameAccount()" class="sub-menu-item">Rename account</a></li> *@
+                                         <li><a href="@Html.EmployerUrls().RenameAccount()" class="sub-menu-item">Rename account</a></li>
 @*                                     } *@
                                     <li><a href="@Html.EmployerUrls().ChangePassword()" class="sub-menu-item">Change your password</a></li>
                                     <li><a href="@Html.EmployerUrls().ChangeEmail()" class="sub-menu-item">Change your email address</a></li>
@@ -89,8 +89,7 @@
         </div>
     </div>
 @*todo @if (Context.User.Identity.IsAuthenticated && ViewContext.RouteData.Values.ContainsKey(RouteValueKeys.AccountHashedId)) *@
-    @if (Context.User.Identity.IsAuthenticated)
-    {
+@*     { *@
         <div class="header-organisation" role="navigation">
             <nav class="header-inner">
                 <ul role="menubar" id="global-nav-links">
@@ -104,7 +103,7 @@
                 </ul>
             </nav>
         </div>
-    }
+    @* } *@
     <div class="govuk-width-container">
         @RenderSection("breadcrumb", false)
         <main class="govuk-main-wrapper " id="main-content" role="main">

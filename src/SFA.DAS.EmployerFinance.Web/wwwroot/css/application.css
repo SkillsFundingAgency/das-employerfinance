@@ -4095,8 +4095,7 @@ body {
 
 .header-inner {
   font-size: 14px;
-  max-width: 960px;
-  margin-bottom: 0; }
+  max-width: 960px; }
 
 @media (min-width: 40.0625em) {
   .header-inner {
@@ -4106,6 +4105,9 @@ body {
 @media (min-width: 63.75em) {
   .header-inner {
     margin: 0 auto 50px; } }
+
+.header-inner {
+  margin-bottom: 0; }
 
 nav ul {
   list-style: none;
@@ -4231,7 +4233,6 @@ nav ul {
 
 .js-enabled #user-nav li.has-sub-menu.open > a {
   background: #f8f8f8;
-  border-bottom-color: #f8f8f8;
   border-color: #bfc1c3;
   color: #4c2c92; }
 

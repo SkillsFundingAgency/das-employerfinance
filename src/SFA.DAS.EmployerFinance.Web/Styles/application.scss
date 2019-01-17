@@ -67,7 +67,6 @@ body {
 .header-inner {
   font-size: 14px;
   max-width: 960px;
-  margin-bottom: 0;
 }
 
 .header-inner {
@@ -78,6 +77,10 @@ body {
   @include govuk-media-query($from: 1020px) {
     margin: 0 auto 50px
   }
+}
+
+.header-inner {
+  margin-bottom: 0;
 }
 
 //.header-user {
