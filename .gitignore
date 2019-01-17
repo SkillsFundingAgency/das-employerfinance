@@ -266,7 +266,6 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 *.stackdump
 desktop.ini
 App.Debug.config
-*.json
 
 # SFA.DAS
 !src/DasAmlCert.pfx
