@@ -8,12 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="appsettings.Development.json" />
-    <None Remove="appsettings.json" />
-    <None Remove="nlog.config" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="appsettings.Development.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -40,12 +34,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System">
-      <HintPath>System</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
