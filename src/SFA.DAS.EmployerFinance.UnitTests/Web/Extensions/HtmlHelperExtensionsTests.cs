@@ -6,24 +6,38 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.EmployerFinance.Web.Urls;
+using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Web.Extensions
 {
     [TestFixture]
-    public class HtmlHelperExtensionsTests
+    public class HtmlHelperExtensionsTests: FluentTest<HtmlHelperExtensionsTestsFixture>
     {
         [Test]
         public void WhenGettingEmployerUrls_ThenShouldGetEmployerUrls()
         {
-            var viewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary());
-            var mockEmployerUrls = new Mock<IEmployerUrls>();
-            viewData["EmployerUrls"] = mockEmployerUrls.Object;
-            var mockHtmlHelper = new Mock<IHtmlHelper>();
-            mockHtmlHelper.SetupGet(hh => hh.ViewData).Returns(viewData);
-            
-            var employerUrlsResult = mockHtmlHelper.Object.EmployerUrls();
+            Test(f => f.GetEmployerUrls(), (f, r) => r.Should().Be(f.EmployerUrls.Object));
+        }
+    }
 
-            employerUrlsResult.Should().Be(mockEmployerUrls.Object);
+    public class HtmlHelperExtensionsTestsFixture
+    {
+        public readonly ViewDataDictionary ViewDataDictionary;
+        public readonly Mock<IEmployerUrls> EmployerUrls;
+        public readonly Mock<IHtmlHelper> HtmlHelper;
+            
+        public HtmlHelperExtensionsTestsFixture()
+        {
+            ViewDataDictionary = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary());
+            EmployerUrls = new Mock<IEmployerUrls>();
+            ViewDataDictionary["EmployerUrls"] = EmployerUrls.Object;
+            HtmlHelper = new Mock<IHtmlHelper>();
+            HtmlHelper.SetupGet(hh => hh.ViewData).Returns(ViewDataDictionary);
+        }
+
+        public IEmployerUrls GetEmployerUrls()
+        {
+            return HtmlHelper.Object.EmployerUrls();
         }
     }
 }
