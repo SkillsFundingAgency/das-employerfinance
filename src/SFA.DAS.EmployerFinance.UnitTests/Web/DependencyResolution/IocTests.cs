@@ -5,6 +5,7 @@ using StructureMap;
 namespace SFA.DAS.EmployerFinance.UnitTests.Web.DependencyResolution
 {
     [TestFixture]
+    [Parallelizable]
     public class IocTests
     {
         [Test]
