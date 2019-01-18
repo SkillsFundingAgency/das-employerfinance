@@ -9,8 +9,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     //todo: minification (https://docs.microsoft.com/en-us/aspnet/core/client-side/using-gulp?view=aspnetcore-2.2)
     //todo: document/script setting up node modules (switch git to e:)
     //todo: typescript (use BuildBundlerMinifier-Typescript?
-    //todo: gov.uk design frontend? js
-    //todo: EmployerUrls
     
     [Route("")]
     public class HomeController : Controller
