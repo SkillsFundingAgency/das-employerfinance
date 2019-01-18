@@ -16,7 +16,7 @@ Execute DevInstall.ps1 as an admin in a legacy Powershell console (the script is
 
 GOV.UK Frontend is included in the project using npm. (There is also a direct reference in `_Layout.cshtml` to a GOV.UK Frontend asset stored in the CDN.)
 
-First, check to see if there is an update available by running this command in your favourite shell...
+First, check to see if there is an update available. To do this, open your favourite shell, change directory to the web project, then execute...
 
 `npm outdated govuk-frontend`
 
@@ -26,6 +26,9 @@ If an update is available, you'll see something like this...
 Package         Current  Wanted  Latest  Location
 govuk-frontend    2.5.0   2.5.1   2.5.1  asp.net
 ``` 
+
+If no update is available, the command will complete silently.
+
 To update the package, run
 
 `npm update govuk-frontend`
