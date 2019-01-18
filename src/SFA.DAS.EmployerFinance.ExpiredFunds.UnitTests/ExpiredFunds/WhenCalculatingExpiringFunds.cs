@@ -6,6 +6,7 @@ using SFA.DAS.EmployerFinance.Domain.ExpiredFunds;
 
 namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
 {
+    [Parallelizable]
     public class WhenCalculatingExpiringFunds
     {
         private EmployerFinance.ExpiredFunds.ExpiredFunds _expiredFunds;

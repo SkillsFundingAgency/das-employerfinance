@@ -1,10 +1,11 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Domain.ExpiredFunds;
 
 namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
 {
+    [Parallelizable]
     public class WhenGetExpiredFundsByDate
     {
         private EmployerFinance.ExpiredFunds.ExpiredFunds _expiredFunds;

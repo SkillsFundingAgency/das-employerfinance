@@ -5,6 +5,7 @@ using SFA.DAS.EmployerFinance.Domain.ExpiredFunds;
 
 namespace SFA.DAS.EmployerFinance.Domain.UnitTests.ExpiredFunds
 {
+    [Parallelizable]
     public class WhenSortingByCalendarPeriod
     {
         [Test]
