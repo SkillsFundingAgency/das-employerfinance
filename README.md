@@ -8,7 +8,7 @@
 
 ##### Add Certificates
 
-Execute DevInstall.ps1 as an admin in a legacy Powershell console (script is currently not compatible with Powershell Core) to import required certificates into their appropriate store locations. If a dialog prompts you whether to install the dev certificate, click 'Yes'.
+Execute DevInstall.ps1 as an admin in a legacy Powershell console (the script is currently not compatible with Powershell Core), to import required certificates into their appropriate store locations. If a dialog prompts you whether to install the dev certificate, click 'Yes'.
 
 #### Development Tasks
  
@@ -42,16 +42,20 @@ The `application.css` file under `wwwroot/css` is generated from the sass file `
 
 To generate a new version of the `application.css` file after updating our own `Styles\application.scss` file, or updating the `govuk-frontend` node package, then follow one of the following guides...
 
-###### Command Line
-
-todo
-
 ###### Visual Studio 2019
 
-todo
+In the `SFA.DAS.EmployerFinance.Web` project,
+
+* right click `package.json` and select `Restore Packages`
+* right click `gulpfile.js` and select `Task Runner Explorer`
+
+Then, in the Task Runner Explorer window, either double-click on `sass`, or right click `sass`, and select `Run`.
 
 ###### Jetbrains Rider
 
-* Right click `package.json` in the project `SFA.DAS.EmployerFinance.Web`, select `Tools` > `Run 'npm install'`.
-* Right click `gulpfile.js` in the project `SFA.DAS.EmployerFinance.Web`, select `Tools` > `Show Gulp Tasks`.
-* In the Gulp window that appears, either double-click on `sass`, or right click `sass`, and select `Run sass`
+In the `SFA.DAS.EmployerFinance.Web` project,
+
+* right click `package.json` and select `Tools` > `Run 'npm install'`
+* right click `gulpfile.js` and select `Tools` > `Show Gulp Tasks`
+
+Then, in the Gulp window that appears, either double-click on `sass`, or right click `sass`, and select `Run sass`.
