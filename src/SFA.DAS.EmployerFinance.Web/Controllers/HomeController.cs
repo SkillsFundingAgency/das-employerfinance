@@ -9,6 +9,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     //todo: minification (https://docs.microsoft.com/en-us/aspnet/core/client-side/using-gulp?view=aspnetcore-2.2)
     //todo: document/script setting up node modules (switch git to e:)
     //todo: typescript (use BuildBundlerMinifier-Typescript?
+    //todo: package up standard das layout. could package up layout components in razor class library? libman/nuget hybrid?
     
     [Route("")]
     public class HomeController : Controller
