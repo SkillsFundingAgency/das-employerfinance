@@ -40,7 +40,7 @@ You'll then need to
 
 The `application.css` file under `wwwroot/css` is generated from the sass file `Styles\application.scss`, which imports the GOV.UK Frontend's sass.
 
-To generate a new version of the `application.css` file after updating our own `Styles\application.scss` file, or updating the `govuk-frontend` node package, then follow one of the following guides...
+To generate a new version of the `application.css` file after updating our own `Styles\application.scss` file, or updating the `govuk-frontend` node package, follow one of the following guides...
 
 ###### Visual Studio 2019
 
