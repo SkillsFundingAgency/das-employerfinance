@@ -8,9 +8,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="FluentAssertions" Version="5.6.0" />
+        <PackageReference Include="Moq" Version="4.10.1" />
         <PackageReference Include="nunit" Version="3.11.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="3.11.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+        <PackageReference Include="SFA.DAS.Testing" Version="3.0.22" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SFA.DAS.EmployerFinance.Web\SFA.DAS.EmployerFinance.Web.csproj" />
     </ItemGroup>
 
 </Project>
