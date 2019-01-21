@@ -4,6 +4,8 @@ namespace SFA.DAS.EmployerFinance.Configuration
 {
     public class EmployerFinanceConfiguration
     {
+        //todo: these standard configs are candidates for a central library
+
         public OidcConfiguration Oidc { get; set; }
         public EmployerUrlsConfiguration EmployerUrls { get; set; }
 

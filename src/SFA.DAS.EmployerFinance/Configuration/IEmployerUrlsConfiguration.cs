@@ -2,7 +2,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
 {
     public interface IEmployerUrlsConfiguration
     {
-        //todo: do we need to prefix with Employer, wheth that's in the name of the interface?
+        //todo: do we need to prefix with Employer, when it's in the name of the interface?
         string EmployerAccountsBaseUrl { get; }
         string EmployerCommitmentsBaseUrl { get; }
         string EmployerFinanceBaseUrl { get; }
