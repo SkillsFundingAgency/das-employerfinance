@@ -41,9 +41,9 @@ You'll then need to
 
 ##### Compile Sass
 
-The `application.css` file under `wwwroot/css` is generated from the sass file `Styles\application.scss`, which imports the GOV.UK Frontend's sass.
+The `das.css` file under `wwwroot/css` is generated from the sass file `Styles\das.scss`, ~~which imports the GOV.UK Frontend's sass~~ and the `govuk-frontend.css` file is generated from `govuk-frontend.scss`, which imports the GOV.UK Frontend's sass.
 
-To generate a new version of the `application.css` file after updating our own `Styles\application.scss` file, or updating the `govuk-frontend` node package, follow one of the following guides...
+To generate new versions of the css files after updating our own `Styles\das.scss` file, or updating the `govuk-frontend` node package, follow one of the following guides...
 
 ###### Visual Studio 2019
 
