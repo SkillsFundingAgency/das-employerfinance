@@ -1,14 +1,14 @@
 [
   {
-    "outputFileName": "wwwroot/css/application.min.css",
-    "inputFiles": [
-      "wwwroot/css/application.css"
-    ]
-  },
-  {
     "outputFileName": "wwwroot/css/govuk-frontend.min.css",
     "inputFiles": [
       "wwwroot/css/govuk-frontend.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/das.min.css",
+    "inputFiles": [
+      "wwwroot/css/das.css"
     ]
   },
   {
@@ -19,7 +19,8 @@
     ],
     "minify": {
       "enabled": false
-    }  },
+    }
+  },
   {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
