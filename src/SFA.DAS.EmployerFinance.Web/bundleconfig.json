@@ -6,6 +6,12 @@
     ]
   },
   {
+    "outputFileName": "wwwroot/css/govuk-frontend.min.css",
+    "inputFiles": [
+      "wwwroot/css/govuk-frontend.css"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/js/site.js",
     "inputFiles": [
       "javascript/employerfinance.js",

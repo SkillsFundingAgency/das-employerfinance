@@ -15,10 +15,14 @@
     @*todo @Html.Partial("_GoogleAnalyticsHead") *@
 
     <environment include="Development">
+        <link rel="stylesheet" href="~/css/govuk-frontend.css" />
+        @* todo rename to das.css *@
         <link rel="stylesheet" href="~/css/application.css" />
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="~/css/application.min.css" asp-append-version="true" />
+        @* todo once cdn includes version in name & a minified version, can pick this up from the cdn *@
+        <link rel="stylesheet" href="~/css/govuk-frontend.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/css/application.min.css" asp-append-version="true"/>
     </environment>
 </head>
 <body class="govuk-template__body">

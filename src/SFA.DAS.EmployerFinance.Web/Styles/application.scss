@@ -1,18 +1,17 @@
 // https://design-system.service.gov.uk/get-started/production/
 //$govuk-global-styles: true;
 
-//todo: combine same media queries into 1?
-
 $govuk-assets-path: 'https://das-prd-frnt-end.azureedge.net/assets/';
 
-//todo: only import mixins, variables etc. and fetch base frontend css from cdn
+// single css file containing our own and GOV.UK Frontend's css
+//@import "../node_modules/govuk-frontend/all";
 
-@import "govuk-frontend/all";
-
-/*** Overide GDS styles to match DAS **/
+// 2 css files: one for GOV.UK Frontend, which can be fetched from the cdn (once it supports versioning), and one for our DAS extensions
+@import "../node_modules/govuk-frontend/settings/all";
+@import "../node_modules/govuk-frontend/tools/all";
+@import "../node_modules/govuk-frontend/helpers/all";
 
 //todo: these colours should be shared throughout DAS for consistency
-
 $das-colours: (
         "purple": #4c2c92 /* Daisy Bush */
 );
