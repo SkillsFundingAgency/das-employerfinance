@@ -59,12 +59,6 @@
                 <nav id="user-nav">
                     <ul role="menubar">
                         <li><a href="@Html.EmployerUrls().Help()" class="menu-main">Help</a></li>
-                        @* how it currently works *@
-                        @* <li><a das-employer-url="Help" class="menu-main">Help</a></li> *@
-                        @* how i want it to work - with intellisense *@
-                        @* <li><a das-employer-url-help class="menu-main">Help</a></li> *@
-                        @* <li><a das-employer-url-home="hashedAccountId" class="menu-main">Account home</a></li> *@
-                        @* todo tag helper condition? already exists?*@
                         @if (Context.User.Identity.IsAuthenticated)
                         {
                             <li class="has-sub-menu">
