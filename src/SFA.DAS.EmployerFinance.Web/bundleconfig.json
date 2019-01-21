@@ -14,8 +14,8 @@
   {
     "outputFileName": "wwwroot/js/site.js",
     "inputFiles": [
-      "javascript/employerfinance.js",
-      "javascript/govuk-frontend/all.js"
+      "content/javascript/employerfinance.js",
+      "content/javascript/govuk-frontend/all.js"
     ],
     "minify": {
       "enabled": false
@@ -24,8 +24,8 @@
   {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
-      "javascript/employerfinance.js",
-      "javascript/govuk-frontend/all.js"
+      "content/javascript/employerfinance.js",
+      "content/javascript/govuk-frontend/all.js"
     ],
     "minify": {
       "enabled": true,
