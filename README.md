@@ -6,6 +6,16 @@
 
 #### Setup
 
+##### Add configuration to Azure Storage Emulator
+
+* Clone the [das-employer-config](https://github.com/SkillsFundingAgency/das-employer-config) repository.
+* Clone the [das-employer-config-updater](https://github.com/SkillsFundingAgency/das-employer-config-updater) repository.
+* Run Azure Storage Emulator.
+* Open the `das-employer-config-updater` solution in Visual Studio.
+* Press F5 and follow the instructions to import the config from the directory that you cloned the `das-employer-config repository` to.
+
+> The two repositories above are private. If the links appear to be dead, make sure that you're logged into GitHub with an account that has access to these i.e. that you are part of the Skills Funding Agency Team organization.
+
 ##### Add Certificates
 
 Execute DevInstall.ps1 as an admin in a legacy Powershell console (the script is currently not compatible with Powershell Core), to import required certificates into their appropriate store locations. If a dialog prompts you whether to install the dev certificate, click 'Yes'.
