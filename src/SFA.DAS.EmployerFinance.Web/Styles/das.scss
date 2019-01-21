@@ -3,10 +3,12 @@
 
 $govuk-assets-path: 'https://das-prd-frnt-end.azureedge.net/assets/';
 
+// eventually it might be best to go with a combined GOV.UK+Das css file, and a separate file for each web project (all of which can live in the cdn)
+
 // single css file containing our own and GOV.UK Frontend's css
 //@import "../node_modules/govuk-frontend/all";
 
-// 2 css files: one for GOV.UK Frontend, which can be fetched from the cdn (once it supports versioning), and one for our DAS extensions
+// 2 css files: one for GOV.UK Frontend, which can be fetched from the cdn (once it supports versioning and minified files), and one for our DAS+employerfinance extensions
 @import "../node_modules/govuk-frontend/settings/all";
 @import "../node_modules/govuk-frontend/tools/all";
 @import "../node_modules/govuk-frontend/helpers/all";
