@@ -147,7 +147,7 @@ nav ul {
 }
 
 #user-nav > ul > li > a {
-  color: govuk-colour("black");
+  color: $govuk-text-colour;
   text-decoration: none
 }
 
@@ -170,33 +170,27 @@ nav ul {
       }
 
       a:link {
-        color: govuk-colour("blue");
+        color: $govuk-link-colour;
       }
 
       a:visited {
         color: das-colour("purple");
       }
 
-      a:hover {
+      a:hover, a:active {
         // replace custom colour with nearly identical govuk theme colour
         //color: das-colour("blue");
-        color: govuk-colour("light-blue");
-      }
-
-      a:active {
-        // replace custom colour with nearly identical govuk theme colour
-        //color: das-colour("blue");
-        color: govuk-colour("light-blue");
+        color: $govuk-link-hover-colour;
       }
 
       a.selected {
-        color: govuk-colour("black");
+        color: $govuk-text-colour;
         @include govuk-typography-weight-bold();
         text-decoration: none;
       }
 
       a.selected:after {
-        background: govuk-colour("blue");
+        background: $govuk-link-colour;
         bottom: -1px;
         content: "";
         display: block;
@@ -505,7 +499,7 @@ nav ul {
 
 ///*** Additional error style for inputs ***/
 //.input-validation-error {
-//  border: 4px solid govuk-colour("red");
+//  border: 4px solid $govuk-error-colour;
 //}
 
 /*** Healthcheck Styles ***/

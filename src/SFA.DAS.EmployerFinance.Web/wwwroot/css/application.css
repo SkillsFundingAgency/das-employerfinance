@@ -4159,9 +4159,7 @@ nav ul {
       color: #005ea5; }
     .header-organisation ul li a:visited {
       color: #4c2c92; }
-    .header-organisation ul li a:hover {
-      color: #2b8cc4; }
-    .header-organisation ul li a:active {
+    .header-organisation ul li a:hover, .header-organisation ul li a:active {
       color: #2b8cc4; }
     .header-organisation ul li a.selected {
       color: #0b0c0c;
