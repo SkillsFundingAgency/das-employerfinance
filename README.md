@@ -9,11 +9,12 @@
     * Azure development
     * Data storage and processing
     * .NET Core cross-platform development 
-2. Install [Azure Storage Explorer] (if required for local storage access as Azure portal now has an online version)
-3. Download Git and clone the project to your desired local location. You can download the zip version alternativey.
+2. Install [Azure Storage Explorer] 
+3. Download [Git] and clone the project to your desired local location.
 
 [Azure Storage Explorer]: http://storageexplorer.com
 [Visual Studio]: https://www.visualstudio.com
+[Git]: https://git-scm.com/
 
 #### Setup
 
@@ -33,7 +34,7 @@
 
 #### Requirements
 
-1. Install [.Net Core] ()
+1. Install [.Net Core]
 2. Install a .Net Core IDE (i.e [Jetbrains Rider], [VS Code])
 
 [.Net Core]: https://dotnet.microsoft.com/download
