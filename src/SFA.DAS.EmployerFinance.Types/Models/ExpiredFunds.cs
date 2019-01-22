@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SFA.DAS.EmployerFinance.Domain.ExpiredFunds;
 
-namespace SFA.DAS.EmployerFinance.ExpiredFunds
+namespace SFA.DAS.EmployerFinance.Types.Models
 {
     public class ExpiredFunds : IExpiredFunds
     {
