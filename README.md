@@ -86,7 +86,7 @@ In the `SFA.DAS.EmployerFinance.Web` project,
 Then, in the Gulp window that appears, either double-click on `sass`, or right click `sass`, and select `Run sass`.
 
 
-### OS X Differences
+### macOS Differences
 
 #### Requirements
 
@@ -101,7 +101,7 @@ Then, in the Gulp window that appears, either double-click on `sass`, or right c
 
 ##### Add Environment variables
 
-As OS X doesn't have an azure emulator you will need to set the configuration storage string to point to your external azure storage. To set this string just create the following environmental variable:
+As macOS doesn't have an azure emulator you will need to set the configuration storage string to point to your external azure storage. To set this string just create the following environmental variable:
 
 **APPSETTING_ConfigurationStorageConnectionString --> 'You connection string'**
 
