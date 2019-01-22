@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
+using SFA.DAS.EmployerFinance.Messages;
 
 
 namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
@@ -15,13 +17,11 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
             _messageSession = messageSession;
         }
 
-        public Task Run([TimerTrigger("0 */1 * * * *", RunOnStartup = true)] TimerInfo timer, ILogger logger)
+        public async Task Run([TimerTrigger("0 */1 * * * *", RunOnStartup = true)] TimerInfo timer, ILogger logger)
         {
             logger.LogDebug("Running Dummy Job...");
 
-            //INSERT CODE HERE TO RUN
-
-            return Task.CompletedTask;
+            await _messageSession.Publish(new DummyMessage{Payload = $"Dummy Message Sent [{DateTime.Now.ToShortTimeString()}]"});
         }
     }
 }
