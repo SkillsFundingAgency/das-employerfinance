@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using StructureMap.AspNetCore;
 
-namespace SFA.DAS.EmployerFinance.Web
+namespace SFA.DAS.EmployerFinance.Web.Startup
 {
     public static class Program
     {

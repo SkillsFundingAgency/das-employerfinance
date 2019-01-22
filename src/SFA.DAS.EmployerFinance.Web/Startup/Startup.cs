@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,8 @@ using SFA.DAS.EmployerFinance.Web.DependencyResolution;
 using SFA.DAS.EmployerFinance.Web.Filters;
 using StructureMap;
 
-namespace SFA.DAS.EmployerFinance.Web
+namespace SFA.DAS.EmployerFinance.Web.Startup
 {
-    //todo: plug in authentication using https://github.com/dotnet/core-setup/blob/master/Documentation/design-docs/host-startup-hook.md
-    // ^^ hopefully should allow very easy plugin in of generic oidc support!
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -40,6 +39,11 @@ namespace SFA.DAS.EmployerFinance.Web
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var cultureInfo = new CultureInfo("en-GB");
+
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -50,6 +54,7 @@ namespace SFA.DAS.EmployerFinance.Web
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

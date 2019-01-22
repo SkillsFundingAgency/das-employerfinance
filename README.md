@@ -103,9 +103,9 @@ Then, in the Gulp window that appears, either double-click on `sass`, or right c
 
 As macOS doesn't have an azure emulator you will need to set the configuration storage string to point to your external azure storage. To set this string just create the following environmental variable:
 
-**APPSETTING_ConfigurationStorageConnectionString --> 'You connection string'**
+**APPSETTING_ConfigurationStorageConnectionString --> 'Your connection string'**
 
-Your IDE configuration will likely be the place to set any environmental variables. Jetbrains rider has this under the run time configuration settings.
+Your IDE configuration will likely be the place to set any environmental variables. Jetbrains Rider has this under the run time configuration settings.
 
 ##### Add configuration to Azure Storage Emulator
 
