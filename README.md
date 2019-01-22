@@ -1,8 +1,23 @@
 # SFA.DAS.EmployerFinance
 
+todo these are different, which 1?
+
 [![Build Status](https://sfa-gov-uk.visualstudio.com/Digital%20Apprenticeship%20Service/_apis/build/status/Manage%20Apprenticeships/das-employerfinance?branchName=master)](https://sfa-gov-uk.visualstudio.com/Digital%20Apprenticeship%20Service/_build/latest?definitionId=1212?branchName=master)
+[![Build status](https://sfa-gov-uk.visualstudio.com/Digital%20Apprenticeship%20Service/_apis/build/status/Manage%20Apprenticeships/das-employerfinance)](https://sfa-gov-uk.visualstudio.com/Digital%20Apprenticeship%20Service/_build/latest?definitionId=1183)
 
 #### Requirements
+
+1. Install [Visual Studio] with these workloads:
+    * ASP.NET and web development
+    * Azure development
+    * Data storage and processing
+    * .NET Core cross-platform development 
+2. Install [Azure Storage Explorer] 
+3. Download [Git] and clone the project to your desired local location.
+
+[Azure Storage Explorer]: http://storageexplorer.com
+[Visual Studio]: https://www.visualstudio.com
+[Git]: https://git-scm.com/
 
 #### Setup
 
@@ -72,3 +87,29 @@ In the `SFA.DAS.EmployerFinance.Web` project,
 * right click `gulpfile.js` and select `Tools` > `Show Gulp Tasks`
 
 Then, in the Gulp window that appears, either double-click on `sass`, or right click `sass`, and select `Run sass`.
+
+
+### OS X Differences
+
+#### Requirements
+
+1. Install [.Net Core]
+2. Install a .Net Core IDE (i.e [Jetbrains Rider], [VS Code])
+
+[.Net Core]: https://dotnet.microsoft.com/download
+[Jetbrains Rider]: https://www.jetbrains.com/rider
+[VS Code]: https://code.visualstudio.com/
+
+#### Setup
+
+##### Add Environment variables
+
+As OS X doesn't have an azure emulator you will need to set the configuration storage string to point to your external azure storage. To set this string just create the following environmental variable:
+
+**APPSETTING_ConfigurationStorageConnectionString --> 'You connection string'**
+
+Your IDE configuration will likely be the place to set any environmental variables. Jetbrains rider has this under the run time configuration settings.
+
+##### Add configuration to Azure Storage Emulator
+
+Currently the das-employer-config-updater does not run under .net core so you will need to import the config values manually.
