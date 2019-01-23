@@ -146,7 +146,6 @@
 
 <environment include="Development">
     <script src="~/lib/jquery/jquery.js"></script>
-    @* todo split site out into 2 js files, and pick up all.js from the cdn? what about versioning? separate files will make it more likely to hit the 6 concurrent downloads limit and slow the site down, but serving all.js from cdn should be cheaper?*@
     <script src="~/js/site.js" asp-append-version="true"></script>
 </environment>
 <environment exclude="Development">
