@@ -266,6 +266,11 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 *.stackdump
 desktop.ini
 App.Debug.config
-*.json
-!appsettings.json
-!appsettings.[Dd]evelopment.json
+
+# SFA.DAS
+!src/DasAmlCert.pfx
+!src/DasIDPCert.pfx
+src/SFA.DAS.EmployerFinance.Web/wwwroot/css/*.min.css
+src/SFA.DAS.EmployerFinance.Web/wwwroot/js/site.js
+src/SFA.DAS.EmployerFinance.Web/wwwroot/js/*.min.js
+src/SFA.DAS.EmployerFinance.Web/wwwroot/js/*.min.js.map

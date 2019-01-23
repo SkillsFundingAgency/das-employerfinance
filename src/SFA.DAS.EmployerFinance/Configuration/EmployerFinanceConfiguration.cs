@@ -1,9 +1,14 @@
-﻿using SFA.DAS.EmployerFinance.Extensions;
+using SFA.DAS.EmployerFinance.Extensions;
 
 namespace SFA.DAS.EmployerFinance.Configuration
 {
     public class EmployerFinanceConfiguration
     {
+        //todo: these standard configs are candidates for a central library
+
+        public OidcConfiguration Oidc { get; set; }
+        public EmployerUrlsConfiguration EmployerUrls { get; set; }
+
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
 
@@ -12,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
             get => _decodedNServiceBusLicense ?? (_decodedNServiceBusLicense = _nServiceBusLicense.HtmlDecode());
             set => _nServiceBusLicense = value;
         }
-        
+
         private string _nServiceBusLicense;
         private string _decodedNServiceBusLicense;
     }
