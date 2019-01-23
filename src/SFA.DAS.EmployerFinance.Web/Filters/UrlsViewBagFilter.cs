@@ -18,8 +18,6 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
                 return;
             }
 
-            // options: https://stackoverflow.com/questions/32459670/resolving-instances-with-asp-net-core-di
-
             var container = context.HttpContext.RequestServices.GetService<IContainer>();
             var employerUrls = container.GetInstance<IEmployerUrls>();
 
