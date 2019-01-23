@@ -9,61 +9,92 @@ using NLog.Extensions.Logging;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
+using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers
 {
     public static class Program
     {
-        private const string AppSettingFilePath = "appsettings.json";
-
         public static async Task Main()
         {
             ServicePointManager.DefaultConnectionLimit = 50;
 
             using (var container = IoC.Initialize())
             {
-                var startup = container.GetInstance<IStartup>();
+                var environmentSettings = GetEnvironmentSettings(container);
 
-                await startup.StartAsync();
+                var host = CreateHost(container, environmentSettings);
 
-                var jobActivator = new StructureMapJobActivator(container);
-
-                var environmentService = container.GetInstance<IEnvironmentService>();
-
-                var environmentName = environmentService.IsCurrent(DasEnv.LOCAL)
-                    ? EnvironmentName.Development
-                    : EnvironmentName.Production;
-
-                var hostBuilder = new HostBuilder()
-                    .UseEnvironment(environmentName)
-                    .ConfigureWebJobs(builder =>
-                    {
-                        builder.AddAzureStorageCoreServices();
-                    })
-                    .ConfigureAppConfiguration(builder =>
-                    {
-                        builder.AddJsonFile(AppSettingFilePath);
-                    })
-                    .ConfigureLogging(builder => 
-                    { 
-                        builder.SetMinimumLevel(LogLevel.Debug)
-                               .AddNLog();
-                    })
-                    .ConfigureServices(collection =>
-                    {
-                        collection.AddSingleton<IJobActivator>(jobActivator);
-                    })
-                    .UseConsoleLifetime();
-
-                var host = hostBuilder.Build();
-
-                using (host)
-                {
-                    await host.RunAsync();
-                }
-
-                await startup.StopAsync();
+                await RunHost(container, host);
             }
+        }
+
+        private static async Task RunHost(IContainer container, IHost host)
+        {
+            var startup = container.GetInstance<IStartup>();
+
+            await startup.StartAsync();
+
+            using (host)
+            {
+                await host.RunAsync();
+            }
+
+            await startup.StopAsync();
+        }
+
+        private static IHost CreateHost(IContainer container, EnvironmentSettings environmentSettings)
+        {
+            var jobActivator = new StructureMapJobActivator(container);
+            
+            var hostBuilder = new HostBuilder()
+                .UseEnvironment(environmentSettings.EnvironmentName)
+                .ConfigureWebJobs(builder =>
+                {
+                    builder.AddAzureStorageCoreServices();
+                })
+                .ConfigureAppConfiguration(builder =>
+                {
+                    builder.AddJsonFile(environmentSettings.AppSettingsFilePath);
+                    builder.AddEnvironmentVariables();
+                })
+                .ConfigureLogging(builder =>
+                {
+                    builder.SetMinimumLevel(LogLevel.Debug)
+                        .AddNLog();
+                })
+                .ConfigureServices(collection => { collection.AddSingleton<IJobActivator>(jobActivator); })
+                .UseConsoleLifetime();
+
+            var host = hostBuilder.Build();
+            
+            return host;
+        }
+
+        private static EnvironmentSettings GetEnvironmentSettings(IContainer container)
+        {
+            var settings = new EnvironmentSettings();
+            
+            var environmentService = container.GetInstance<IEnvironmentService>();
+
+            settings.EnvironmentName = EnvironmentName.Production;
+            settings.AppSettingsFilePath = "appsettings.json";
+
+            if (!environmentService.IsCurrent(DasEnv.LOCAL))
+            {
+                return settings;
+            }
+            
+            settings.EnvironmentName = EnvironmentName.Development;
+            settings.AppSettingsFilePath = "appsettings.Development.json";
+
+            return settings;
+        }
+
+        private struct EnvironmentSettings
+        {
+            public string EnvironmentName { get; set; }
+            public string AppSettingsFilePath { get; set; }
         }
     }
 }
