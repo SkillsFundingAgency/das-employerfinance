@@ -33,10 +33,26 @@
 Execute DevInstall.ps1 as an admin in a legacy Powershell console (the script is currently not compatible with Powershell Core), to import required certificates into their appropriate store locations. If a dialog prompts you whether to install the dev certificate, click 'Yes'.
 
 #### Development Tasks
- 
-##### Update GOV.UK Frontend
+
+##### Install GOV.UK Frontend
 
 GOV.UK Frontend is included in the project using npm. (There is also a direct reference in `_Layout.cshtml` to a GOV.UK Frontend asset stored in the CDN.)
+
+To install the necessary node package locally to your worktree, which you'll need to do first if you want to e.g. update GOV.UK Frontend, follow one of these guides...
+
+###### CLI
+
+Change to the web project's directory, then run `npm install`.
+
+###### Visual Studio 2019
+
+In the `SFA.DAS.EmployerFinance.Web` project, right click `package.json` and select `Restore Packages`.
+
+###### Jetbrains Rider
+
+In the `SFA.DAS.EmployerFinance.Web` project, right click `package.json` and select `Tools` > `Run 'npm install'`.
+
+##### Update GOV.UK Frontend
 
 First, check to see if there is an update available. To do this, open your favourite shell, change directory to the web project, then execute...
 
@@ -55,35 +71,34 @@ To update the package, run
 
 `npm update govuk-frontend`
 
-You'll then need to
+As part of the update, the default gulp task will be run, which will...
 
-* regenerate our css file (if you haven't set up your IDE to generate it automatically, you'll need to do this manually, see 'Compile Sass' below)
-* run the batch file 'copy-govuk-frontend-js.bat' in the web directory
-* build the project (this will incorporate the new css and js into our bundles, and then minify them)
+* regenerate the GOV.UK Frontend css file in `wwwroot\css`
+* copy GOV.UK's `all.js` file to its location under the `Content\Javascript\govuk-frontend` folder
+
+When you next build the solution, the new `all.js` file is used as a source file in our bundling and minification process.
 
 ##### Compile Sass
 
 The `das.css` file under `wwwroot/css` is generated from the sass file `content\styles\das.scss`, ~~which imports the GOV.UK Frontend's sass~~ and the `govuk-frontend.css` file is generated from `govuk-frontend.scss`, which imports the GOV.UK Frontend's sass.
 
-To generate new versions of the css files after updating our own `content\styles\das.scss` file, or updating the `govuk-frontend` node package, follow one of the following guides...
+To generate a new version of the `wwwroot\css\das.css` file after updating our own `content\styles\das.scss` sass file, follow one of the following guides...
+
+###### CLI
+
+Change to the web project's directory, then run `gulp`.
 
 ###### Visual Studio 2019
 
-In the `SFA.DAS.EmployerFinance.Web` project,
+In the `SFA.DAS.EmployerFinance.Web` project, right click `gulpfile.js` and select `Task Runner Explorer`.
 
-* right click `package.json` and select `Restore Packages`
-* right click `gulpfile.js` and select `Task Runner Explorer`
-
-Then, in the Task Runner Explorer window, either double-click on `sass`, or right click `sass`, and select `Run`.
+Then, in the Task Runner Explorer window, either double-click on `css`, or right click `css`, and select `Run`.
 
 ###### Jetbrains Rider
 
-In the `SFA.DAS.EmployerFinance.Web` project,
+In the `SFA.DAS.EmployerFinance.Web` project, right click `gulpfile.js` and select `Tools` > `Show Gulp Tasks`.
 
-* right click `package.json` and select `Tools` > `Run 'npm install'`
-* right click `gulpfile.js` and select `Tools` > `Show Gulp Tasks`
-
-Then, in the Gulp window that appears, either double-click on `sass`, or right click `sass`, and select `Run sass`.
+Then, in the Gulp window that appears, either double-click on `css`, or right click `css`, and select `Run css`.
 
 
 ### macOS Differences
