@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.Host", "SFA.DAS.EmployerFinance.Host\SFA.DAS.EmployerFinance.Host.csproj", "{D2E7C848-02F6-424B-ABE9-7EA5AD66AC7B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4C37DF92-C718-4AAD-AA0A-D614A14AAA4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{2BD44ADA-8758-45D7-9987-48402C921D36} = {4C37DF92-C718-4AAD-AA0A-D614A14AAA4D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C17E7E9F-0BDD-448B-9E0F-44E81E91B1C1}
