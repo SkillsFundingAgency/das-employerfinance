@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
         
         public async Task StartAsync()
         {
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.ProviderRelationships.JobsV2")
+            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.MessageHandlersV2")
                 .UseAzureServiceBusTransport(() => _employerFinanceConfiguration.ServiceBusConnectionString, _environmentService.IsCurrent(DasEnv.LOCAL))
                 .UseLicense(_employerFinanceConfiguration.NServiceBusLicense)
                 .UseMessageConventions()
