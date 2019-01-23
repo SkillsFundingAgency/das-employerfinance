@@ -14,9 +14,9 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
         {
             var controller = context.Controller as Controller;
             if (controller == null)
+            {
                 return;
-
-            // options: https://stackoverflow.com/questions/32459670/resolving-instances-with-asp-net-core-di
+            }
 
             var container = context.HttpContext.RequestServices.GetService<IContainer>();
             var employerUrls = container.GetInstance<IEmployerUrls>();

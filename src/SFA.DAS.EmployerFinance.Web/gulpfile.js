@@ -3,14 +3,22 @@
 // and in visual studio...
 // https://docs.microsoft.com/en-us/aspnet/core/client-side/using-gulp?view=aspnetcore-2.2
 
-var gulp = require("gulp"),
-	//fs = require("fs"),
-	sass = require("gulp-sass");
+const { src, dest, parallel } = require('gulp');
+const sass = require("gulp-sass");
 
-gulp.task("sass", function () {
-	return gulp.src('content/styles/*.scss')
+function css() {
+	return src('content/styles/*.scss')
 		.pipe(sass({
 			includePaths: 'node_modules'
 		}))
-		.pipe(gulp.dest('wwwroot/css'));
-});
+		.pipe(dest('wwwroot/css'));
+}
+
+function js() {
+	return src('node_modules/govuk-frontend/all.js')
+		.pipe(dest('content/javascript/govuk-frontend'))
+}
+
+exports.css = css;
+exports.js = js;
+exports.default = parallel(css, js);

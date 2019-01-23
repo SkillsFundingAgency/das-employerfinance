@@ -12,20 +12,17 @@
     <link rel="apple-touch-icon" href="/images/govuk-apple-touch-icon.png" />
     <link rel="mask-icon" href="/images/govuk-mask-icon.svg" color="#0b0c0c" />
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
-    @*todo @Html.Partial("_GoogleAnalyticsHead") *@
 
     <environment include="Development">
         <link rel="stylesheet" href="~/css/govuk-frontend.css" />
         <link rel="stylesheet" href="~/css/das.css" />
     </environment>
     <environment exclude="Development">
-        @* todo once cdn includes version in name & a minified version, can pick this up from the cdn *@
         <link rel="stylesheet" href="~/css/govuk-frontend.min.css" asp-append-version="true"/>
         <link rel="stylesheet" href="~/css/das.min.css" asp-append-version="true"/>
     </environment>
 </head>
 <body class="govuk-template__body">
-    @*todo @Html.Partial("_GoogleAnalyticsBody") *@
     <script>
         document.body.className = (document.body.className ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>
@@ -149,7 +146,6 @@
 
 <environment include="Development">
     <script src="~/lib/jquery/jquery.js"></script>
-    @* todo split site out into 2 js files, and pick up all.js from the cdn? what about versioning? separate files will make it more likely to hit the 6 concurrent downloads limit and slow the site down, but serving all.js from cdn should be cheaper?*@
     <script src="~/js/site.js" asp-append-version="true"></script>
 </environment>
 <environment exclude="Development">
