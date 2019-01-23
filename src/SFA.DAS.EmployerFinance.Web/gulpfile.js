@@ -14,10 +14,11 @@ function css() {
 		.pipe(dest('wwwroot/css'));
 }
 
-// function js() {
-// 	return src('')
-// 		.pipe(dest('wwwroot/js'))
-// }
+function js() {
+	return src('node_modules/govuk-frontend/all.js')
+		.pipe(dest('content/javascript/govuk-frontend'))
+}
 
 exports.css = css;
-exports.default = parallel(css);
+exports.js = js;
+exports.default = parallel(css, js);
