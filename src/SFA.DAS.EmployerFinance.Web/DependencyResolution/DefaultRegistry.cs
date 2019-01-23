@@ -8,12 +8,6 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
         public DefaultRegistry()
         {
             For<IEmployerUrls>().Use<EmployerUrls>();
-
-//            Scan(s =>
-//            {
-//                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
-//                s.With(new ControllerConvention());
-//            });
         }
     }
 }
