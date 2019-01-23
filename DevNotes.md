@@ -8,6 +8,10 @@ We need the files in the CDN to include a version in their name (or path), and w
 
 We might also want to bundle some or all of the GOV.UK / common DAS / site specific artifacts together, but only really if we can populate/update the cdn as part of the release pipeline. We should aim to not go above the [concurrent number of downloads per server](https://stackoverflow.com/questions/985431/max-parallel-http-connections-in-a-browser) for modern browsers, to keep page latency low when artifacts are not cached. To help with that aim we might want to combine GOV.UK's images into a sprite sheet.
 
+## To Do
+
+* GDPR / CheckConsentNeeded?
+
 ## Useful Links
 
 [Resolving dependencies during startup](https://stackoverflow.com/questions/32459670/resolving-instances-with-asp-net-core-di)
