@@ -11,6 +11,7 @@ We might also want to bundle some or all of the GOV.UK / common DAS / site speci
 ## To Do
 
 * GDPR / CheckConsentNeeded?
+* [Scope our node package](https://docs.npmjs.com/misc/scope) to Esfa?
 
 ## Useful Links
 
