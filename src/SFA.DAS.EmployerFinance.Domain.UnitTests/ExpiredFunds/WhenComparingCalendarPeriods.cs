@@ -4,6 +4,7 @@ using SFA.DAS.EmployerFinance.Types.Models;
 
 namespace SFA.DAS.EmployerFinance.Domain.UnitTests.ExpiredFunds
 {
+    [Parallelizable]
     public class WhenComparingCalendarPeriods
     {
         [TestCase(2018,01,true)]
