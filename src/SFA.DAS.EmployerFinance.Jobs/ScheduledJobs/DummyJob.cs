@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Messages;
 
-
 namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
 {
     public class DummyJob
@@ -21,9 +20,9 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
         {
             logger.LogDebug("Running Dummy Job...");
             
-            Console.WriteLine("Publishing a new message...");
+            Console.WriteLine("Publishing a new dummy event...");
 
-            await _messageSession.SendLocal(new DummyEvent{Payload = $"Dummy Message Sent [{DateTime.Now:hh:mm:ss}]"});
+            await _messageSession.SendLocal(new DummyEvent{Payload = $"Dummy Event Sent [{DateTime.Now:hh:mm:ss}]"});
         }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SFA.DAS.AutoConfiguration;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
 using StructureMap;
@@ -21,7 +22,9 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
 
             using (var container = IoC.Initialize())
             {
-                var environmentSettings = GetEnvironmentSettings(container);
+                var environmentService = container.GetInstance<IEnvironmentService>();
+
+                var environmentSettings = HostEnvironmentSettingsFactory.Create(environmentService);
 
                 var host = CreateHost(container, environmentSettings);
 
@@ -43,7 +46,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
             await startup.StopAsync();
         }
 
-        private static IHost CreateHost(IContainer container, EnvironmentSettings environmentSettings)
+        private static IHost CreateHost(IContainer container, HostEnvironmentSettings environmentSettings)
         {
             var jobActivator = new StructureMapJobActivator(container);
 
@@ -57,7 +60,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
                 })
                 .ConfigureLogging(builder =>
                 {
-                    builder.SetMinimumLevel(LogLevel.Debug)
+                    builder.SetMinimumLevel(environmentSettings.MinLogLevel)
                         .AddNLog();
                 })
                 .ConfigureServices(collection => { collection.AddSingleton<IJobActivator>(jobActivator); })
@@ -74,32 +77,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
         {
             var loggerProvider = host.Services.GetService<ILoggerProvider>();
             container.Configure(c => c.For<ILogger>().Use(x => loggerProvider.CreateLogger(x.ParentType.FullName)));
-        }
-
-        private static EnvironmentSettings GetEnvironmentSettings(IContainer container)
-        {
-            var settings = new EnvironmentSettings();
-            
-            var environmentService = container.GetInstance<IEnvironmentService>();
-
-            settings.EnvironmentName = EnvironmentName.Production;
-            settings.AppSettingsFilePath = "appsettings.json";
-
-            if (!environmentService.IsCurrent(DasEnv.LOCAL))
-            {
-                return settings;
-            }
-            
-            settings.EnvironmentName = EnvironmentName.Development;
-            settings.AppSettingsFilePath = "appsettings.Development.json";
-
-            return settings;
-        }
-
-        private struct EnvironmentSettings
-        {
-            public string EnvironmentName { get; set; }
-            public string AppSettingsFilePath { get; set; }
         }
     }
 }
