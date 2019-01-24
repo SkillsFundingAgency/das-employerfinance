@@ -5,6 +5,7 @@ using SFA.DAS.EmployerFinance.Types.Models;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.CalendarPeriodTests
 {
+    [Parallelizable]
     public class WhenSortingByCalendarPeriod
     {
         [Test]

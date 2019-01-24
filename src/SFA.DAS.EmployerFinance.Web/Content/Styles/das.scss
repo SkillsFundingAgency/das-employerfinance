@@ -1,0 +1,653 @@
+// https://design-system.service.gov.uk/get-started/production/
+//$govuk-global-styles: true;
+
+$govuk-assets-path: 'https://das-prd-frnt-end.azureedge.net/assets/';
+
+// eventually it might be best to go with a combined GOV.UK+Das css file, and a separate file for each web project (all of which can live in the cdn)
+
+// single css file containing our own and GOV.UK Frontend's css
+//@import "../../node_modules/govuk-frontend/all";
+
+// 2 css files: one for GOV.UK Frontend, which can be fetched from the cdn (once it supports versioning and minified files), and one for our DAS+employerfinance extensions
+@import "../../node_modules/govuk-frontend/settings/all";
+@import "../../node_modules/govuk-frontend/tools/all";
+@import "../../node_modules/govuk-frontend/helpers/all";
+
+//todo: these colours should be shared throughout DAS for consistency
+$das-colours: (
+        "purple": #4c2c92 /* Daisy Bush */
+);
+
+/// Get DAS colour
+///
+/// @param {String} $colour - Name of colour from the colour palette
+///   (`$das-colours`)
+/// @return {Colour} Representation of named colour
+/// @throw if `$colour` is not a colour from the colour palette
+/// @access public
+
+@function das-colour($colour) {
+  $colour: quote($colour);
+
+  @if not map-has-key($das-colours, $colour) {
+    @error "Unknown colour `#{$colour}`";
+  }
+
+  @return map-get($das-colours, $colour);
+}
+
+body {
+  font-family: $govuk-font-family;
+}
+
+.govuk-header {
+  border-bottom: 0;
+}
+
+.govuk-header__container {
+  position: relative;
+  margin-bottom: 0;
+  padding-top: 10px;
+  border-bottom: 0;
+}
+
+.govuk-header__link--service-name {
+  margin-left: 10px;
+}
+
+.govuk-header__logo {
+  margin-bottom: 8px;
+}
+
+/*** MA Legacy menu styles ***/
+
+.header-organisation * {
+  margin: 0;
+  padding: 0;
+}
+
+.header-inner {
+  font-size: 14px;
+  max-width: 960px;
+}
+
+.header-inner {
+  @include govuk-media-query($from: tablet) {
+    margin: 0 30px 30px;
+    font-size: 19px
+  }
+  @include govuk-media-query($from: 1020px) {
+    margin: 0 auto 50px
+  }
+}
+
+.header-inner {
+  margin-bottom: 0;
+}
+
+//.header-user {
+//  background: govuk-colour("grey-4");
+//  border-bottom: 1px solid govuk-colour("grey-2");
+//  border-top: 10px solid govuk-colour("blue");
+//
+//  h2 { margin: 10px 0; }
+//}
+
+nav ul {
+  list-style: none;
+  margin: 0
+}
+
+//.header-user #user-nav {
+//  @include govuk-media-query($from: tablet) {
+//    float: right
+//  }
+//}
+
+//.header-user h2 {
+//  @include govuk-media-query($from: tablet) {
+//    float: left
+//  }
+//}
+
+#user-nav {
+  @include govuk-media-query($from: tablet) {
+    font-size: 16px;
+    margin: 5px 0
+  }
+}
+
+#user-nav > ul {
+  margin-left: -15px;
+  margin-right: -15px
+}
+
+#user-nav > ul > li {
+  float: left
+}
+
+#user-nav > ul > li {
+  @include govuk-media-query($from: tablet) {
+    border: none;
+    float: left
+  }
+}
+
+#user-nav a {
+  display: block;
+  float: left;
+  padding: 12px 15px 10px
+}
+
+#user-nav a:focus {
+  outline: 0
+}
+
+#user-nav > ul > li ul {
+  float: left
+}
+
+#user-nav > ul > li > a {
+  color: $govuk-text-colour;
+  text-decoration: none
+}
+
+.account-information {
+  text-align: right
+}
+
+.header-organisation {
+  border-bottom: 1px solid govuk-colour("grey-1");
+  font-size: 14px;
+
+  ul {
+    margin: 0 -15px;
+
+    li {
+      a {
+        display: block;
+        padding: 12px 15px 10px;
+        position: relative
+      }
+
+      a:link {
+        color: $govuk-link-colour;
+      }
+
+      a:visited {
+        color: das-colour("purple");
+      }
+
+      a:hover, a:active {
+        // replace custom colour with nearly identical govuk theme colour
+        //color: das-colour("blue");
+        color: $govuk-link-hover-colour;
+      }
+
+      a.selected {
+        color: $govuk-text-colour;
+        @include govuk-typography-weight-bold();
+        text-decoration: none;
+      }
+
+      a.selected:after {
+        background: $govuk-link-colour;
+        bottom: -1px;
+        content: "";
+        display: block;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 5px;
+        z-index: 0
+      }
+
+      a:focus {
+        outline: 0
+      }
+    }
+  }
+}
+
+.header-organisation ul li {
+  @include govuk-media-query($from: tablet) {
+    float: left;
+    font-size: 16px;
+    width: 50%;
+  }
+  @include govuk-media-query($from: desktop) {
+    width: auto;
+  }
+  //this value needs to be high enough so that when shrinking the browser window, the font size shrinks before the line splits onto 2 lines
+  @include govuk-media-query($from: 1050px) {
+    font-size: 19px
+  }
+}
+
+.header-organisation ul li a.selected:after {
+  @include govuk-media-query($from: desktop) {
+    height: 5px;
+    left: 15px;
+    right: 15px;
+    top: auto;
+    width: auto
+  }
+}
+
+.js-enabled #user-nav {
+  text-align: left
+}
+
+.js-enabled #user-nav li, .js-enabled #user-nav a, .js-enabled #user-nav li ul {
+  float: none
+}
+
+.js-enabled #user-nav > ul > li {
+  @include govuk-media-query($from: tablet) {
+    float: left
+  }
+}
+
+.js-enabled #user-nav.close {
+  display: none
+}
+
+.js-enabled #user-nav.close {
+  @include govuk-media-query($from: tablet) {
+    display: block
+  }
+}
+
+.js-enabled #user-nav > ul > li > a {
+  z-index: 2
+}
+
+.js-enabled #user-nav > ul > li > a {
+  @include govuk-media-query($from: tablet) {
+    border: 1px solid govuk-colour("grey-4");
+  }
+}
+
+.js-enabled #user-nav li.has-sub-menu {
+  position: relative
+}
+
+.js-enabled #user-nav li.has-sub-menu.open > a {
+  background: govuk-colour("grey-4");
+  border-color: govuk-colour("grey-2");
+  color: das-colour("purple");
+}
+
+.js-enabled #user-nav li.has-sub-menu.open > a:before {
+  border-left-color: transparent;
+  // originally #000, but should probably be govuk black. if it was for printing, then true black would be correct, but then should use $govuk-print-text-colour
+  border-top-color: govuk-colour("black");
+  border-width: 7px 4px
+}
+
+.js-enabled #user-nav li.has-sub-menu > a {
+  padding-left: 25px;
+  position: relative
+}
+
+.js-enabled #user-nav li.has-sub-menu > a:before {
+  border-color: transparent;
+  border-left-color: govuk-colour("white");
+  border-style: solid;
+  border-width: 4px 7px;
+  content: "";
+  display: block;
+  height: 0;
+  left: 10px;
+  margin-top: -5px;
+  position: absolute;
+  top: 50%;
+  width: 0
+}
+
+.js-enabled #user-nav li.has-sub-menu ul {
+  @include govuk-media-query($from: tablet) {
+    background: govuk-colour("grey-4");
+    border: 1px solid govuk-colour("grey-2");
+    margin-top: -1px;
+    padding: 0 10px;
+    position: absolute;
+    right: 0;
+    width: 200px;
+    z-index: 1
+  }
+}
+
+.js-enabled #user-nav li.has-sub-menu ul li:first-child {
+  @include govuk-media-query($from: tablet) {
+    border-top: none
+  }
+}
+
+.js-enabled .header-organisation ul {
+  position: relative;
+
+  li { float: left; }
+}
+
+.js-enabled .header-organisation ul li {
+  @include govuk-media-query($from: tablet) {
+    width: auto
+  }
+}
+
+#floating-menu-holder {
+  background: govuk-colour("light-purple");
+  width: 100%;
+
+  .fixed-header {
+    left: 0;
+    max-width: 100%;
+    position: fixed;
+    top: 0
+  }
+
+  .width-adjust {
+    margin: 0 auto;
+    max-width: 960px
+  }
+}
+
+.account-information:after, .header-organisation ul:after {
+  clear: both;
+  content: "";
+  display: block
+}
+
+.floating-menu {
+  background: govuk-colour("light-purple");
+  clear: both;
+  color: govuk-colour("white");
+  margin: 0 auto;
+  max-width: 960px;
+  width: 100%;
+  z-index: 1;
+
+  nav#user-nav {
+    clear: both;
+    float: left;
+    margin: 0 0 0 20px
+  }
+}
+
+.header-organisation ul li.menu-link.sub-menu-open > a:before {
+  border-left-color: transparent;
+  border-top-color: govuk-colour("black"); // originally #000;
+  border-width: 7px 4px
+}
+
+.header-organisation ul li.menu-link > a {
+  padding-left: 25px;
+  position: absolute;
+  right: 0;
+  top: 0
+}
+
+.header-organisation ul li.menu-link > a:before {
+  border-color: transparent;
+  border-left-color: govuk-colour("black"); // originally #000;
+  border-style: solid;
+  border-width: 4px 7px;
+  content: "";
+  display: block;
+  height: 0;
+  left: 10px;
+  margin-top: -5px;
+  position: absolute;
+  top: 50%;
+  width: 0
+}
+
+.js-enabled .header-organisation ul li a.selected:after {
+  height: 5px;
+  left: 15px;
+  right: 15px;
+  top: auto;
+  width: auto
+}
+
+//.js-enabled .header-organisation ul li.menu-link.sub-menu-open {
+//  clear: left;
+//  width: 100%
+//}
+//
+//.js-enabled .header-organisation ul li.menu-link.sub-menu-open ul li {
+//  border-top: 1px solid govuk-colour("grey-3");
+//}
+//
+//.js-enabled .header-organisation ul li.menu-link.sub-menu-open ul li a.selected:after {
+//  height: auto;
+//  left: 0;
+//  right: auto;
+//  top: 0;
+//  width: 5px
+//}
+//
+//li.menu-link ul {
+//  display: none
+//}
+//
+//li.menu-link.sub-menu-open ul {
+//  display: block;
+//  margin: 0
+//}
+//
+//li.menu-link.sub-menu-open ul li {
+//  display: block;
+//  float: none
+//}
+//
+//li.menu-link.sub-menu-open ul li a {
+//  display: block
+//}
+
+.floating-menu nav#user-nav {
+  @include govuk-media-query($from: tablet) {
+    clear: none;
+    float: right;
+    margin: 0
+  }
+}
+
+.floating-menu nav#user-nav li .has-sub-menu a.menu-main {
+  border: 0;
+  color: govuk-colour("white");
+}
+
+.floating-menu nav#user-nav li .open a.menu-main {
+  color: das-colour("purple");
+}
+
+.floating-menu nav#user-nav li a {
+  border: 0;
+  color: govuk-colour("white");
+}
+
+.floating-menu p.floating-head-text {
+  float: left;
+  font-size: 19px;
+  @include govuk-typography-weight-bold();
+  margin: 10px 0 0 10px
+}
+
+.floating-menu p.floating-head-text {
+  @include govuk-media-query($from: tablet) {
+    margin: 10px 0;
+  }
+}
+
+.floating-menu nav#user-nav #settings-menu a.sub-menu-item {
+  @include govuk-media-query($from: tablet) {
+    color: das-colour("purple") !important
+  }
+}
+
+/*** Added as new GDS doesn't have js-hidden class **/
+.js-enabled #user-nav .js-hidden {
+  display: none;
+  visibility: hidden;
+}
+
+// the following styles are used on provider relationship's pages (as opposed to being used in the layout)
+// we'll leave them here for now as some will likely be needed for future employer finance pages and
+// the original css has been converted to sass, so we'd want these versions rather than the originals
+// todo: before we release the mvs, we can delete anything that it still commented out
+
+///*** Additional error style for inputs ***/
+//.input-validation-error {
+//  border: 4px solid $govuk-error-colour;
+//}
+
+/*** Healthcheck Styles ***/
+//.govuk-table__cell--center, .govuk-table__header--center {
+//  text-align: center;
+//}
+
+//.govuk-info-summary, .govuk-success-summary {
+//  color: govuk-colour("black");
+//  padding: 15px;
+//  margin-bottom: 30px;
+//  border: 4px solid govuk-colour("turquoise");
+//}
+//
+//.govuk-info-summary {
+//  border: 4px solid govuk-colour("purple");
+//}
+//
+//.govuk-success-summary {
+//  border: 4px solid govuk-colour("turquoise");
+//}
+//
+//@media print {
+//  .govuk-info-summary, .govuk-success-summary {
+//    color: $govuk-print-text-colour
+//  }
+//}
+//
+//.govuk-info-summary, .govuk-success-summary {
+//  @include govuk-media-query($from: tablet) {
+//    padding: 20px;
+//    margin-bottom: 50px;
+//  }
+//}
+//
+//.govuk-info-summary:focus, .govuk-success-summary:focus {
+//  outline: 3px solid govuk-colour("yellow");
+//  outline-offset: 0
+//}
+//
+//.govuk-info-summary {
+//  @include govuk-media-query($from: tablet) {
+//    border: 5px solid govuk-colour("purple");
+//  }
+//}
+//
+//.govuk-success-summary {
+//  @include govuk-media-query($from: tablet) {
+//    border:5px solid govuk-colour("turquoise");
+//  }
+//}
+//
+//.govuk-info-summary__title, .govuk-success-summary__title {
+//  @include govuk-typography-common($govuk-font-family-nta);
+//  @include govuk-typography-weight-bold();
+//  font-size: 1.125rem;
+//  line-height: 1.11111;
+//  margin-top: 0;
+//  margin-bottom: 15px
+//}
+//
+//.govuk-info-summary__title, .govuk-success-summary__title {
+//  @include govuk-media-query($from: tablet) {
+//    font-size: 1.5rem;
+//    line-height: 1.25;
+//    margin-bottom: 20px;
+//  }
+//}
+//
+//@media print {
+//  .govuk-info-summary__title, .govuk-success-summary__title {
+//    font-size: 18pt;
+//    line-height: 1.15
+//  }
+//}
+//
+//.govuk-info-summary__body, .govuk-success-summary__body {
+//  @include govuk-typography-common($govuk-font-family-nta);
+//  @include govuk-typography-weight-regular();
+//  font-size: 1rem;
+//  line-height: 1.25
+//}
+//
+//.govuk-info-summary__body, .govuk-success-summary__body {
+//  @include govuk-media-query($from: tablet) {
+//    font-size: 1.1875rem;
+//    line-height: 1.31579
+//  }
+//}
+//
+//@media print {
+//  .govuk-info-summary__body, .govuk-success-summary__body {
+//    font-size: 14pt;
+//    line-height: 1.15
+//  }
+//}
+//
+//.govuk-info-summary__body p, .govuk-success-summary__body p {
+//  margin-top: 0;
+//  margin-bottom: 15px
+//}
+//
+//.govuk-info-summary__body p, .govuk-success-summary__body p {
+//  @include govuk-media-query($from: tablet) {
+//    margin-bottom: 20px
+//  }
+//}
+//
+//.govuk-info-summary__list, .govuk-success-summary__list {
+//  margin-top: 0;
+//  margin-bottom: 0
+//}
+//
+//.govuk-info-summary__list a, .govuk-success-summary__list a {
+//  @include govuk-typography-weight-bold();
+//}
+//
+//.govuk-info-summary__list a:focus, .govuk-success-summary__list a:focus {
+//  outline: 3px solid govuk-colour("yellow");
+//  outline-offset: 0;
+//  background-color: govuk-colour("yellow");
+//}
+//
+//.govuk-info-summary__list a:link,.govuk-info-summary__list a:visited,.govuk-info-summary__list a:hover,.govuk-info-summary__list a:active {
+//  color: govuk-colour("purple");
+//}
+//
+//.govuk-success-summary__list a:link,.govuk-success-summary__list a:visited,.govuk-success-summary__list a:hover,.govuk-success-summary__list a:active {
+//  color: govuk-colour("turquoise");
+//}
+//
+//.govuk-info-summary__list a:focus, .govuk-success-summary__list a:focus {
+//  color: govuk-colour("black");
+//}
+
+//.govuk-\!-text-align-center {
+//  text-align: center;
+//}
+ 
+//.das-table__cell--vertical-align-top {
+//  vertical-align: top;
+//}
+
+//.das-list--comma-after li:after {
+//  content: ", ";
+//}
+//
+//.das-list--comma-after li:last-child:after {
+//  content: "";
+//}
