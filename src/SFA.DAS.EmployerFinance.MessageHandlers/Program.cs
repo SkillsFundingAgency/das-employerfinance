@@ -46,13 +46,10 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
         private static IHost CreateHost(IContainer container, EnvironmentSettings environmentSettings)
         {
             var jobActivator = new StructureMapJobActivator(container);
-            
+
             var hostBuilder = new HostBuilder()
                 .UseEnvironment(environmentSettings.EnvironmentName)
-                .ConfigureWebJobs(builder =>
-                {
-                    builder.AddAzureStorageCoreServices();
-                })
+                .ConfigureWebJobs(builder => { builder.AddAzureStorageCoreServices(); })
                 .ConfigureAppConfiguration(builder =>
                 {
                     builder.AddJsonFile(environmentSettings.AppSettingsFilePath);
@@ -67,8 +64,16 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
                 .UseConsoleLifetime();
 
             var host = hostBuilder.Build();
-            
+
+            AddHostLoggerToIoC(container, host);
+
             return host;
+        }
+
+        private static void AddHostLoggerToIoC(IContainer container, IHost host)
+        {
+            var loggerProvider = host.Services.GetService<ILoggerProvider>();
+            container.Configure(c => c.For<ILogger>().Use(x => loggerProvider.CreateLogger(x.ParentType.FullName)));
         }
 
         private static EnvironmentSettings GetEnvironmentSettings(IContainer container)

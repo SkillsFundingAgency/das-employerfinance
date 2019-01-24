@@ -1,6 +1,8 @@
+using NServiceBus;
+
 namespace SFA.DAS.EmployerFinance.Messages
 {
-    public class DummyMessage
+    public class DummyEvent : IEvent
     {
         public string Payload { get; set; }
     }

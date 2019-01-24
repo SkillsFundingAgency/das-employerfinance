@@ -17,11 +17,13 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
             _messageSession = messageSession;
         }
 
-        public async Task Run([TimerTrigger("0 */1 * * * *", RunOnStartup = true)] TimerInfo timer, ILogger logger)
+        public async Task Run([TimerTrigger("*/2 * * * * *", RunOnStartup = true)] TimerInfo timer, ILogger logger)
         {
             logger.LogDebug("Running Dummy Job...");
+            
+            Console.WriteLine("Publishing a new message...");
 
-            await _messageSession.Publish(new DummyMessage{Payload = $"Dummy Message Sent [{DateTime.Now.ToShortTimeString()}]"});
+            await _messageSession.SendLocal(new DummyEvent{Payload = $"Dummy Message Sent [{DateTime.Now:hh:mm:ss}]"});
         }
     }
 }
