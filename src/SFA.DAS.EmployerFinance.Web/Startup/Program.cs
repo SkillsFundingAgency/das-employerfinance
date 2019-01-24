@@ -20,8 +20,8 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                         // use hostingContext.HostingEnvironment.EnvironmentName?
                         config.AddAzureTableStorageConfiguration(
                             // connection string will be picked up from an environment variable
-                            "insert connection string here",
-                            "LOCAL", new[] {new AzureTableStorageConfigurationDescriptor("SFA.DAS.EmployerFinanceV2", typeof (EmployerFinanceConfiguration))});
+                            "",
+                            "LOCAL", new[] {"SFA.DAS.EmployerFinanceV2"});
                     })
                 .UseKestrel(options => options.AddServerHeader = false)
                 .UseStartup<Startup>()

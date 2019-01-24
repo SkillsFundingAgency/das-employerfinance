@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using Newtonsoft.Json;
 
 namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
 {
@@ -31,15 +29,13 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
         // das's tools (das-employer-config) don't currently support different versions, so might as well hardcode it
         // we provider versioning by appending a 'Vn' on to the name
         private const string Version = "1.0";
-        private readonly IConfigurationBuilder _builder;
-        private readonly IEnumerable<AzureTableStorageConfigurationDescriptor> _configDescriptors;
+        private readonly IEnumerable<string> _configNames;
         private readonly string _environment;
         private readonly CloudStorageAccount _storageAccount;
 
-        public AzureTableStorageConfigurationProvider(IConfigurationBuilder builder, string connection, string environment, IEnumerable<AzureTableStorageConfigurationDescriptor> configDescriptors)
+        public AzureTableStorageConfigurationProvider(string connection, string environment, IEnumerable<string> configNames)
         {
-            _builder = builder;
-            _configDescriptors = configDescriptors;
+            _configNames = configNames;
             _environment = environment;
             _storageAccount = CloudStorageAccount.Parse(connection);
         }
@@ -53,18 +49,12 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
         {
             var table = GetTable();
 
-            var operations = _configDescriptors.Select(cd => table.ExecuteAsync(GetOperation(cd.Name)));
+            var operations = _configNames.Select(name => table.ExecuteAsync(GetOperation(name)));
 
             var rows = Task.WhenAll(operations).GetAwaiter().GetResult();
 
             //var configJson = rows.Select(r => r.Result).Cast<ConfigurationRow>().Select(cr => cr.Data);
             var configJsons = rows.Select(r => ((ConfigurationRow)r.Result).Data);
-
-            // given file paths, not json!
-//            foreach (var json in configsJsons)
-//            {
-//                _builder.AddJsonFile(json);
-//            }
 
             IEnumerable<Stream> configStreams = null;
             try
@@ -72,8 +62,7 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
                 configStreams = configJsons.Select(GenerateStreamFromString);
 
                 //todo: tuple
-                var configNameAndStreams = _configDescriptors.Zip(configStreams,
-                    (cd, stream) => new KeyValuePair<string, Stream>(cd.Name, stream));
+                var configNameAndStreams = _configNames.Zip(configStreams, (name, stream) => new KeyValuePair<string, Stream>(name, stream));
 
                 //todo: selectmany?
                 foreach (var kvp in configNameAndStreams)
@@ -93,33 +82,9 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
                 }
             }
 
-//            _configDescriptors.Zip(configJsons, (cd, json) => new KeyValuePair<string,string>())
-//
-//            foreach (var json in configJsons)
-//            {
-//                //todo: can access public static in internal file? if so use original
-//                using (var stream = GenerateStreamFromString(json))
-//                {
-//                    var data = JsonConfigurationStreamParser.Parse(stream);
-//
-//                    foreach (var kvp in data)
-//                        Data.Add($":{kvp.Key}", kvp.Value);
-//                }
-//            }
-            
-
-            //var configObjects = configsJsons.Zip(_configDescriptors, (json, desc) => JsonConvert.DeserializeObject(json, desc.Type));
-
-            //pass through IConfigurationBuilder properties
-
-            //we're before StructureMap setup, so...
-
-            // we either can convert poco's to individual config files, add to config, then in configureservices convert them back and add them using Configuration.GetSection
-            // -ve: convert back and fore unnecessarily
-            // +ve: set up services in normal location, can pick out subsections easily and add them too
+            //todo: can access public static in internal file? if so use original
 
             //todo: if we need facility to override config from e.g. command line, env variable (so can inject devs own connection string etc), then can stuff config into IOptions
-            //todo: how to handle sub objects? want code to only inject sub object, but how to handle that best??
         }
 
         public static Stream GenerateStreamFromString(string s)

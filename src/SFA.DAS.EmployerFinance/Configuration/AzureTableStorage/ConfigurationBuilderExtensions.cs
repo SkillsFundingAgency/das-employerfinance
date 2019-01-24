@@ -5,9 +5,9 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
 {
     public static class ConfigurationBuilderExtensions
     {
-        public static IConfigurationBuilder AddAzureTableStorageConfiguration(this IConfigurationBuilder builder, string connection, string environment, IEnumerable<AzureTableStorageConfigurationDescriptor> configDescriptors)
+        public static IConfigurationBuilder AddAzureTableStorageConfiguration(this IConfigurationBuilder builder, string connection, string environment, IEnumerable<string> configNames)
         {
-            return builder.Add(new AzureTableStorageConfigurationSource(connection, environment, configDescriptors));
+            return builder.Add(new AzureTableStorageConfigurationSource(connection, environment, configNames));
         }
     }
 }

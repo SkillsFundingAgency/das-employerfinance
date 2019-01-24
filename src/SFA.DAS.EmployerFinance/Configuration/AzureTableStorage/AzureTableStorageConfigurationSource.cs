@@ -7,19 +7,18 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
     {
         private readonly string _connection;
         private readonly string _environment;
-        private readonly IEnumerable<AzureTableStorageConfigurationDescriptor> _configDescriptors;
+        private readonly IEnumerable<string> _configNames;
 
-        public AzureTableStorageConfigurationSource(string connection, string environment, IEnumerable<AzureTableStorageConfigurationDescriptor> configDescriptors)
+        public AzureTableStorageConfigurationSource(string connection, string environment, IEnumerable<string> configNames)
         {
             _connection = connection;
             _environment = environment;
-            _configDescriptors = configDescriptors;
+            _configNames = configNames;
         }
 
         public IConfigurationProvider Build(IConfigurationBuilder builder)
         {
-            //todo: something that returns json files, then add jsonconfigurationsource, then don't need to add AzureTableStorageConfigurationProvider?
-            return new AzureTableStorageConfigurationProvider(builder, _connection, _environment, _configDescriptors);
+            return new AzureTableStorageConfigurationProvider(_connection, _environment, _configNames);
         }
     }
 }
