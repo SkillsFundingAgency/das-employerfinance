@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Configuration;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Web.DependencyResolution;
 using StructureMap;
@@ -12,7 +14,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.DependencyResolution
         public void WhenIocIsInitializationThenContainerShouldBeValid()
         {
             var registry = new Registry();
-            IoC.Initialize(registry);
+            IoC.Initialize(registry, Mock.Of<IConfiguration>());
             var container = new Container(registry);
             container.AssertConfigurationIsValid();
         }

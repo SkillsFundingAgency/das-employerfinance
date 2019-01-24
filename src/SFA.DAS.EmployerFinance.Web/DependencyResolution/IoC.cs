@@ -7,16 +7,13 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
 {
     public static class IoC
     {
-        public static void Initialize(Registry registry)
+        public static void Initialize(Registry registry, IConfiguration configuration)
         {
-            //            var employerFinanceConfig = new EmployerFinanceConfiguration();
-//            Configuration.GetSection("SFA.DAS.EmployerFinanceV2").Bind(employerFinanceConfig);
+            //todo: belongs in ConfigurationRegistry
+            //todo: indirect, so only fetch if injected?
+            var oidcConfig = configuration.GetSection($"{"SFA.DAS.EmployerFinanceV2"}:{"Oidc"}").Get<OidcConfiguration>();
+            registry.For<IOidcConfiguration>().Use(oidcConfig).Singleton();
 
-//todo: let consumers work using IConfiguration, or insert into container?
-//            var x = configuration.GetSection("SFA.DAS.EmployerFinanceV2").Get<EmployerFinanceConfiguration>();
-//
-//            registry.For<>()
-            
             registry.IncludeRegistry<ConfigurationRegistry>();
             registry.IncludeRegistry<DefaultRegistry>();
         }

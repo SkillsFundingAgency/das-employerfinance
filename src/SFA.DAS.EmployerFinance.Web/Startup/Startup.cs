@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
         
         public void ConfigureContainer(Registry registry)
         {
-            IoC.Initialize(registry);
+            IoC.Initialize(registry, Configuration);
         }
     }
 }

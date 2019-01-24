@@ -4,19 +4,25 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EmployerFinance.Configuration;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
 {
-#if not_ready_yet
     public static class ServiceCollectionExtensions
     {
         //todo: needs oidc config. config content needs to change. plug into .net core's IConfiguration, rather than autoconfig?
         //todo: use dans azure storage configuration provider (could potentially add the autoconfig ability into it to pick up the connection string from the env variable (das-reservations)
-        public static void AddAuthenticationService(this IServiceCollection services, IHostingEnvironment hostingEnvironment)
+        public static void AddAuthenticationService(this IServiceCollection services, IHostingEnvironment hostingEnvironment, IConfiguration configuration)
             //, AuthenticationConfiguration authConfig, IEmployerVacancyClient vacancyClient, IRecruitVacancyClient recruitClient, IHostingEnvironment hostingEnvironment)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            //todo: or add OidcConfiguration to container??
+//            var oidcConfig = configuration.GetSection($"{"SFA.DAS.EmployerFinanceV2"}:{"Oidc"}").Get<OidcConfiguration>();
+
+#if not_ready_yet
 
             services.AddAuthentication(options =>
             {
@@ -73,7 +79,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                     return Task.CompletedTask;
                 };
             });
+#endif
         }
     }
-#endif
 }
