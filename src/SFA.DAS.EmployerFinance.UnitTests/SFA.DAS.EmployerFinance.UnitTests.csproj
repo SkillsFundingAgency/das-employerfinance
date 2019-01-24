@@ -16,13 +16,13 @@
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="Moq" Version="4.10.1" />    
     <PackageReference Include="SFA.DAS.Testing" Version="3.0.22" />
-    <PackageReference Include="SFA.DAS.AutoConfiguration" Version="1.1.13" />
+    <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Types\SFA.DAS.EmployerFinance.Types.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Web\SFA.DAS.EmployerFinance.Web.csproj" />
-    ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
   </ItemGroup>
 
 </Project>
