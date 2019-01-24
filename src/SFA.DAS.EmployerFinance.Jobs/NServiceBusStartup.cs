@@ -42,7 +42,6 @@ namespace SFA.DAS.EmployerFinance.Jobs
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
                 .UseInstallers()
-                .UseSendOnly()
                 .UseStructureMapBuilder(_container);
 
             _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
