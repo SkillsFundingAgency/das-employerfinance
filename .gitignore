@@ -253,6 +253,9 @@ paket-files/
 # FAKE - F# Make
 .fake/
 
+# NServiceBus Learning Transport folder
+.learningtransport
+
 # JetBrains Rider
 .idea/
 *.sln.iml
