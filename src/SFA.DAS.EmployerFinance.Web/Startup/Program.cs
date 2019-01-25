@@ -19,6 +19,24 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
+            var environmentVariables = GetEnvironmentVariables();
+            //todo: pick up the environment also, and integrate it into core's environment system
+            
+            return WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    // use hostingContext.HostingEnvironment.EnvironmentName?
+                    config.AddAzureTableStorageConfiguration(
+                        environmentVariables.StorageConnectionString,
+                        environmentVariables.EnvironmentName, new[] {ConfigurationKeys.EmployerFinance});
+                })
+                .UseKestrel(options => options.AddServerHeader = false)
+                .UseStartup<Startup>()
+                .UseStructureMap();
+        }
+
+        private static (string StorageConnectionString, string EnvironmentName) GetEnvironmentVariables()
+        {
             var environmentVariablesConfig = new ConfigurationBuilder().AddEnvironmentVariables().Build();
             var storageConnectionString = environmentVariablesConfig[EnvironmentVariableNames.ConfigurationStorageConnectionString];
 
@@ -28,20 +46,8 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             var environmentName = environmentVariablesConfig[EnvironmentVariableNames.Environment] ?? DefaultEnvironment;
             //todo: LOCAL / development etc. how to reconcile?
             // only care about legacy envnames like LOCAL, for config?
-            
-            //todo: pick up the environment also, and integrate it into core's environment system
-            
-            return WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    // use hostingContext.HostingEnvironment.EnvironmentName?
-                    config.AddAzureTableStorageConfiguration(
-                        storageConnectionString,
-                        environmentName, new[] {ConfigurationKeys.EmployerFinance});
-                })
-                .UseKestrel(options => options.AddServerHeader = false)
-                .UseStartup<Startup>()
-                .UseStructureMap();
+
+            return (storageConnectionString, environmentName);
         }
     }
 }
