@@ -2,7 +2,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
 {
     public static class EnvironmentVariableNames
     {
-        public const string Environment = "EnvironmentName";
-        public const string ConfigurationStorageConnectionString = "ConfigurationStorageConnectionString";
+        public const string Environment = "APPSETTING_EnvironmentName";
+        public const string ConfigurationStorageConnectionString = "APPSETTING_ConfigurationStorageConnectionString";
     }
 }
