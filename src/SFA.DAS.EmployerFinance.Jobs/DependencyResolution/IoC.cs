@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerFinance.DependencyResolution;
-using IContainer = StructureMap.IContainer;
-using Container = StructureMap.Container;
+﻿using SFA.DAS.AutoConfiguration.DependencyResolution;
+using SFA.DAS.EmployerFinance.DependencyResolution;
+using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
 {
@@ -10,6 +10,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
         {
             return new Container(c =>
             {
+                c.AddRegistry<AutoConfigurationRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<StartupRegistry>();

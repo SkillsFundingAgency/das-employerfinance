@@ -12,6 +12,7 @@ We might also want to bundle some or all of the GOV.UK / common DAS / site speci
 
 * GDPR / CheckConsentNeeded?
 * [Scope our node package](https://docs.npmjs.com/misc/scope) to Esfa?
+* Move npm & gulp configuration to the project root?
 
 ## Useful Links
 

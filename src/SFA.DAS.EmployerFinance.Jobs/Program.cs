@@ -14,50 +14,28 @@ namespace SFA.DAS.EmployerFinance.Jobs
 {
     public static class Program
     {
-        private const string AppSettingFilePath = "appsettings.json";
-
         public static async Task Main()
         {
             ServicePointManager.DefaultConnectionLimit = 50;
 
             using (var container = IoC.Initialize())
             {
+                var environmentService = container.GetInstance<IEnvironmentService>();
+                var environmentName = environmentService.IsCurrent(DasEnv.LOCAL) ? EnvironmentName.Development : EnvironmentName.Production;
+                var jobActivator = new StructureMapJobActivator(container);
                 var startup = container.GetInstance<IStartup>();
+                
+                var host = new HostBuilder()
+                    .UseEnvironment(environmentName)
+                    .ConfigureWebJobs(b => b.AddAzureStorageCoreServices().AddTimers())
+                    .ConfigureAppConfiguration(b => b.AddJsonFile("appsettings.json").AddJsonFile($"appsettings.{environmentName}.json", true))
+                    .ConfigureLogging(b => b.SetMinimumLevel(LogLevel.Debug).AddNLog())
+                    .ConfigureServices(c => c.AddSingleton<IJobActivator>(jobActivator))
+                    .UseConsoleLifetime()
+                    .Build();
 
                 await startup.StartAsync();
-
-                var jobActivator = new StructureMapJobActivator(container);
-
-                var environmentService = container.GetInstance<IEnvironmentService>();
-
-                var environmentName = environmentService.IsCurrent(DasEnv.LOCAL)
-                    ? EnvironmentName.Development
-                    : EnvironmentName.Production;
-
-                var hostBuilder = new HostBuilder()
-                    .UseEnvironment(environmentName)
-                    .ConfigureWebJobs(builder =>
-                    {
-                        builder.AddAzureStorageCoreServices()
-                               .AddTimers();
-                    })
-                    .ConfigureAppConfiguration(builder =>
-                    {
-                        builder.AddJsonFile(AppSettingFilePath);
-                    })
-                    .ConfigureLogging(builder => 
-                    { 
-                        builder.SetMinimumLevel(LogLevel.Debug)
-                               .AddNLog();
-                    })
-                    .ConfigureServices(collection =>
-                    {
-                        collection.AddSingleton<IJobActivator>(jobActivator);
-                    })
-                    .UseConsoleLifetime();
-
-                var host = hostBuilder.Build();
-
+                
                 using (host)
                 {
                     await host.RunAsync();
