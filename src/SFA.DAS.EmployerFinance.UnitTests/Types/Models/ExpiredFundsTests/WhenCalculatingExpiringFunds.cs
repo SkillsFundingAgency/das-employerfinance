@@ -4,18 +4,18 @@ using System.Linq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Types.Models;
 
-namespace SFA.DAS.EmployerFinance.ExpiredFunds.UnitTests.ExpiredFunds
+namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
 {
     [Parallelizable]
     public class WhenCalculatingExpiringFunds
     {
-        private Types.Models.ExpiredFunds _expiredFunds;
+        private ExpiredFunds _expiredFunds;
         private Dictionary<CalendarPeriod, decimal> _fundsIn;
 
         [SetUp]
         public void Arrange()
         {
-            _expiredFunds = new Types.Models.ExpiredFunds();
+            _expiredFunds = new ExpiredFunds();
 
             _fundsIn = new Dictionary<CalendarPeriod, decimal>
             {
