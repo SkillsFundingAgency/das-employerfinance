@@ -78,12 +78,6 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
 
                 default:
                     throw new FormatException($"Unsupported JSON token '{_reader.TokenType}' was found. Path '{_reader.Path}', line {_reader.LineNumber} position {_reader.LinePosition}.");
-                // https://github.com/Red-Pulse-Legacy/neo-gui-rpx/blob/master/neo-gui-rpx/Microsoft.Extensions.Configuration.Json.xml
-//                    throw new FormatException(Resources.FormatError_UnsupportedJSONToken(
-//                        _reader.TokenType,
-//                        _reader.Path,
-//                        _reader.LineNumber,
-//                        _reader.LinePosition));
             }
         }
 
@@ -103,7 +97,6 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
 
             if (_data.ContainsKey(key))
             {
-                //throw new FormatException(Resources.FormatError_KeyIsDuplicated(key));
                 throw new FormatException($"A duplicate key '{key}' was found.");
             }
             _data[key] = data.ToString(CultureInfo.InvariantCulture);
