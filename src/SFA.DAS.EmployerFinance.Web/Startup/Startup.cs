@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Configuration.Extensions;
 using SFA.DAS.EmployerFinance.Web.DependencyResolution;
 using SFA.DAS.EmployerFinance.Web.Filters;
 using StructureMap;
@@ -20,20 +22,22 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var serviceProvider = services.BuildServiceProvider();
+            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-            
-            services.AddMvc(options =>
-                {
-                    options.Filters.Add(new UrlsViewBagFilter());
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            })
+            // ConfigureContainer() hasn't been called yet, so we have to get the Oidc config from IConfiguration, rather than serviceProvider
+            .AddAuthenticationService(serviceProvider.GetService<IHostingEnvironment>(), Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"))
+            .AddMvc(options =>
+            {
+                options.Filters.Add(new UrlsViewBagFilter());
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

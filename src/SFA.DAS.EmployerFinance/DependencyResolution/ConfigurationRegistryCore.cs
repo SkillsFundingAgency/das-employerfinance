@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using StructureMap;
 using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Configuration.Extensions;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
 {

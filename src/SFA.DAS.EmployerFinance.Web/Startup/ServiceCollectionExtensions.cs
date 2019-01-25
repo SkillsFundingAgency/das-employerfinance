@@ -10,17 +10,15 @@ using SFA.DAS.EmployerFinance.Configuration;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
 {
+    //todo: move to authentication/extensions?
     public static class ServiceCollectionExtensions
     {
         //todo: needs oidc config. config content needs to change. plug into .net core's IConfiguration, rather than autoconfig?
         //todo: use dans azure storage configuration provider (could potentially add the autoconfig ability into it to pick up the connection string from the env variable (das-reservations)
-        public static void AddAuthenticationService(this IServiceCollection services, IHostingEnvironment hostingEnvironment, IConfiguration configuration)
+        public static IServiceCollection AddAuthenticationService(this IServiceCollection services, IHostingEnvironment hostingEnvironment, IOidcConfiguration oidcConfiguration)
             //, AuthenticationConfiguration authConfig, IEmployerVacancyClient vacancyClient, IRecruitVacancyClient recruitClient, IHostingEnvironment hostingEnvironment)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-            //todo: or add OidcConfiguration to container??
-//            var oidcConfig = configuration.GetSection($"{"SFA.DAS.EmployerFinanceV2"}:{"Oidc"}").Get<OidcConfiguration>();
 
 #if not_ready_yet
 
@@ -80,6 +78,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 };
             });
 #endif
+            return services;
         }
     }
 }
