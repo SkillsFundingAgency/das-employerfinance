@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-
+#if not_ready_yet
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -56,27 +56,27 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 options.ClientSecret = oidcConfig.ClientSecret;
                 options.Scope.Add("profile");
 
-//                options.Events.OnTokenValidated = async (ctx) =>
-//                {
-//                    await PopulateAccountsClaim(ctx, vacancyClient);
-//                    await HandleUserSignedIn(ctx, recruitClient);
-//                };
-//
-//                options.Events.OnRemoteFailure = ctx =>
-//                {
-//                    if (ctx.Failure.Message.Contains("Correlation failed"))
-//                    {
-//                        var logger = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>().CreateLogger<Startup>();
-//                        logger.LogDebug("Correlation Cookie was invalid - probably timed-out");
-//
-//                        ctx.Response.Redirect("/");
-//                        ctx.HandleResponse();
-//                    }
-//
-//                    return Task.CompletedTask;
-//                };
-            });
+                options.Events.OnTokenValidated = async (ctx) =>
+                {
+                    await PopulateAccountsClaim(ctx, vacancyClient);
+                    await HandleUserSignedIn(ctx, recruitClient);
+                };
 
+                options.Events.OnRemoteFailure = ctx =>
+                {
+                    if (ctx.Failure.Message.Contains("Correlation failed"))
+                    {
+                        var logger = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>().CreateLogger<Startup>();
+                        logger.LogDebug("Correlation Cookie was invalid - probably timed-out");
+
+                        ctx.Response.Redirect("/");
+                        ctx.HandleResponse();
+                    }
+
+                    return Task.CompletedTask;
+                };
+            });
+#endif
             return services;
         }
     }
