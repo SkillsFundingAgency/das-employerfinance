@@ -1,18 +1,9 @@
-using System.Linq;
 using Microsoft.Extensions.Configuration;
 using StructureMap;
 using SFA.DAS.EmployerFinance.Configuration;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
 {
-    public static class ConfigurationExtensions
-    {
-        public static TConfig GetEmployerFinanceSection<TConfig>(this IConfiguration configuration, params string[] subSectionPath)
-        {
-            return configuration.GetSection(string.Join(":", Enumerable.Repeat(ConfigurationKeys.EmployerFinance, 1).Concat(subSectionPath))).Get<TConfig>();
-        }
-    }
-    
     //todo: rename to ConfigurationRegistry, once there are no consumers of the old registry
     public class ConfigurationRegistryCore : Registry
     {
