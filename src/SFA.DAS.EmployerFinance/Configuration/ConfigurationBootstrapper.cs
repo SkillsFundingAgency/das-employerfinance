@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.Configuration;
+using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
 
 namespace SFA.DAS.EmployerFinance.Configuration
 {
@@ -21,6 +22,14 @@ namespace SFA.DAS.EmployerFinance.Configuration
             // only care about legacy envnames like LOCAL, for config?
 
             return (storageConnectionString, environmentName);
+        }
+
+        public static IConfigurationRoot GetConfiguration(params string[] configurationKeys)
+        {
+            var environmentVariables = GetEnvironmentVariables();
+            
+            return new ConfigurationBuilder().AddAzureTableStorageConfiguration(
+                environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, configurationKeys).Build();
         }
     }
 }

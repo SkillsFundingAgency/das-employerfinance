@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SFA.DAS.AutoConfiguration;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
 
@@ -20,6 +21,8 @@ namespace SFA.DAS.EmployerFinance.Jobs
         {
             ServicePointManager.DefaultConnectionLimit = 50;
 
+            var config = ConfigurationBootstrapper.GetConfiguration(ConfigurationKeys.EmployerFinance);
+            
             using (var container = IoC.Initialize())
             {
                 var startup = container.GetInstance<IStartup>();
