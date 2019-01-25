@@ -4,7 +4,6 @@ using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
 
 namespace SFA.DAS.EmployerFinance.Configuration
 {
-    // StartupConfiguration??
     public class ConfigurationBootstrapper
     {
         private const string DefaultEnvironment = "LOCAL";
@@ -24,12 +23,18 @@ namespace SFA.DAS.EmployerFinance.Configuration
             return (storageConnectionString, environmentName);
         }
 
+        public static IConfigurationRoot GetConfiguration(string storageConnectionString, string environmentName, params string[] configurationKeys)
+        {
+            return new ConfigurationBuilder().AddAzureTableStorageConfiguration(
+                storageConnectionString, environmentName, configurationKeys).Build();
+        }
+        
         public static IConfigurationRoot GetConfiguration(params string[] configurationKeys)
         {
             var environmentVariables = GetEnvironmentVariables();
-            
-            return new ConfigurationBuilder().AddAzureTableStorageConfiguration(
-                environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, configurationKeys).Build();
+
+            return GetConfiguration(
+                environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, configurationKeys);
         }
     }
 }

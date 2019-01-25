@@ -1,16 +1,17 @@
-﻿using SFA.DAS.EmployerFinance.DependencyResolution;
-using IContainer = StructureMap.IContainer;
-using Container = StructureMap.Container;
+﻿using Microsoft.Extensions.Configuration;
+using SFA.DAS.EmployerFinance.DependencyResolution;
+using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
 {
     public static class IoC
     {
-        public static IContainer Initialize()
+        public static IContainer Initialize(IConfiguration config, string environmentName)
         {
             return new Container(c =>
             {
-                c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry(new NonMvcHostingEnvironmentRegistry(environmentName));
+                c.AddRegistry(new ConfigurationRegistryCore(config));
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();

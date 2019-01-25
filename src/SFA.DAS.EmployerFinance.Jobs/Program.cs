@@ -6,10 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace SFA.DAS.EmployerFinance.Jobs
 {
@@ -20,10 +20,11 @@ namespace SFA.DAS.EmployerFinance.Jobs
         public static async Task Main()
         {
             ServicePointManager.DefaultConnectionLimit = 50;
-
-            var config = ConfigurationBootstrapper.GetConfiguration(ConfigurationKeys.EmployerFinance);
             
-            using (var container = IoC.Initialize())
+            var environmentVariables = ConfigurationBootstrapper.GetEnvironmentVariables();
+            var config = ConfigurationBootstrapper.GetConfiguration(environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, ConfigurationKeys.EmployerFinance);
+            
+            using (var container = IoC.Initialize(config, environmentVariables.EnvironmentName))
             {
                 var startup = container.GetInstance<IStartup>();
 
@@ -31,14 +32,10 @@ namespace SFA.DAS.EmployerFinance.Jobs
 
                 var jobActivator = new StructureMapJobActivator(container);
 
-                var environmentService = container.GetInstance<IEnvironmentService>();
-
-                var environmentName = environmentService.IsCurrent(DasEnv.LOCAL)
-                    ? EnvironmentName.Development
-                    : EnvironmentName.Production;
+                var hostingEnvironment = container.GetInstance<IHostingEnvironment>();
 
                 var hostBuilder = new HostBuilder()
-                    .UseEnvironment(environmentName)
+                    .UseEnvironment(hostingEnvironment.EnvironmentName)
                     .ConfigureWebJobs(builder =>
                     {
                         builder.AddAzureStorageCoreServices()
@@ -60,7 +57,6 @@ namespace SFA.DAS.EmployerFinance.Jobs
                     .UseConsoleLifetime();
 
                 var host = hostBuilder.Build();
-
                 using (host)
                 {
                     await host.RunAsync();
