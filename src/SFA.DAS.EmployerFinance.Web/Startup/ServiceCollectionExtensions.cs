@@ -15,12 +15,11 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
     {
         //todo: needs oidc config. config content needs to change. plug into .net core's IConfiguration, rather than autoconfig?
         //todo: use dans azure storage configuration provider (could potentially add the autoconfig ability into it to pick up the connection string from the env variable (das-reservations)
-        public static IServiceCollection AddAuthenticationService(this IServiceCollection services, IHostingEnvironment hostingEnvironment, IOidcConfiguration oidcConfiguration)
+        public static IServiceCollection AddAuthenticationService(this IServiceCollection services, IHostingEnvironment hostingEnvironment, IOidcConfiguration oidcConfig)
             //, AuthenticationConfiguration authConfig, IEmployerVacancyClient vacancyClient, IRecruitVacancyClient recruitClient, IHostingEnvironment hostingEnvironment)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-#if not_ready_yet
 
             services.AddAuthentication(options =>
             {
@@ -49,35 +48,35 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             {
                 options.SignInScheme = "Cookies";
 
-                options.Authority = authConfig.Authority;
-                options.MetadataAddress = authConfig.MetaDataAddress;
-                options.RequireHttpsMetadata = false;
+                options.Authority = oidcConfig.Authority;
+                options.MetadataAddress = oidcConfig.MetaDataAddress;
+                options.RequireHttpsMetadata = false; //todo: we *should* require https for metadata, except in local dev envs
                 options.ResponseType = "code";
-                options.ClientId = authConfig.ClientId;
-                options.ClientSecret = authConfig.ClientSecret;
+                options.ClientId = oidcConfig.ClientId;
+                options.ClientSecret = oidcConfig.ClientSecret;
                 options.Scope.Add("profile");
 
-                options.Events.OnTokenValidated = async (ctx) =>
-                {
-                    await PopulateAccountsClaim(ctx, vacancyClient);
-                    await HandleUserSignedIn(ctx, recruitClient);
-                };
-
-                options.Events.OnRemoteFailure = ctx =>
-                {
-                    if (ctx.Failure.Message.Contains("Correlation failed"))
-                    {
-                        var logger = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>().CreateLogger<Startup>();
-                        logger.LogDebug("Correlation Cookie was invalid - probably timed-out");
-
-                        ctx.Response.Redirect("/");
-                        ctx.HandleResponse();
-                    }
-
-                    return Task.CompletedTask;
-                };
+//                options.Events.OnTokenValidated = async (ctx) =>
+//                {
+//                    await PopulateAccountsClaim(ctx, vacancyClient);
+//                    await HandleUserSignedIn(ctx, recruitClient);
+//                };
+//
+//                options.Events.OnRemoteFailure = ctx =>
+//                {
+//                    if (ctx.Failure.Message.Contains("Correlation failed"))
+//                    {
+//                        var logger = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>().CreateLogger<Startup>();
+//                        logger.LogDebug("Correlation Cookie was invalid - probably timed-out");
+//
+//                        ctx.Response.Redirect("/");
+//                        ctx.HandleResponse();
+//                    }
+//
+//                    return Task.CompletedTask;
+//                };
             });
-#endif
+
             return services;
         }
     }
