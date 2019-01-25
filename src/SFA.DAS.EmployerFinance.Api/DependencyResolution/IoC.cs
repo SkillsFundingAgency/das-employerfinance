@@ -1,5 +1,4 @@
 using StructureMap;
-using SFA.DAS.EmployerFinance.DependencyResolution;
 
 namespace SFA.DAS.EmployerFinance.Api.DependencyResolution
 {
@@ -7,7 +6,6 @@ namespace SFA.DAS.EmployerFinance.Api.DependencyResolution
     {
         public static void Initialize(Registry registry)
         {
-            registry.IncludeRegistry<ConfigurationRegistry>();
             registry.IncludeRegistry<DefaultRegistry>();
         }
     }
