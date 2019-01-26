@@ -104,7 +104,7 @@ Run in the `src` directory:
 
 ## Gulp tasks
 
-Run in the `./src/SFA.DAS.EmployerFinance.Web` directory:
+Run in the `src/SFA.DAS.EmployerFinance.Web` directory:
 
 ```powershell
 > gulp <task>
