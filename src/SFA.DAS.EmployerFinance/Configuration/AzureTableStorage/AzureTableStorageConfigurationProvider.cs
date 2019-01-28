@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
     //todo: use new table code in cosmos package ?? not currently an option: https://github.com/Azure/azure-cosmos-dotnet-v2/issues/344
     // ^^ could use this preview package: https://www.nuget.org/packages/Microsoft.Azure.Cosmos.Table/0.10.1-preview
     //todo: move this provider into a hosting startup (https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/platform-specific-configuration?view=aspnetcore-2.2)
+    //todo: if we need facility to override config from e.g. command line, env variable (so can inject devs own connection string etc), then can stuff config into IOptions
     /// <remarks>
     /// Inspired by...
     /// https://github.com/SkillsFundingAgency/das-reservations/blob/MF-7-reservations-web/src/SFA.DAS.Reservations.Infrastructure/Configuration/AzureTableStorageConfigurationProvider.cs
@@ -25,6 +26,7 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
         // das's tools (das-employer-config) don't currently support different versions, so might as well hardcode it
         // we provider versioning by appending a 'Vn' on to the name
         private const string Version = "1.0";
+        private const string ConfigurationTableName = "Configuration";
         private readonly IEnumerable<string> _configNames;
         private readonly string _environment;
         private readonly CloudStorageAccount _storageAccount;
@@ -43,14 +45,7 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
         
         public override void Load()
         {
-            var table = GetTable();
-
-            var operations = _configNames.Select(name => table.ExecuteAsync(GetOperation(name)));
-
-            var rows = Task.WhenAll(operations).GetAwaiter().GetResult();
-
-            //var configJson = rows.Select(r => r.Result).Cast<ConfigurationRow>().Select(cr => cr.Data);
-            var configJsons = rows.Select(r => ((ConfigurationRow)r.Result).Data);
+            var configJsons = GetRows().Select(r => ((ConfigurationRow)r.Result).Data);
 
             IEnumerable<Stream> configStreams = null;
             try
@@ -59,14 +54,7 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
 
                 var configNameAndStreams = _configNames.Zip(configStreams, (name, stream) => (name, stream));
 
-                //todo: selectmany?
-                foreach (var configNameAndStream in configNameAndStreams)
-                {
-                    var configData = JsonConfigurationStreamParser.Parse(configNameAndStream.stream);
-
-                    foreach (var configItem in configData)
-                        Data.Add($"{configNameAndStream.name}:{configItem.Key}", configItem.Value);
-                }
+                Parallel.ForEach(configNameAndStreams, AddToData);
             }
             finally
             {
@@ -75,11 +63,10 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
                     stream.Dispose();
                 }
             }
-
-            //todo: if we need facility to override config from e.g. command line, env variable (so can inject devs own connection string etc), then can stuff config into IOptions
         }
 
-        public static Stream GenerateStreamFromString(string s)
+        /// <returns>Stream that contains the supplied string. The caller is responsible for disposing the stream.</returns>
+        private static Stream GenerateStreamFromString(string s)
         {
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
@@ -92,12 +79,28 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
         private CloudTable GetTable()
         {
             var tableClient = _storageAccount.CreateCloudTableClient();
-            return tableClient.GetTableReference("Configuration");
+            return tableClient.GetTableReference(ConfigurationTableName);
+        }
+
+        private IEnumerable<TableResult> GetRows()
+        {
+            var table = GetTable();
+            var operations = _configNames.Select(name => table.ExecuteAsync(GetOperation(name)));
+            return Task.WhenAll(operations).GetAwaiter().GetResult();
         }
 
         private TableOperation GetOperation(string serviceName)
         {
             return TableOperation.Retrieve<ConfigurationRow>(_environment, $"{serviceName}_{Version}");
+        }
+        
+        // return projection, then add that to data instead?
+        private void AddToData((string name, Stream stream) configNameAndStream)
+        {
+            var configData = JsonConfigurationStreamParser.Parse(configNameAndStream.stream);
+
+            foreach (var configItem in configData)
+                Data.Add($"{configNameAndStream.name}:{configItem.Key}", configItem.Value);
         }
     }
 }
