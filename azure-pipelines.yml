@@ -1,0 +1,68 @@
+resources:
+- repo: self
+queue:
+  name: Continuous Integration 02 - SSD - 160ACU
+variables:
+  BuildConfiguration: release
+
+steps:
+- task: gittools.gitversion.gitversion-task.GitVersion@3
+  displayName: GitVersion
+  inputs:
+    updateAssemblyInfo: true
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: restore
+    projects: '**/*.sln'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    command: test
+    projects: '**/*.sln'
+    arguments: '--configuration $(BuildConfiguration)'
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test'
+  inputs:
+    command: test
+    projects: '*\**\*UnitTests.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack'
+  inputs:
+    command: pack
+    packagesToPack: src/SFA.DAS.EmployerFinance.Types/SFA.DAS.EmployerFinance.Types.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;
+    versioningScheme: byEnvVar
+    versionEnvVar: GitVersion.NuGetVersionV2
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish Website'
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: src/SFA.DAS.EmployerFinance.Web/SFA.DAS.EmployerFinance.Web.csproj
+    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish WebJobs'
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: src/SFA.DAS.EmployerFinance.Jobs/SFA.DAS.EmployerFinance.Jobs.csproj
+    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+
+
