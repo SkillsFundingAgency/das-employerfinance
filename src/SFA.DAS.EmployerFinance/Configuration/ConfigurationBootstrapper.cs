@@ -17,8 +17,6 @@ namespace SFA.DAS.EmployerFinance.Configuration
                 throw new Exception($"Hey {environmentVariablesConfig["USERNAME"]??"developer"}, you need to set the environment variable '{EnvironmentVariableNames.ConfigurationStorageConnectionString}'. Set it to a connection string pointing to a storage account containing a 'Configuration' table. See readme.md for more information.");
 
             var environmentName = environmentVariablesConfig[EnvironmentVariableNames.Environment] ?? DefaultEnvironment;
-            //todo: LOCAL / development etc. how to reconcile?
-            // only care about legacy envnames like LOCAL, for config?
 
             return (storageConnectionString, environmentName);
         }
@@ -33,8 +31,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
         {
             var environmentVariables = GetEnvironmentVariables();
 
-            return GetConfiguration(
-                environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, configurationKeys);
+            return GetConfiguration(environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, configurationKeys);
         }
     }
 }
