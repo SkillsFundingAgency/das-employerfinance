@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog.Web;
+using SFA.DAS.EmployerFinance.Configuration;
 using StructureMap.AspNetCore;
 
 namespace SFA.DAS.EmployerFinance.Web
@@ -15,6 +18,13 @@ namespace SFA.DAS.EmployerFinance.Web
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel(options => options.AddServerHeader = false)
                 .UseStartup<Startup>()
-                .UseStructureMap();
+                .UseStructureMap()
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(LogLevel.Debug);
+                })
+                .UseNLog(); 
     }
+
 }
