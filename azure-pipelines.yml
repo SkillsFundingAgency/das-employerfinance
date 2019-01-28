@@ -1,3 +1,4 @@
+name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 resources:
 - repo: self
 queue:
