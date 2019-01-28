@@ -8,6 +8,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
 {
+    //todo: das-recruit just picks up the values straight from environment variables (which devops have to set anyway). we could too and cut out all this table reading provider code etc.
     //todo: have config types and config code in different folders/namespaces
     //todo: pick up storage connection string from env variables storage provider in here. pick up environment from core's env -> IHostingEnvironment.EnvironmentName can get to it so early?
     //todo: implement reload on change is table supports it
@@ -61,17 +62,15 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
             {
                 configStreams = configJsons.Select(GenerateStreamFromString);
 
-                //todo: tuple
-                var configNameAndStreams = _configNames.Zip(configStreams, (name, stream) => new KeyValuePair<string, Stream>(name, stream));
+                var configNameAndStreams = _configNames.Zip(configStreams, (name, stream) => (name, stream));
 
                 //todo: selectmany?
-                foreach (var kvp in configNameAndStreams)
+                foreach (var configNameAndStream in configNameAndStreams)
                 {
-                    //todo: can access public static in internal file? if so use original
-                    var configData = JsonConfigurationStreamParser.Parse(kvp.Value);
+                    var configData = JsonConfigurationStreamParser.Parse(configNameAndStream.stream);
 
                     foreach (var configItem in configData)
-                        Data.Add($"{kvp.Key}:{configItem.Key}", configItem.Value);
+                        Data.Add($"{configNameAndStream.name}:{configItem.Key}", configItem.Value);
                 }
             }
             finally
@@ -81,8 +80,6 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
                     stream.Dispose();
                 }
             }
-
-            //todo: can access public static in internal file? if so use original
 
             //todo: if we need facility to override config from e.g. command line, env variable (so can inject devs own connection string etc), then can stuff config into IOptions
         }

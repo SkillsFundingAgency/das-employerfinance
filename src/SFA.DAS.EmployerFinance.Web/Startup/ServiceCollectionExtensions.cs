@@ -10,7 +10,7 @@ using SFA.DAS.EmployerFinance.Configuration;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
 {
-    //todo: move to authentication/extensions?
+    //todo: move to authentication/extensions? rename ServiceCollectionOidcExtensions?
     public static class ServiceCollectionExtensions
     {
         //todo: needs oidc config. config content needs to change. plug into .net core's IConfiguration, rather than autoconfig?
@@ -20,7 +20,6 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-#if not_ready_yet
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -50,12 +49,13 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
 
                 options.Authority = oidcConfig.Authority;
                 options.MetadataAddress = oidcConfig.MetaDataAddress;
-                options.RequireHttpsMetadata = false; //todo: we *should* require https for metadata, except in local dev envs
+                options.RequireHttpsMetadata = true; //todo: we *should* require https for metadata, except in local dev envs
                 options.ResponseType = "code";
                 options.ClientId = oidcConfig.ClientId;
                 options.ClientSecret = oidcConfig.ClientSecret;
                 options.Scope.Add("profile");
 
+#if not_ready_yet
                 options.Events.OnTokenValidated = async (ctx) =>
                 {
                     await PopulateAccountsClaim(ctx, vacancyClient);
@@ -75,8 +75,9 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
 
                     return Task.CompletedTask;
                 };
-            });
 #endif
+            });
+
             return services;
         }
     }

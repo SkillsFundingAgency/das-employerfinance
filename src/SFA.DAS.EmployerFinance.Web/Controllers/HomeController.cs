@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerFinance.Web.Models;
 
@@ -7,6 +8,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     [Route("")]
     public class HomeController : Controller
     {
+        [Authorize]
         public IActionResult Index()
         {
             return View();
