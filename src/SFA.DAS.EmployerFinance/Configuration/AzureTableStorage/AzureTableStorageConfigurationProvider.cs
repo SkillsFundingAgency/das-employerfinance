@@ -10,16 +10,11 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
 {
     //todo: das-recruit just picks up the values straight from environment variables (which devops have to set anyway). we could too and cut out all this table reading provider code etc.
     //todo: have config types and config code in different folders/namespaces
-    //todo: pick up storage connection string from env variables storage provider in here. pick up environment from core's env -> IHostingEnvironment.EnvironmentName can get to it so early?
-    //todo: implement reload on change is table supports it
+    //todo: implement reload on change if table supports it
     //todo: inject config into views??
-    //todo: how to handle which rows to load? supply collection of names that apply (if we do that, it'll mean 3 tiered config, row/config group/config item, which would fit into section/subsection/key ok)?
-    // base AzureTableStorageConfigurationProvider and derive from it with row name? or do we load all from 1 row?? some other mechanism? 
     //todo: options??
-    //todo: async load??
     //todo: use new table code in cosmos package ?? not currently an option: https://github.com/Azure/azure-cosmos-dotnet-v2/issues/344
     // ^^ could use this preview package: https://www.nuget.org/packages/Microsoft.Azure.Cosmos.Table/0.10.1-preview
-    //todo: getsection, then bind to poco and put in container, or let everyone work with iconfiguration?
     //todo: move this provider into a hosting startup (https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/platform-specific-configuration?view=aspnetcore-2.2)
     /// <remarks>
     /// Inspired by...
