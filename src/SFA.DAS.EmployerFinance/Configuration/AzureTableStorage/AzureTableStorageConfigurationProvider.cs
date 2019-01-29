@@ -31,21 +31,31 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
         private readonly string _environment;
         private readonly CloudStorageAccount _storageAccount;
 
-        public AzureTableStorageConfigurationProvider(string connection, string environment, IEnumerable<string> configNames)
+        public AzureTableStorageConfigurationProvider(CloudStorageAccount cloudStorageAccount, string environment, IEnumerable<string> configNames)
         {
             _configNames = configNames;
             _environment = environment;
-            _storageAccount = CloudStorageAccount.Parse(connection);
+            _storageAccount = cloudStorageAccount;
         }
 
-        private class ConfigurationRow : TableEntity
+        internal interface IConfigurationRow : ITableEntity
+        {
+            string Data { get; set; }
+        }
+        
+        internal class ConfigurationRow : TableEntity, IConfigurationRow
         {
             public string Data { get; set; }
         }
         
         public override void Load()
         {
-            var configJsons = GetRows().Select(r => ((ConfigurationRow)r.Result).Data);
+            
+            //row.Result is null
+//            var configJsons = GetRows().Select(r => ((ConfigurationRow)r.Result).Data);
+            var rows = GetRows();
+            //todo: Result needs to be ConfigurationRow, not 
+            var configJsons = rows.Select(r => ((ConfigurationRow)r.Result).Data);
 
             IEnumerable<Stream> configStreams = null;
             try
@@ -85,11 +95,23 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
         private IEnumerable<TableResult> GetRows()
         {
             var table = GetTable();
-            var operations = _configNames.Select(name => table.ExecuteAsync(GetOperation(name)));
+//            var operations = _configNames.Select(name => table.ExecuteAsync(GetOperation(name)));
+            var operations = _configNames.Select(name => GetTableResult(table, name));
             return Task.WhenAll(operations).GetAwaiter().GetResult();
         }
 
-        private TableOperation GetOperation(string serviceName)
+        private Task<TableResult> GetTableResult(CloudTable table, string serviceName)
+        {
+            var tableOperation = GetOperation(serviceName);
+            return table.ExecuteAsync(tableOperation);
+        }
+        
+        /// <remarks>
+        /// protected virtual so can create a derived object and override for unit testing
+        /// bit of a hack, until MS update fakes for core, or they release a unit testable library
+        /// alternative is to introduce an injected class to provide a level of indirection
+        /// </remarks>
+        protected virtual TableOperation GetOperation(string serviceName)
         {
             return TableOperation.Retrieve<ConfigurationRow>(_environment, $"{serviceName}_{Version}");
         }

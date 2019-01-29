@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage;
 
 namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
 {
@@ -18,7 +19,7 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
 
         public IConfigurationProvider Build(IConfigurationBuilder builder)
         {
-            return new AzureTableStorageConfigurationProvider(_connection, _environment, _configNames);
+            return new AzureTableStorageConfigurationProvider(CloudStorageAccount.Parse(_connection), _environment, _configNames);
         }
     }
 }
