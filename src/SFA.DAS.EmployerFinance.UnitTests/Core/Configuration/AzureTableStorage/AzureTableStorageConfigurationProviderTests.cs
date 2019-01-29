@@ -60,44 +60,29 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
         public TestableAzureTableStorageConfigurationProvider ConfigProvider { get; set; }
         public Mock<CloudStorageAccount> CloudStorageAccount { get; set; }
         public Mock<CloudTableClient> CloudTableClient { get; set; }
-        //public Mock<CloudTable> CloudTable { get; set; }
-//        public Mock<TestableCloudTable> CloudTable { get; set; }
         public Mock<CloudTable> CloudTable { get; set; }
-        //public TableResult TableResult { get; set; }
 
         public AzureTableStorageConfigurationProviderTestsFixture()
         {
             var dummyUri = new Uri("http://example.com/");
-            //TableResult = new TableResult();
-//            CloudTable = new Mock<TestableCloudTable>();
             CloudTable = new Mock<CloudTable>(dummyUri);
-//            CloudTable.Setup(ct => ct.ExecuteAsync(It.IsAny<TableOperation>())).ReturnsAsync(TableResult);
             CloudTableClient = new Mock<CloudTableClient>(dummyUri, new StorageCredentials());
             CloudTableClient.Setup(ctc => ctc.GetTableReference("Configuration")).Returns(CloudTable.Object);
             CloudStorageAccount = new Mock<CloudStorageAccount>(new StorageCredentials(), dummyUri, dummyUri, dummyUri, dummyUri);
             CloudStorageAccount.Setup(csa => csa.CreateCloudTableClient()).Returns(CloudTableClient.Object);
-//            ConfigProvider = new TestableAzureTableStorageConfigurationProvider(CloudStorageAccount.Object, EnvironmentName, new[] {""});
         }
 
         public void SetConfigs(IEnumerable<(string configKey, string json)> configs)
         {
-            //do we want this separate?
             ConfigProvider = new TestableAzureTableStorageConfigurationProvider(CloudStorageAccount.Object, EnvironmentName, configs.Select(c => c.configKey));
 
-            //shim static TableOperation.Retrieve
-            //TableOperation.Retrieve()
             ConfigProvider.Test_SetConfigs(configs);
             foreach (var config in configs)
             {
-//                var configurationRow = new Mock<AzureTableStorageConfigurationProvider.IConfigurationRow>();
-//                //configurationRow.SetupGet(te => te.RowKey).Returns(Configs[serviceName]);
-//                //configurationRow.SetupGet(te => te.RowKey).Returns(serviceName);
-//
-//                configurationRow.SetupGet(te => te.Data).Returns(config.json);
-
                 var configurationRow = new AzureTableStorageConfigurationProvider.ConfigurationRow {Data = config.json};
 
-                CloudTable.Setup(ct => ct.ExecuteAsync(It.Is<TableOperation>(to => to.Entity.RowKey == config.configKey))).ReturnsAsync(new TableResult { Result = configurationRow });
+                CloudTable.Setup(ct => ct.ExecuteAsync(It.Is<TableOperation>(to => to.Entity.RowKey == config.configKey)))
+                    .ReturnsAsync(new TableResult { Result = configurationRow });
             }
         }
 

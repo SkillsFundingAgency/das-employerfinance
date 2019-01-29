@@ -50,12 +50,7 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
         
         public override void Load()
         {
-            
-            //row.Result is null
-//            var configJsons = GetRows().Select(r => ((ConfigurationRow)r.Result).Data);
-            var rows = GetRows();
-            //todo: Result needs to be ConfigurationRow, not 
-            var configJsons = rows.Select(r => ((ConfigurationRow)r.Result).Data);
+            var configJsons = GetRows().Select(r => ((ConfigurationRow)r.Result).Data);
 
             IEnumerable<Stream> configStreams = null;
             try
@@ -95,7 +90,6 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
         private IEnumerable<TableResult> GetRows()
         {
             var table = GetTable();
-//            var operations = _configNames.Select(name => table.ExecuteAsync(GetOperation(name)));
             var operations = _configNames.Select(name => GetTableResult(table, name));
             return Task.WhenAll(operations).GetAwaiter().GetResult();
         }
