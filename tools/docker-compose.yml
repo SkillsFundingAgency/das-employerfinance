@@ -32,6 +32,8 @@ services:
       - sqlserver:/opt/sqlserver/data
     ports:
       - '1433:1433'
+    networks:
+    - das-employerfinance
 
 volumes:
   azurite:
