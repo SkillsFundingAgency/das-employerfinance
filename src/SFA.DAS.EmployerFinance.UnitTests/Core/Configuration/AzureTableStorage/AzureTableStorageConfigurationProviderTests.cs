@@ -46,13 +46,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
             //todo: why do we set json below?
             tableEntity.SetupGet(te => te.Data).Returns("{\"\",\"\")");
 
-//            var tableOperation = new Mock<TableOperation>();
-//            tableOperation.SetupGet(to => to.Entity).Returns(tableEntity.Object);
-//
-//            return tableOperation.Object;
-
-            //var tableOperation = new TableOperation(Mock.Of<ITableEntity>(), TableOperationType.Retrieve);
-            //make ConfigurationRow non private and use that?
             var tableOperation = TableOperation.Retrieve<ConfigurationRow>("", "");
             
             typeof(TableOperation).GetProperty("Entity").SetValue(tableOperation, tableEntity.Object);
@@ -60,14 +53,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
             return tableOperation;
         }
     }
-
-//    public class TestableCloudTable : CloudTable
-//    {
-//        public TestableCloudTable() : base(new Uri("http://localhost/"))
-//        {}
-//    }
     
-    // why does MS make testing this shit such a pita?
     public class AzureTableStorageConfigurationProviderTestsFixture
     {
         public const string EnvironmentName = "PROD";
