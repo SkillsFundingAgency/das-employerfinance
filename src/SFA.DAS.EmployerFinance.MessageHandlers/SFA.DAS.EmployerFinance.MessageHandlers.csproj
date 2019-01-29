@@ -4,6 +4,7 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <OutputType>Exe</OutputType>
         <LangVersion>latest</LangVersion>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
@@ -34,10 +35,6 @@
       <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="8.0.1" />
       <PackageReference Include="StructureMap" Version="4.7.0" />
       <PackageReference Include="StructureMap.Microsoft.DependencyInjection" Version="1.4.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="EventHandlers" />
     </ItemGroup>
 
 </Project>

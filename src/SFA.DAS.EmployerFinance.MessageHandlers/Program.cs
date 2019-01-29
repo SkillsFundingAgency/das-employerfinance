@@ -28,14 +28,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
                 var host = new HostBuilder()
                     .UseEnvironment(environmentName)
                     .ConfigureWebJobs(b => b.AddAzureStorageCoreServices().AddTimers())
-                    .ConfigureAppConfiguration(b => b.AddJsonFile(environmentName).AddEnvironmentVariables())
+                    .ConfigureAppConfiguration(b => b.AddJsonFile("appsettings.json")
+                                                     .AddJsonFile($"appsettings.{environmentName}.json", true)
+                                                     .AddEnvironmentVariables())
                     .ConfigureLogging(b => b.AddNLog())
                     .ConfigureServices(c => c.AddSingleton<IJobActivator>(jobActivator))
                     .UseConsoleLifetime()
                     .Build();
-                
-                var loggerProvider = host.Services.GetService<ILoggerProvider>();
-                container.Configure(c => c.For<ILogger>().Use(x => loggerProvider.CreateLogger(x.ParentType.FullName)));
             
                 await startup.StartAsync();
 
