@@ -34,15 +34,16 @@ namespace SFA.DAS.EmployerFinance.Jobs
         public async Task StartAsync()
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.JobsV2")
-                .UseAzureServiceBusTransport(() => 
-                    _employerFinanceConfiguration.ServiceBusConnectionString, 
+                .UseAzureServiceBusTransport(() =>
+                        _employerFinanceConfiguration.ServiceBusConnectionString,
                     _environmentService.IsCurrent(DasEnv.LOCAL))
                 .UseLicense(_employerFinanceConfiguration.NServiceBusLicense)
                 .UseMessageConventions()
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
                 .UseInstallers()
-                .UseStructureMapBuilder(_container);
+                .UseStructureMapBuilder(_container)
+                .UseSendOnly();
 
             _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
