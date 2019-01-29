@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
+using FluentAssertions;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Microsoft.WindowsAzure.Storage.Auth;
@@ -17,9 +17,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
     public class AzureTableStorageConfigurationProviderTests : FluentTest<AzureTableStorageConfigurationProviderTestsFixture>
     {
         [Test]
-        public void x()
+        public void WhenReadingFlatJsonFromSingleTable_ThenConfigDataShouldBeCorrect()
         {
-            Test(f => f.SetConfigs(new[] {("SFA.DAS.EmployerFinanceV2", "{\"key\": \"value\"}")}), f => f.Load());
+            Test(f => f.SetConfigs(new[] {("SFA.DAS.EmployerFinanceV2", "{\"key\": \"value\"}")}), f => f.Load(), f => f.AssertData(new[] {("SFA.DAS.EmployerFinanceV2:key", "value")} ));
         }
     }
 
@@ -29,34 +29,24 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
             : base(cloudStorageAccount, environment, configNames)
         {
         }
-
-        public ImmutableDictionary<string, string> Configs;
-        
-        public void Test_SetConfigs(IEnumerable<(string configKey, string json)> configs)
-        {
-            Configs = configs.ToImmutableDictionary(config => config.configKey, config => config.json);
-        }
         
         protected override TableOperation GetOperation(string serviceName)
         {
-            //todo: don't need this first stuff (unless remove executeasync setup
             var tableEntity = new Mock<IConfigurationRow>();
-            //tableEntity.SetupGet(te => te.RowKey).Returns(Configs[serviceName]);
             tableEntity.SetupGet(te => te.RowKey).Returns(serviceName);
-            //todo: why do we set json below?
-            tableEntity.SetupGet(te => te.Data).Returns("{\"\",\"\")");
 
             var tableOperation = TableOperation.Retrieve<ConfigurationRow>("", "");
-            
             typeof(TableOperation).GetProperty("Entity").SetValue(tableOperation, tableEntity.Object);
-
             return tableOperation;
         }
+        
+        public IDictionary<string, string> PublicData => Data;
     }
     
     public class AzureTableStorageConfigurationProviderTestsFixture
     {
         public const string EnvironmentName = "PROD";
+        public const string ConfigurationTableName = "Configuration";
         public TestableAzureTableStorageConfigurationProvider ConfigProvider { get; set; }
         public Mock<CloudStorageAccount> CloudStorageAccount { get; set; }
         public Mock<CloudTableClient> CloudTableClient { get; set; }
@@ -65,10 +55,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
         public AzureTableStorageConfigurationProviderTestsFixture()
         {
             var dummyUri = new Uri("http://example.com/");
+            var dummyStorageCredentials = new StorageCredentials();
             CloudTable = new Mock<CloudTable>(dummyUri);
-            CloudTableClient = new Mock<CloudTableClient>(dummyUri, new StorageCredentials());
-            CloudTableClient.Setup(ctc => ctc.GetTableReference("Configuration")).Returns(CloudTable.Object);
-            CloudStorageAccount = new Mock<CloudStorageAccount>(new StorageCredentials(), dummyUri, dummyUri, dummyUri, dummyUri);
+            CloudTableClient = new Mock<CloudTableClient>(dummyUri, dummyStorageCredentials);
+            CloudTableClient.Setup(ctc => ctc.GetTableReference(ConfigurationTableName)).Returns(CloudTable.Object);
+            CloudStorageAccount = new Mock<CloudStorageAccount>(dummyStorageCredentials, dummyUri, dummyUri, dummyUri, dummyUri);
             CloudStorageAccount.Setup(csa => csa.CreateCloudTableClient()).Returns(CloudTableClient.Object);
         }
 
@@ -76,7 +67,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
         {
             ConfigProvider = new TestableAzureTableStorageConfigurationProvider(CloudStorageAccount.Object, EnvironmentName, configs.Select(c => c.configKey));
 
-            ConfigProvider.Test_SetConfigs(configs);
             foreach (var config in configs)
             {
                 var configurationRow = new AzureTableStorageConfigurationProvider.ConfigurationRow {Data = config.json};
@@ -89,6 +79,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
         public void Load()
         {
             ConfigProvider.Load();
+        }
+
+        public void AssertData(IEnumerable<(string key, string value)> expectedData)
+        {
+            var expectedDictionary = expectedData.ToDictionary(ed => ed.key, ed => ed.value);
+            ConfigProvider.PublicData.Should().Equal(expectedDictionary);
         }
     }
 }
