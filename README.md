@@ -130,12 +130,12 @@ Alternatively:
 |`css`|Compiles all scss files in `content/styles` to `wwwroot/css`.|
 |`js`|Copies all js files in `node_modules/govuk-frontend` to `content/javascript/govuk-frontend`.|
 
-### GOV.UK Frontend
+## GOV.UK Frontend
 
 GOV.UK Frontend is included in the project using npm. There is also a direct reference in `_Layout.cshtml` to a GOV.UK Frontend asset stored in the CDN. To ensure that the latest version is being used run in the `src/SFA.DAS.EmployerFinance.Web` directory:
 
 ```powershell
-`> npm outdated govuk-frontend`
+> npm outdated govuk-frontend
 ```
 
 If an update is available then you'll see something like this:
@@ -147,9 +147,11 @@ govuk-frontend    2.5.0   2.5.1   2.5.1   asp.net
 
 If no update is available then the command will complete silently. To update the package run in the `src/SFA.DAS.EmployerFinance.Web` directory:
 
-`> npm update govuk-frontend`
+```powershell
+> npm update govuk-frontend
+```
 
-As part of the update the default gulp task will be run which will:
+As part of the update the default gulp task will run which will:
 
 * Compile `content/styles/govuk-frontend.scss` to `wwwroot/css/govuk-frontend.css`.
 * Copy `node_modules/govuk-frontend/all.js` to `content/javascript/govuk-frontend/all.js`.
