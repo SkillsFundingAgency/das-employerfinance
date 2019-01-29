@@ -110,6 +110,12 @@ Run in the `src/SFA.DAS.EmployerFinance.Web` directory:
 > gulp <task>
 ```
 
+|Task|Description|
+|----|-----------|
+|`default`|Runs the `css` & `js` tasks.|
+|`css`|Compiles all scss files in `content/styles` to `wwwroot/css`.|
+|`js`|Copies all js files in `node_modules/govuk-frontend` to `content/javascript/govuk-frontend`.|
+
 Alternatively:
 
 ### Rider
@@ -123,12 +129,6 @@ Alternatively:
 * Right click `src/SFA.DAS.EmployerFinance.Web/gulpfile.js`.
 * Select `Task Runner Explorer`.
 * Double click `<task>` or right click `<task>` then select `Run`.
-
-|Task|Description|
-|----|-----------|
-|`default`|Runs the `css` & `js` tasks.|
-|`css`|Compiles all scss files in `content/styles` to `wwwroot/css`.|
-|`js`|Copies all js files in `node_modules/govuk-frontend` to `content/javascript/govuk-frontend`.|
 
 ## GOV.UK Frontend
 
