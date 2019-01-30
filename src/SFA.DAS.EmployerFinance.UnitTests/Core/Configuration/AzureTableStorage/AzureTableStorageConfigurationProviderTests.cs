@@ -30,9 +30,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
         {
             get
             {
-                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\"}")}, new[] {("t1:k1", "v1")}).SetName("SingleItemInFlatJsonFromSingleTable");
-                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\", \"k2\": \"v2\"}")}, new[] {("t1:k1", "v1"), ("t1:k2", "v2")}).SetName("MultipleItemsInFlatJsonFromSingleTable");
-                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\"}"), ("t2", "{\"k2\": \"v2\"}")}, new[] {("t1:k1", "v1"), ("t2:k2", "v2")}).SetName("FlatJsonsFromMultipleTables");
+                yield return new TestCaseData(new[] {("t1", @"{""k1"": ""v1""}")}, new[] {("t1:k1", "v1")}).SetName("SingleItemInFlatJsonFromSingleTable");
+                yield return new TestCaseData(new[] {("t1", @"{""k1"": ""v1"", ""k2"": ""v2""}")}, new[] {("t1:k1", "v1"), ("t1:k2", "v2")}).SetName("MultipleItemsInFlatJsonFromSingleTable");
+                yield return new TestCaseData(new[] {("t1", @"{""k1"": ""v1""}"), ("t2", @"{""k2"": ""v2""}")}, new[] {("t1:k1", "v1"), ("t2:k2", "v2")}).SetName("FlatJsonsFromMultipleTables");
+                yield return new TestCaseData(new[] {("t1", @"{""ss1"": {""k1"": ""v1""}}")}, new[] {("t1:ss1:k1", "v1")}).SetName("NestedJsonFromSingleTable");
             }
         }  
     }
