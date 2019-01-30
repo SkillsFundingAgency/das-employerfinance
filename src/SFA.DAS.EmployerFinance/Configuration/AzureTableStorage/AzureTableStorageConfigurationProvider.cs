@@ -9,7 +9,6 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
 {
-    //todo: das-recruit just picks up the values straight from environment variables (which devops have to set anyway). we could too and cut out all this table reading provider code etc.
     //todo: have config types and config code in different folders/namespaces
     //todo: implement reload on change if table supports it
     //todo: inject config into views??
@@ -107,7 +106,7 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
         
         /// <remarks>
         /// protected virtual so can create a derived object and override for unit testing
-        /// bit of a hack, until MS update fakes for core, or they release a unit testable library
+        /// bit of a hack, until MS update fakes for core, or they release a easily unit testable library
         /// alternative is to introduce an injected class to provide a level of indirection
         /// </remarks>
         protected virtual TableOperation GetOperation(string serviceName)
@@ -115,7 +114,6 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
             return TableOperation.Retrieve<ConfigurationRow>(_environment, $"{serviceName}_{Version}");
         }
         
-        // return projection, then add that to data instead?
         private void AddToData((string name, Stream stream) configNameAndStream)
         {
             var configData = JsonConfigurationStreamParser.Parse(configNameAndStream.stream);
