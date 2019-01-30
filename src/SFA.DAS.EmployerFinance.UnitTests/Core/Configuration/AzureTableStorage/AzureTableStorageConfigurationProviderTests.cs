@@ -26,6 +26,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
 
     public class AzureTableStorageConfigurationProviderTestsSource
     {
+        private static IEnumerable<(string configKey, string json)> GenerateSource(int tableCount)
+        {
+            return Enumerable.Range(0, tableCount).Select(cnt => ($"t{cnt}", $@"{{""k{cnt}"": ""v{cnt}""}}"));
+        }
+
         public static IEnumerable TestCases
         {
             get
@@ -34,6 +39,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
                 yield return new TestCaseData(new[] {("t1", @"{""k1"": ""v1"", ""k2"": ""v2""}")}, new[] {("t1:k1", "v1"), ("t1:k2", "v2")}).SetName("MultipleItemsInFlatJsonFromSingleTable");
                 yield return new TestCaseData(new[] {("t1", @"{""k1"": ""v1""}"), ("t2", @"{""k2"": ""v2""}")}, new[] {("t1:k1", "v1"), ("t2:k2", "v2")}).SetName("FlatJsonsFromMultipleTables");
                 yield return new TestCaseData(new[] {("t1", @"{""ss1"": {""k1"": ""v1""}}")}, new[] {("t1:ss1:k1", "v1")}).SetName("NestedJsonFromSingleTable");
+                yield return new TestCaseData(new[] {("t1", @"{""ss1"": {""k1"": ""v1""}, ""k2"": ""v2""}")}, new[] {("t1:ss1:k1", "v1"), ("t1:k2", "v2")}).SetName("OneSubSectionAndOneItemFromSingleTable");
+                yield return new TestCaseData(new[] {("t1", @"{""ss1"": {""k1"": ""v1""}, ""ss2"": {""k2"": ""v2""}}")}, new[] {("t1:ss1:k1", "v1"), ("t1:ss2:k2", "v2")}).SetName("MultipleSubSectionsFromSingleTable");
+                yield return new TestCaseData(new[] {("t1", @"{""ss1"": {""k1"": ""v1""}, ""ss2"": {""k2"": ""v2""}}"), ("t2", @"{""ss3"": {""k3"": ""v3""}, ""ss4"": {""k4"": ""v4""}}")}, new[] {("t1:ss1:k1", "v1"), ("t1:ss2:k2", "v2"), ("t2:ss3:k3", "v3"), ("t2:ss4:k4", "v4")}).SetName("MultipleSubSectionsFromMultipleTables");
+                yield return new TestCaseData(GenerateSource(10), new[] {("t0:k0", "v0"), ("t1:k1", "v1"), ("t2:k2", "v2"), ("t3:k3", "v3"), ("t4:k4", "v4"), ("t5:k5", "v5"), ("t6:k6", "v6"), ("t7:k7", "v7"), ("t8:k8", "v8"), ("t9:k9", "v9")}).SetName("ManyTables");
             }
         }  
     }
