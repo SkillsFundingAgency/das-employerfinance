@@ -5,10 +5,9 @@ using SFA.DAS.EmployerFinance.Configuration.Extensions;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
 {
-    //todo: rename to ConfigurationRegistry, once there are no consumers of the old registry
-    public class ConfigurationRegistryCore : Registry
+    public class ConfigurationRegistry : Registry
     {
-        public ConfigurationRegistryCore(IConfiguration configuration)
+        public ConfigurationRegistry(IConfiguration configuration)
         {
             // either get root and pick from there, or get individually
             // todo: don't have any values in root config, then won't rehydrate twice and will only rehydrate what gets injected

@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
             return new Container(c =>
             {
                 c.AddRegistry(new NonMvcHostingEnvironmentRegistry(environmentName));
-                c.AddRegistry(new ConfigurationRegistryCore(config));
+                c.AddRegistry(new ConfigurationRegistry(config));
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
