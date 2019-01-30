@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Configuration;
@@ -8,7 +7,6 @@ using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
 using StructureMap;
 
