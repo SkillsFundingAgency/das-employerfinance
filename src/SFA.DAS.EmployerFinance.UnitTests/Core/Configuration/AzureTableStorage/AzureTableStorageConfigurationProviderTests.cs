@@ -17,6 +17,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
     [Parallelizable]
     public class AzureTableStorageConfigurationProviderTests : FluentTest<AzureTableStorageConfigurationProviderTestsFixture>
     {
+        // why doesn't it pick data up from fixture?
+        //[Test, TestCaseSource(typeof(AzureTableStorageConfigurationProviderTestsFixture), nameof(AzureTableStorageConfigurationProviderTestsFixture.TestCases))]
         [Test, TestCaseSource(typeof(MyDataClass), nameof(MyDataClass.TestCases))]
         public void WhenReadingTables_ThenConfigDataShouldBeCorrect(IEnumerable<(string configKey, string json)> sourceConfigs, IEnumerable<(string key, string value)> expected)
         {
@@ -30,9 +32,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
         {
             get
             {
-                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\"}")}, new[] {("t1:k1", "v1")}).SetDescription("SingleItemInFlatJsonFromSingleTable");
-                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\", \"k2\": \"v2\"}")}, new[] {("t1:k1", "v1"), ("t1:k2", "v2")}).SetDescription("MultipleItemsInFlatJsonFromSingleTable");
-                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\"}"), ("t2", "{\"k2\": \"v2\"}")}, new[] {("t1:k1", "v1"), ("t2:k2", "v2")}).SetDescription("FlatJsonsFromMultipleTables");
+                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\"}")}, new[] {("t1:k1", "v1")}).SetName("SingleItemInFlatJsonFromSingleTable");
+                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\", \"k2\": \"v2\"}")}, new[] {("t1:k1", "v1"), ("t1:k2", "v2")}).SetName("MultipleItemsInFlatJsonFromSingleTable");
+                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\"}"), ("t2", "{\"k2\": \"v2\"}")}, new[] {("t1:k1", "v1"), ("t2:k2", "v2")}).SetName("FlatJsonsFromMultipleTables");
             }
         }  
     }
@@ -77,6 +79,16 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
             CloudStorageAccount.Setup(csa => csa.CreateCloudTableClient()).Returns(CloudTableClient.Object);
         }
 
+//        public static IEnumerable TestCases
+//        {
+//            get
+//            {
+//                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\"}")}, new[] {("t1:k1", "v1")}).SetName("SingleItemInFlatJsonFromSingleTable");
+//                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\", \"k2\": \"v2\"}")}, new[] {("t1:k1", "v1"), ("t1:k2", "v2")}).SetName("MultipleItemsInFlatJsonFromSingleTable");
+//                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\"}"), ("t2", "{\"k2\": \"v2\"}")}, new[] {("t1:k1", "v1"), ("t2:k2", "v2")}).SetName("FlatJsonsFromMultipleTables");
+//            }
+//        }  
+        
         public void SetConfigs(IEnumerable<(string configKey, string json)> configs)
         {
             ConfigProvider = new TestableAzureTableStorageConfigurationProvider(CloudStorageAccount.Object, EnvironmentName, configs.Select(c => c.configKey));
