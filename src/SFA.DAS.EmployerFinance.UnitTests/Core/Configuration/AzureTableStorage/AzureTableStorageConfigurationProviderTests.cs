@@ -17,16 +17,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
     [Parallelizable]
     public class AzureTableStorageConfigurationProviderTests : FluentTest<AzureTableStorageConfigurationProviderTestsFixture>
     {
-        // why doesn't it pick data up from fixture?
-        //[Test, TestCaseSource(typeof(AzureTableStorageConfigurationProviderTestsFixture), nameof(AzureTableStorageConfigurationProviderTestsFixture.TestCases))]
-        [Test, TestCaseSource(typeof(MyDataClass), nameof(MyDataClass.TestCases))]
+        [Test, TestCaseSource(typeof(AzureTableStorageConfigurationProviderTestsSource), nameof(AzureTableStorageConfigurationProviderTestsSource.TestCases))]
         public void WhenReadingTables_ThenConfigDataShouldBeCorrect(IEnumerable<(string configKey, string json)> sourceConfigs, IEnumerable<(string key, string value)> expected)
         {
             Test(f => f.SetConfigs(sourceConfigs), f => f.Load(), f => f.AssertData(expected));
         }
     }
 
-    public class MyDataClass
+    public class AzureTableStorageConfigurationProviderTestsSource
     {
         public static IEnumerable TestCases
         {
@@ -78,16 +76,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
             CloudStorageAccount = new Mock<CloudStorageAccount>(dummyStorageCredentials, dummyUri, dummyUri, dummyUri, dummyUri);
             CloudStorageAccount.Setup(csa => csa.CreateCloudTableClient()).Returns(CloudTableClient.Object);
         }
-
-//        public static IEnumerable TestCases
-//        {
-//            get
-//            {
-//                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\"}")}, new[] {("t1:k1", "v1")}).SetName("SingleItemInFlatJsonFromSingleTable");
-//                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\", \"k2\": \"v2\"}")}, new[] {("t1:k1", "v1"), ("t1:k2", "v2")}).SetName("MultipleItemsInFlatJsonFromSingleTable");
-//                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\"}"), ("t2", "{\"k2\": \"v2\"}")}, new[] {("t1:k1", "v1"), ("t2:k2", "v2")}).SetName("FlatJsonsFromMultipleTables");
-//            }
-//        }  
         
         public void SetConfigs(IEnumerable<(string configKey, string json)> configs)
         {
