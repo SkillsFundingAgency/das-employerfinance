@@ -4,12 +4,13 @@ using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SFA.DAS.AutoConfiguration;
-using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
+using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
 
-namespace SFA.DAS.EmployerFinance.Jobs
+namespace SFA.DAS.EmployerFinance.MessageHandlers
 {
     public static class Program
     {
