@@ -18,6 +18,7 @@ Run the following PowerShell commands in the `tools` directory, [Choclatey] will
 > iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
 > choco install dotnetcore-sdk
 > choco install docker-desktop
+> & "$Env:PROGRAMFILES\Docker\Docker\Docker for Windows.exe"
 > docker-compose up -d
 > choco install nodejs
 > npm install -g npm
@@ -33,6 +34,7 @@ $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/inst
 $ brew tap caskroom/cask
 $ brew cask install dotnet-sdk
 $ brew cask install docker
+$ open -a docker
 $ docker-compose up -d
 $ brew install nodejs
 $ npm install -g npm
