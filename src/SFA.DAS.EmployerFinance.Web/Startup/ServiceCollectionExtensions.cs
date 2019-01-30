@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 options.SignInScheme = "Cookies";
 
                 options.Authority = oidcConfig.Authority;
-                options.MetadataAddress = oidcConfig.MetaDataAddress;
+                options.MetadataAddress = oidcConfig.MetadataAddress;
                 options.RequireHttpsMetadata = true; //todo: we *should* require https for metadata, except in local dev envs
                 options.ResponseType = "code";
                 options.ClientId = oidcConfig.ClientId;
