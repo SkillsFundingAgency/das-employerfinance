@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -16,13 +17,26 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
     [Parallelizable]
     public class AzureTableStorageConfigurationProviderTests : FluentTest<AzureTableStorageConfigurationProviderTestsFixture>
     {
-        [Test]
-        public void WhenReadingFlatJsonFromSingleTable_ThenConfigDataShouldBeCorrect()
+        [Test, TestCaseSource(typeof(MyDataClass), nameof(MyDataClass.TestCases))]
+        public void WhenReadingTables_ThenConfigDataShouldBeCorrect(IEnumerable<(string configKey, string json)> sourceConfigs, IEnumerable<(string key, string value)> expected)
         {
-            Test(f => f.SetConfigs(new[] {("SFA.DAS.EmployerFinanceV2", "{\"key\": \"value\"}")}), f => f.Load(), f => f.AssertData(new[] {("SFA.DAS.EmployerFinanceV2:key", "value")} ));
+            Test(f => f.SetConfigs(sourceConfigs), f => f.Load(), f => f.AssertData(expected));
         }
     }
 
+    public class MyDataClass
+    {
+        public static IEnumerable TestCases
+        {
+            get
+            {
+                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\"}")}, new[] {("t1:k1", "v1")}).SetDescription("SingleItemInFlatJsonFromSingleTable");
+                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\", \"k2\": \"v2\"}")}, new[] {("t1:k1", "v1"), ("t1:k2", "v2")}).SetDescription("MultipleItemsInFlatJsonFromSingleTable");
+                yield return new TestCaseData(new[] {("t1", "{\"k1\": \"v1\"}"), ("t2", "{\"k2\": \"v2\"}")}, new[] {("t1:k1", "v1"), ("t2:k2", "v2")}).SetDescription("FlatJsonsFromMultipleTables");
+            }
+        }  
+    }
+    
     public class TestableAzureTableStorageConfigurationProvider : AzureTableStorageConfigurationProvider
     {
         public TestableAzureTableStorageConfigurationProvider(CloudStorageAccount cloudStorageAccount, string environment, IEnumerable<string> configNames)
