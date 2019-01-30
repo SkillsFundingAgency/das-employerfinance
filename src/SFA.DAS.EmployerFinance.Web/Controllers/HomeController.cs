@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerFinance.Web.Models;
@@ -9,9 +8,9 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     [Route("")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger logger)
         {
             _logger = logger;
         }
