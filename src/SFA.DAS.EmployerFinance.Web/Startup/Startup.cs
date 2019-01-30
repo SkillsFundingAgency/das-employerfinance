@@ -37,6 +37,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             {
                 options.Filters.Add(new UrlsViewBagFilter());
             })
+            .AddControllersAsServices()
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

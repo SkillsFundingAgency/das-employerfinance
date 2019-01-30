@@ -9,6 +9,7 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
         public static void Initialize(Registry registry, IConfiguration configuration)
         {
             registry.IncludeRegistry(new ConfigurationRegistry(configuration));
+            registry.IncludeRegistry<LoggingRegistry>();
             registry.IncludeRegistry<DefaultRegistry>();
         }
     }

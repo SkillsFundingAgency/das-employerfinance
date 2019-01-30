@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
+using NLog.Web;
 using StructureMap.AspNetCore;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
@@ -28,7 +29,8 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 })
                 .UseKestrel(options => options.AddServerHeader = false)
                 .UseStartup<Startup>()
-                .UseStructureMap();
+                .UseStructureMap()
+                .UseNLog();
         }
     }
 }
