@@ -1,35 +1,34 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
-using SFA.DAS.EmployerFinance.Startup;
+using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using IStartup = SFA.DAS.EmployerFinance.Startup.IStartup;
 
-namespace SFA.DAS.EmployerFinance.Jobs
+namespace SFA.DAS.EmployerFinance.MessageHandlers
 {
     public static class Program
     {
         public static async Task Main()
         {
             ServicePointManager.DefaultConnectionLimit = 50;
-            
+
             var environmentVariables = ConfigurationBootstrapper.GetEnvironmentVariables();
             var config = ConfigurationBootstrapper.GetConfiguration(environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, ConfigurationKeys.EmployerFinance);
-            
+
             using (var container = IoC.Initialize(config, environmentVariables.EnvironmentName))
             {
                 var startup = container.GetInstance<IStartup>();
-
-                await startup.StartAsync();
-
-                var jobActivator = new StructureMapJobActivator(container);
                 var hostingEnvironment = container.GetInstance<IHostingEnvironment>();
-
+                var jobActivator = new StructureMapJobActivator(container);
+            
                 var host = new HostBuilder()
                     .UseEnvironment(hostingEnvironment.EnvironmentName)
                     .ConfigureWebJobs(b => b.AddAzureStorageCoreServices().AddTimers())
