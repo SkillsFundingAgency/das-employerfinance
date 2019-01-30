@@ -4,7 +4,6 @@ using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;

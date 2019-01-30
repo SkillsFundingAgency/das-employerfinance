@@ -1,5 +1,3 @@
-using System;
-
 namespace SFA.DAS.EmployerFinance.Web.Models
 {
     public class ErrorViewModel
