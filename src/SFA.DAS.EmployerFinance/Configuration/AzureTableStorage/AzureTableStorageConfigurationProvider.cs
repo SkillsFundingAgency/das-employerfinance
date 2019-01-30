@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,12 +31,15 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
         private readonly IEnumerable<string> _configNames;
         private readonly string _environment;
         private readonly CloudStorageAccount _storageAccount;
+        //todo: would be better to create jit
+        private readonly ConcurrentDictionary<string, string> _concurrentData;
 
         public AzureTableStorageConfigurationProvider(CloudStorageAccount cloudStorageAccount, string environment, IEnumerable<string> configNames)
         {
             _configNames = configNames;
             _environment = environment;
             _storageAccount = cloudStorageAccount;
+            _concurrentData = new ConcurrentDictionary<string, string>();
         }
 
         internal interface IConfigurationRow : ITableEntity
@@ -60,6 +64,7 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
                 var configNameAndStreams = _configNames.Zip(configStreams, (name, stream) => (name, stream));
 
                 Parallel.ForEach(configNameAndStreams, AddToData);
+                Data = _concurrentData;
             }
             finally
             {
@@ -116,7 +121,7 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
             var configData = JsonConfigurationStreamParser.Parse(configNameAndStream.stream);
 
             foreach (var configItem in configData)
-                Data.Add($"{configNameAndStream.name}:{configItem.Key}", configItem.Value);
+                _concurrentData.AddOrUpdate($"{configNameAndStream.name}:{configItem.Key}", configItem.Value, (key, oldValue) => configItem.Value);
         }
     }
 }
