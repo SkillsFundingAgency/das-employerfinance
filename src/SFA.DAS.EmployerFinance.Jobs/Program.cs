@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
@@ -31,7 +31,11 @@ namespace SFA.DAS.EmployerFinance.Jobs
                     .ConfigureWebJobs(b => b.AddAzureStorageCoreServices().AddTimers())
                     .ConfigureAppConfiguration(b => b.AddJsonFile("appsettings.json").AddJsonFile($"appsettings.{environmentName}.json", true).AddEnvironmentVariables())
                     .ConfigureLogging(b => b.AddNLog())
-                    .ConfigureServices(c => c.AddSingleton<IJobActivator>(jobActivator))
+                    .ConfigureServices((context, collection) =>
+                    {
+                        collection.AddSingleton<IJobActivator>(jobActivator);
+                        collection.AddApplicationInsightsTelemetry(context.Configuration);
+                    })
                     .UseConsoleLifetime()
                     .Build();
 

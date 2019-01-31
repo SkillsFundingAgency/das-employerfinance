@@ -29,7 +29,11 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
                     .ConfigureWebJobs(b => b.AddAzureStorageCoreServices().AddTimers())
                     .ConfigureAppConfiguration(b => b.AddJsonFile("appsettings.json").AddJsonFile($"appsettings.{environmentName}.json", true).AddEnvironmentVariables())
                     .ConfigureLogging(b => b.AddNLog())
-                    .ConfigureServices(c => c.AddSingleton<IJobActivator>(jobActivator))
+                    .ConfigureServices((context, collection) =>
+                    {
+                        collection.AddSingleton<IJobActivator>(jobActivator);
+                        collection.AddApplicationInsightsTelemetry(context.Configuration);
+                    })
                     .UseConsoleLifetime()
                     .Build();
             

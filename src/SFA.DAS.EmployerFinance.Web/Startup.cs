@@ -36,6 +36,8 @@ namespace SFA.DAS.EmployerFinance.Web
                 })
                 .AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
+            services.AddApplicationInsightsTelemetry(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

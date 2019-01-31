@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using StructureMap.AspNetCore;
 
 namespace SFA.DAS.EmployerFinance.Api
@@ -15,6 +16,10 @@ namespace SFA.DAS.EmployerFinance.Api
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel(options => options.AddServerHeader = false)
                 .UseStartup<Startup>()
-                .UseStructureMap();
+                .UseStructureMap()
+                .ConfigureServices((context, collection) =>
+                {
+                    collection.AddApplicationInsightsTelemetry(context.Configuration);
+                });
     }
 }
