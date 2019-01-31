@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.EmployerFinance.Web.Models;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
@@ -9,10 +12,12 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger _logger;
+        private readonly ICompositeViewEngine _viewEngine;
 
-        public HomeController(ILogger logger)
+        public HomeController(ILogger logger, ICompositeViewEngine viewEngine)
         {
             _logger = logger;
+            _viewEngine = viewEngine;
         }
         
         public IActionResult Index()
@@ -22,11 +27,12 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return View();
         }
 
-        [Route("error")]
+        [AllowAnonymous]
+        [Route("error/{code}")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(int code)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(this.ViewExists(_viewEngine, $"Errors/{code}") ? $"Errors/{code}" : "Errors/Error");
         }
     }
 }

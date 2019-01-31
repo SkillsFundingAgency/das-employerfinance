@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerFinance.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseStatusCodePagesWithRedirects("/error/{0}");
                 app.UseHsts();
             }
 
