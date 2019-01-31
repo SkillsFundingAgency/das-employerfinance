@@ -35,12 +35,14 @@ namespace SFA.DAS.EmployerFinance.Jobs
                     .UseConsoleLifetime()
                     .Build();
 
+                var jobHost = host.Services.GetService<IJobHost>();
+                
                 await startup.StartAsync();
                 
                 using (host)
                 {
                     await host.StartAsync();
-                    await host.Services.GetService<IJobHost>().CallAsync(nameof(DeployDatabaseJob));
+                    await jobHost.CallAsync(nameof(DeployDatabaseJob));
                     await host.RunAsync();
                 }
 
