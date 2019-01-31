@@ -7,20 +7,32 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <EmbeddedResource Include="Data\Scripts\Script0003CreateAccounts.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0002CreateClientOutboxData.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0005CreateHealthChecks.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0001CreateOutboxData.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0004CreateUsers.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0006DropHealthChecksUserRef.sql" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="8.0.0" />
+        <PackageReference Include="MediatR" Version="6.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.1" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
         <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
         <PackageReference Include="SFA.DAS.NServiceBus" Version="8.0.1" />
+        <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="8.0.1" />
+        <PackageReference Include="SFA.DAS.UnitOfWork" Version="4.1.1" />
         <PackageReference Include="StructureMap" Version="4.7.0" />
         <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Data\Scripts\Script0003CreateAccounts.sql" />
-      <EmbeddedResource Include="Data\Scripts\Script0002CreateClientOutboxData.sql" />
-      <EmbeddedResource Include="Data\Scripts\Script0005CreateHealthChecks.sql" />
-      <EmbeddedResource Include="Data\Scripts\Script0001CreateOutboxData.sql" />
-      <EmbeddedResource Include="Data\Scripts\Script0004CreateUsers.sql" />
+        <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj" />
+        <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj" />
     </ItemGroup>
 
 </Project>

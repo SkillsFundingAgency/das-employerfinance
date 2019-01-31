@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Startup
 {
-    public class DefaultStartup : IStartup
+    public class DefaultStartup : IRunAtStartup
     {
-        private readonly IEnumerable<IStartup> _startups;
+        private readonly IEnumerable<IRunAtStartup> _startups;
 
-        public DefaultStartup(IEnumerable<IStartup> startups)
+        public DefaultStartup(IEnumerable<IRunAtStartup> startups)
         {
             _startups = startups;
         }
