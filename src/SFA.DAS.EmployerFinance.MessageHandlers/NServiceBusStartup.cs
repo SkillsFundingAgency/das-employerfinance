@@ -10,7 +10,8 @@ using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
 using StructureMap;
 
-namespace SFA.DAS.EmployerFinance.Jobs
+
+namespace SFA.DAS.EmployerFinance.MessageHandlers
 {
     public class NServiceBusStartup : IStartup
     {
@@ -31,19 +32,18 @@ namespace SFA.DAS.EmployerFinance.Jobs
         
         public async Task StartAsync()
         {
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.JobsV2")
-                .UseAzureServiceBusTransport(() => _employerFinanceConfiguration.ServiceBusConnectionString, _environmentService.IsCurrent(DasEnv.LOCAL))
-                .UseInstallers()
+            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.MessageHandlersV2")
+                .UseAzureServiceBusTransport(() => 
+                    _employerFinanceConfiguration.ServiceBusConnectionString, 
+                    _environmentService.IsCurrent(DasEnv.LOCAL))
                 .UseLicense(_employerFinanceConfiguration.NServiceBusLicense)
                 .UseMessageConventions()
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
-                .UseStructureMapBuilder(_container)
-                .UseSendOnly();
+                .UseInstallers()
+                .UseStructureMapBuilder(_container);
 
             _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
-
-            _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
         }
 
         public Task StopAsync()

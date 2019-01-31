@@ -10,6 +10,7 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
         {
             registry.IncludeRegistry<AutoConfigurationRegistry>();
             registry.IncludeRegistry<ConfigurationRegistry>();
+            registry.IncludeRegistry<LoggingRegistry>();
             registry.IncludeRegistry<DefaultRegistry>();
         }
     }
