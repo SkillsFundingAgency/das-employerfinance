@@ -15,7 +15,9 @@ namespace SFA.DAS.EmployerFinance.Jobs.StartupJobs
             _configuration = configuration;
         }
         
-        public void Run([TimerTrigger("0 0 * * *", RunOnStartup = true)]TimerInfo timer, ILogger logger)
+        [FunctionName(nameof(DeployDatabaseJob))]
+        [NoAutomaticTrigger]
+        public void Run(ILogger logger)
         {
             logger.LogInformation("Started deploying database");
             
