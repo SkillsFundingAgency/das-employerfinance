@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerFinance.Configuration
         string ClientId { get; set; }
         string ClientSecret { get; set; }
         string MetadataAddress { get; set; }
+        string LogoutEndpoint { get; set; }
     }
 }
