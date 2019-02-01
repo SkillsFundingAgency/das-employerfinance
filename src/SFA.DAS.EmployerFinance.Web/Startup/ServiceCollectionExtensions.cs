@@ -62,15 +62,15 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
 
                 options.Authority = oidcConfig.Authority;
                 options.MetadataAddress = oidcConfig.MetadataAddress;
-                options.RequireHttpsMetadata = true; //todo: we *should* require https for metadata, except in local dev envs
+                //options.RequireHttpsMetadata = true; //todo: we *should* require https for metadata, except in local dev envs
                 options.ResponseType = "code";
                 options.ClientId = oidcConfig.ClientId;
                 options.ClientSecret = oidcConfig.ClientSecret;
-                options.Scope.Add("profile");
+                //options.Scope.Add("profile");
 
-                options.AuthenticationMethod = OpenIdConnectRedirectBehavior.RedirectGet;
+                //options.AuthenticationMethod = OpenIdConnectRedirectBehavior.RedirectGet;
 
-                //is this required?
+                //is this required? try with JwtSecurityTokenHandler.InboundClaimTypeMap.Clear()
                 options.ClaimActions.MapUniqueJsonKey("sub", "id");
 
 
