@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Configuration;
 
-namespace SFA.DAS.EmployerFinance.Web.Startup
+namespace SFA.DAS.EmployerFinance.Web.Authentication
 {
     //todo: options.ClaimActions.MapUniqueJsonKey("sub", "id");
     //todo: move to authentication/extensions? rename ServiceCollectionOidcExtensions?
