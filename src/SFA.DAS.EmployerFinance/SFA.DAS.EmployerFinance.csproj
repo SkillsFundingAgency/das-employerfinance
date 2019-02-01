@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>latest</LangVersion>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
@@ -26,6 +26,14 @@
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
         </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Data\Scripts\Script0003CreateAccounts.sql" />
+      <EmbeddedResource Include="Data\Scripts\Script0002CreateClientOutboxData.sql" />
+      <EmbeddedResource Include="Data\Scripts\Script0005CreateHealthChecks.sql" />
+      <EmbeddedResource Include="Data\Scripts\Script0001CreateOutboxData.sql" />
+      <EmbeddedResource Include="Data\Scripts\Script0004CreateUsers.sql" />
     </ItemGroup>
 
 </Project>
