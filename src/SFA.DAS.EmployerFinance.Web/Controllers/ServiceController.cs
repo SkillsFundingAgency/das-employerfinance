@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("signout")]
         public async Task<IActionResult> SignOut()
         {
-            await HttpContext.SignOutAsync(); //CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             //todo: config    "LogoutEndpoint": "/connect/endsession?id_token_hint={0}",
             return new RedirectResult("/connect/endsession?id_token_hint={0}");
@@ -20,8 +20,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("signoutcleanup")]
         public IActionResult SignOutCleanup()
         {
-            //_authenticationService.SignOutUser();
-            return new SignOutResult();
+            return new SignOutResult(CookieAuthenticationDefaults.AuthenticationScheme);
         }
     }
 }
