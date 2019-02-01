@@ -32,7 +32,6 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
-//why are we supplying AuthenticationScheme again, use other overload?
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
                 //options.Cookie.Name = CookieNames.RecruitData;
