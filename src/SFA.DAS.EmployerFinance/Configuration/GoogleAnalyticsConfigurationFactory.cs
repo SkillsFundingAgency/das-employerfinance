@@ -1,6 +1,6 @@
 using SFA.DAS.AutoConfiguration;
 
-namespace SFA.DAS.ProviderRelationships.Configuration
+namespace SFA.DAS.EmployerFinance.Configuration
 {
     public class GoogleAnalyticsConfigurationFactory : IGoogleAnalyticsConfigurationFactory
     {
@@ -23,7 +23,7 @@ namespace SFA.DAS.ProviderRelationships.Configuration
             else if (_environmentService.IsCurrent(DasEnv.PROD))
             {
                 configuration.ContainerId = "GTM-KWQBWGJ";
-                configuration.TrackingId = "UA‌-83918739-10";
+                configuration.TrackingId = "UA-83918739-9";
             }
 
             return configuration;

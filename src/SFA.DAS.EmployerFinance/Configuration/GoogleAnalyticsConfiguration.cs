@@ -1,4 +1,4 @@
-namespace SFA.DAS.ProviderRelationships.Configuration
+namespace SFA.DAS.EmployerFinance.Configuration
 {
     public class GoogleAnalyticsConfiguration
     {
