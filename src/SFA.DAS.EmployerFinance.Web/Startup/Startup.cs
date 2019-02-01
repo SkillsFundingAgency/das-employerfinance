@@ -1,8 +1,10 @@
 ﻿using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Configuration;
@@ -36,6 +38,13 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             .AddMvc(options =>
             {
                 options.Filters.Add(new UrlsViewBagFilter());
+                
+                // default to all pages/actions requiring authentication and allow opt-out with [AllowAnonymous], rather than opting in with [Authorize]
+                //todo: put in helper?
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
             })
             .AddControllersAsServices()
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

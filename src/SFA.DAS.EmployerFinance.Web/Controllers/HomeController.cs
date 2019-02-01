@@ -16,7 +16,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             _logger = logger;
         }
         
-        [Authorize]
         public IActionResult Index()
         {
             _logger.LogDebug("Index page has been viewed");
@@ -24,6 +23,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [Route("error")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
