@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Configuration;
 
@@ -20,10 +19,9 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
     {
         //https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/additional-claims?view=aspnetcore-2.2
         // reservations hooks into OnTokenValidated, example uses OnPostConfirmationAsync
-        public static IServiceCollection AddAuthenticationService(this IServiceCollection services, IHostingEnvironment hostingEnvironment, IOidcConfiguration oidcConfig)
+        public static IServiceCollection AddAndConfigureAuthentication(this IServiceCollection services, IHostingEnvironment hostingEnvironment, IOidcConfiguration oidcConfig)
         {
-            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            //^^ replace with options.ClaimActions.MapUniqueJsonKey("sub", "id");?
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
             {
@@ -34,8 +32,6 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                //options.Cookie.Name = CookieNames.RecruitData;
-
                 if (!hostingEnvironment.IsDevelopment())
                 {
                     options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
@@ -56,8 +52,23 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
 
                 //is this required? try with JwtSecurityTokenHandler.InboundClaimTypeMap.Clear()
                 options.ClaimActions.MapUniqueJsonKey("sub", "id");
-            });
+                
+                options.Events.OnRemoteFailure = ctx =>
+                {
+                    if (ctx.Failure.Message.Contains("Correlation failed"))
+                    {
+//                        var logger = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>().CreateLogger<Startup>();
+//                        logger.LogDebug("Correlation Cookie was invalid - probably timed-out");
 
+                        //todo: what's our homepage? inject EmployerUrls? redirect back to login page with message along the lines of 'for your security you must log in again if you spend too long on the login page'
+                        ctx.Response.Redirect("/");
+                        ctx.HandleResponse();
+                    }
+
+                    return Task.CompletedTask;
+                };
+            });
+            
             return services;
         }
     }

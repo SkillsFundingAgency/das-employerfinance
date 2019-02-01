@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             })
             // ConfigureContainer() hasn't been called yet, so we have to get the Oidc config from IConfiguration, rather than serviceProvider
-            .AddAuthenticationService(serviceProvider.GetService<IHostingEnvironment>(), Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"))
+            .AddAndConfigureAuthentication(serviceProvider.GetService<IHostingEnvironment>(), Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"))
             .AddMvc(options =>
             {
                 options.Filters.Add(new UrlsViewBagFilter());
