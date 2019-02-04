@@ -12,7 +12,7 @@ using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Jobs
 {
-    public class NServiceBusStartup : IStartup
+    public class NServiceBusStartup : IRunAtStartup
     {
         private readonly IContainer _container;
         private readonly IEnvironmentService _environmentService;
@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerFinance.Jobs
         
         public async Task StartAsync()
         {
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.JobsV2")
+            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinanceV2.Jobs")
                 .UseAzureServiceBusTransport(() => _employerFinanceConfiguration.ServiceBusConnectionString, _environmentService.IsCurrent(DasEnv.LOCAL))
                 .UseInstallers()
                 .UseLicense(_employerFinanceConfiguration.NServiceBusLicense)

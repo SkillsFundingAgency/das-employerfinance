@@ -1,45 +1,56 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.EmployerFinance.Web.DependencyResolution;
 using SFA.DAS.EmployerFinance.Web.Filters;
+using SFA.DAS.UnitOfWork.Mvc;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web
 {
-    //todo: plug in authentication using https://github.com/dotnet/core-setup/blob/master/Documentation/design-docs/host-startup-hook.md
-    // ^^ hopefully should allow very easy plugin in of generic oidc support!
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        private IContainer _container;
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
+            services.Configure<CookiePolicyOptions>(o =>
             {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                o.CheckConsentNeeded = c => true;
+                o.MinimumSameSitePolicy = SameSiteMode.None;
             });
             
-            services.AddMvc(options =>
+            services.AddMvc(o =>
                 {
-                    options.Filters.Add(new UrlsViewBagFilter());
+                    o.Filters.Add(new UrlsViewBagFilter());
                 })
                 .AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            _container = IoC.Initialize(services);
+            
+            var startup = _container.GetInstance<IRunAtStartup>();
+            var serviceProvider = _container.GetInstance<IServiceProvider>();
+            
+            startup.StartAsync().GetAwaiter().GetResult();
+            
+            return serviceProvider;
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime, IHostingEnvironment env)
         {
+            applicationLifetime.ApplicationStopping.Register(() =>
+            {
+                using (_container)
+                {
+                    _container.GetInstance<IRunAtStartup>().StopAsync().GetAwaiter().GetResult();
+                }
+            });
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -49,17 +60,12 @@ namespace SFA.DAS.EmployerFinance.Web
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseUnitOfWork();
             app.UseMvc();
-        }
-        
-        public void ConfigureContainer(Registry registry)
-        {
-            IoC.Initialize(registry);
         }
     }
 }

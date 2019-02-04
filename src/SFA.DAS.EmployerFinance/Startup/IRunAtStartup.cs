@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerFinance.Startup
 {
-    public interface IStartup
+    public interface IRunAtStartup
     {
         Task StartAsync();
         Task StopAsync();
