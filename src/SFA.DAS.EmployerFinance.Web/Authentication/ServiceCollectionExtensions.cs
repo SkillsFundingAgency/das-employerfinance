@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerFinance.Web.Authentication
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            .AddCookie(options =>
             {
                 if (!hostingEnvironment.IsDevelopment())
                 {
@@ -41,6 +41,7 @@ namespace SFA.DAS.EmployerFinance.Web.Authentication
 
                 //todo:
                 options.AccessDeniedPath = "/Error/403";
+                options.Cookie.Name = "EmployerFinance.Web.Auth";
             })
             .AddOpenIdConnect(options =>
             {
