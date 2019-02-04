@@ -50,15 +50,11 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [AllowAnonymous]
         public void SignOutCleanup()
         {
-            //why is breakpoint not hit, but endpoint called?
-            // try deleting cookie manually
             // look at recruit, see what they're doing differently
             // what's wsfederated??
-//            if (!User.Identity.IsAuthenticated)
-//                return; // Task.CompletedTask;
             
             Response.Cookies.Delete("EmployerFinance.Web.Auth");
-            
+
 //            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 //            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme,
 //                new AuthenticationProperties { RedirectUri = "/" });
