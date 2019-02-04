@@ -50,6 +50,8 @@ namespace SFA.DAS.EmployerFinance.Web.Authentication
                 options.ResponseType = "code";
                 options.ClientId = oidcConfig.ClientId;
                 options.ClientSecret = oidcConfig.ClientSecret;
+                // we don't need this if we don't supply the token in the redirect url, which is good, because it causes the sign-out to blow up occasionally, due to the cookie containing the tokens getting too long. see... https://github.com/IdentityServer/IdentityServer4/issues/1764, also https://stackoverflow.com/questions/40934829/c-sharp-identity-server-bad-request-request-too-long
+                //options.SaveTokens = true;
 
                 //is this required? try with JwtSecurityTokenHandler.InboundClaimTypeMap.Clear()
                 options.ClaimActions.MapUniqueJsonKey("sub", "id");
