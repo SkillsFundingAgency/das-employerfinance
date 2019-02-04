@@ -18,11 +18,14 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         }
         
         [Route("signout")]
-        public async Task<IActionResult> SignOut()
+        public async Task SignOut()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
-            return new RedirectResult(_config.LogoutEndpoint);
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme,
+                        new AuthenticationProperties { RedirectUri = _config.LogoutEndpoint });
+            }
         }
 
         [Route("signoutcleanup")]
