@@ -4,10 +4,9 @@ using SFA.DAS.EmployerFinance.Environment;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
 {
-    //rename DasNonMvcHostingEnvironmentRegistry
-    public class NonMvcHostingEnvironmentRegistry : Registry
+    public class DasNonMvcHostingEnvironmentRegistry : Registry
     {
-        public NonMvcHostingEnvironmentRegistry(string environmentName)
+        public DasNonMvcHostingEnvironmentRegistry(string environmentName)
         {
             For<IHostingEnvironment>().Use(() => DasHostingEnvironment.Create(environmentName)).Singleton();
         }
