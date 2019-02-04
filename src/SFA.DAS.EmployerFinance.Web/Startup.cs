@@ -33,7 +33,6 @@ namespace SFA.DAS.EmployerFinance.Web
             services.AddMvc(options =>
                 {
                     options.Filters.Add(new UrlsViewBagFilter());
-                    options.Filters.Add(new GoogleAnalyticsViewBagFilter());
                 })
                 .AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
