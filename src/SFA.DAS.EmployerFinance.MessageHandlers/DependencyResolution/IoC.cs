@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using StructureMap;
 using SFA.DAS.EmployerFinance.DependencyResolution;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.UnitOfWork.EntityFrameworkCore;
+using SFA.DAS.UnitOfWork.NServiceBus;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
 {
@@ -13,6 +16,10 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
                 c.AddRegistry(new ConfigurationRegistry(config));
                 c.AddRegistry(new DasNonMvcHostingEnvironmentRegistry(environmentName));
                 c.AddRegistry<DataRegistry>();
+                c.AddRegistry<EntityFrameworkCoreUnitOfWorkRegistry<EmployerFinanceDbContext>>();
+                c.AddRegistry<MapperRegistry>();
+                c.AddRegistry<MediatorRegistry>();
+                c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });

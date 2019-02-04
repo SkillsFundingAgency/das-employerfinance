@@ -12,7 +12,7 @@ using IStartup = SFA.DAS.EmployerFinance.Startup.IStartup;
 
 namespace SFA.DAS.EmployerFinance.Jobs
 {
-    public class NServiceBusStartup : IStartup
+    public class NServiceBusStartup : IRunAtStartup
     {
         private readonly IContainer _container;
         private readonly IHostingEnvironment _environment;
@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerFinance.Jobs
         
         public async Task StartAsync()
         {
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.JobsV2")
+            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinanceV2.Jobs")
                 .UseAzureServiceBusTransport(() => _employerFinanceConfiguration.ServiceBusConnectionString, _environment.IsDevelopment())
                 .UseInstallers()
                 .UseLicense(_employerFinanceConfiguration.NServiceBusLicense)

@@ -14,10 +14,10 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             var environmentVariables = ConfigurationBootstrapper.GetEnvironmentVariables();
-            
+
             return WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
@@ -26,9 +26,9 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                         environmentVariables.EnvironmentName, new[] {ConfigurationKeys.EmployerFinance});
                 })
                 .UseKestrel(options => options.AddServerHeader = false)
+                .UseNLog()
                 .UseStartup<Startup>()
-                .UseStructureMap()
-                .UseNLog();
+                .UseStructureMap();
         }
     }
 }

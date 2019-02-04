@@ -8,10 +8,7 @@ namespace SFA.DAS.EmployerFinance.Api.Client.DependencyResolution
     {
         public ConfigurationRegistry()
         {
-            For<EmployerFinanceApiClientConfiguration>().Use(c =>
-                c.GetInstance<IAutoConfigurationService>()
-                    .Get<EmployerFinanceApiClientConfiguration>(ConfigurationKeys.ApiClient)).Singleton();
+            For<EmployerFinanceApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerFinanceApiClientConfiguration>(ConfigurationKeys.ApiClient)).Singleton();
         }
-
     }
 }

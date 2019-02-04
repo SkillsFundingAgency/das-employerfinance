@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerFinance.Jobs
                 var jobActivator = new StructureMapJobActivator(container);
                 var hostingEnvironment = container.GetInstance<IHostingEnvironment>();
 
-                var startup = container.GetInstance<IStartup>();
+                var startup = container.GetInstance<IRunAtStartup>();
                 
                 var host = new HostBuilder()
                     .UseEnvironment(hostingEnvironment.EnvironmentName)
@@ -45,7 +45,6 @@ namespace SFA.DAS.EmployerFinance.Jobs
                 
                 using (host)
                 {
-                    await host.StartAsync();
                     await jobHost.CallAsync(nameof(DeployDatabaseJob));
                     await host.RunAsync();
                 }

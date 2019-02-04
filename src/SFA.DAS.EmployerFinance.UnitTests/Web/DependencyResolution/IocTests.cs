@@ -1,8 +1,9 @@
+using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Web.DependencyResolution;
-using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Web.DependencyResolution
 {
@@ -13,10 +14,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.DependencyResolution
         [Test, Ignore("Fails on build server as doesn't have access to config")]
         public void WhenIocIsInitializationThenContainerShouldBeValid()
         {
-            var registry = new Registry();
-            IoC.Initialize(registry, Mock.Of<IConfiguration>());
-            var container = new Container(registry);
-            container.AssertConfigurationIsValid();
+            using (var container = IoC.Initialize(new List<ServiceDescriptor>(), Mock.Of<IConfiguration>()))
+            {
+                container.AssertConfigurationIsValid();
+            }
         }
     }
 }

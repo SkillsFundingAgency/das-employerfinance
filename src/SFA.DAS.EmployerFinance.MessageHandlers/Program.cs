@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
 
             using (var container = IoC.Initialize(config, environmentVariables.EnvironmentName))
             {
-                var startup = container.GetInstance<IStartup>();
+                var startup = container.GetInstance<IRunAtStartup>();
                 var hostingEnvironment = container.GetInstance<IHostingEnvironment>();
                 var jobActivator = new StructureMapJobActivator(container);
             

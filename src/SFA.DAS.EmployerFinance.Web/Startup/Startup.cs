@@ -16,6 +16,7 @@ using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
 {
+    //todo: integrate config changes from https://github.com/SkillsFundingAgency/das-employerfinance/blob/master/src/SFA.DAS.EmployerFinance.Web/Startup.cs
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -29,23 +30,23 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
         {
             var serviceProvider = services.BuildServiceProvider();
             
-            services.Configure<CookiePolicyOptions>(options =>
+            services.Configure<CookiePolicyOptions>(o =>
             {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                o.CheckConsentNeeded = c => true;
+                o.MinimumSameSitePolicy = SameSiteMode.None;
             })
             // ConfigureContainer() hasn't been called yet, so we have to get the Oidc config from IConfiguration, rather than serviceProvider
             .AddAndConfigureAuthentication(serviceProvider.GetService<IHostingEnvironment>(), Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"))
-            .AddMvc(options =>
+            .AddMvc(o =>
             {
-                options.Filters.Add(new UrlsViewBagFilter());
+                o.Filters.Add(new UrlsViewBagFilter());
                 
                 // default to all pages/actions requiring authentication and allow opt-out with [AllowAnonymous], rather than opting in with [Authorize]
                 //todo: put in helper?
                 var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
+                o.Filters.Add(new AuthorizeFilter(policy));
             })
             .AddControllersAsServices()
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -72,7 +73,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseUnitOfWork();
             app.UseMvc();
         }
         

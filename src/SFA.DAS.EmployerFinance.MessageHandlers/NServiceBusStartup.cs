@@ -13,7 +13,7 @@ using IStartup = SFA.DAS.EmployerFinance.Startup.IStartup;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers
 {
-    public class NServiceBusStartup : IStartup
+    public class NServiceBusStartup : IRunAtStartup
     {
         private readonly IContainer _container;
         private readonly IHostingEnvironment _environment;
@@ -32,10 +32,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
         
         public async Task StartAsync()
         {
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.MessageHandlersV2")
-                .UseAzureServiceBusTransport(() => 
-                    _employerFinanceConfiguration.ServiceBusConnectionString,
-                    _environment.IsDevelopment())
+            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinanceV2.MessageHandlers")
+                .UseAzureServiceBusTransport(() => _employerFinanceConfiguration.ServiceBusConnectionString, _environment.IsDevelopment())
                 .UseLicense(_employerFinanceConfiguration.NServiceBusLicense)
                 .UseMessageConventions()
                 .UseNewtonsoftJsonSerializer()
