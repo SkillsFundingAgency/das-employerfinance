@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("signoutcleanup")]
         public IActionResult SignOutCleanup()
         {
-            return new SignOutResult(new List<string> {CookieAuthenticationDefaults.AuthenticationScheme, CookieAuthenticationDefaults.AuthenticationScheme});
+            return new SignOutResult(new List<string> {CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme});
         }
     }
 }
