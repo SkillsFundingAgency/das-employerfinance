@@ -22,7 +22,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         {
             using (var container = new Container(c =>
             {
-                c.AddRegistry<ConfigurationRegistry>();
+                //todo: once DI has been fixed
+                //c.AddRegistry<ConfigurationRegistry>();
             }))
             {
                 var configuration = container.GetInstance<EmployerFinanceConfiguration>();

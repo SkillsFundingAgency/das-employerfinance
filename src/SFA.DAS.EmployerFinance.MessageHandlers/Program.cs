@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,8 +7,8 @@ using Microsoft.Extensions.Hosting;
 using NLog.Extensions.Logging;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;
+using SFA.DAS.EmployerFinance.Startup;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-using IStartup = SFA.DAS.EmployerFinance.Startup.IStartup;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers
 {

@@ -12,6 +12,7 @@ using SFA.DAS.EmployerFinance.Configuration.Extensions;
 using SFA.DAS.EmployerFinance.Web.Authentication;
 using SFA.DAS.EmployerFinance.Web.DependencyResolution;
 using SFA.DAS.EmployerFinance.Web.Filters;
+using SFA.DAS.UnitOfWork.Mvc;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
@@ -39,6 +40,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             .AddAndConfigureAuthentication(serviceProvider.GetService<IHostingEnvironment>(), Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"))
             .AddMvc(o =>
             {
+                //todo: inject directly into view rather than using filter?
                 o.Filters.Add(new UrlsViewBagFilter());
                 
                 // default to all pages/actions requiring authentication and allow opt-out with [AllowAnonymous], rather than opting in with [Authorize]
@@ -50,6 +52,12 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             })
             .AddControllersAsServices()
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            //todo: how to marry up this with needing config in this method (for setting up auth)
+//            var startup = _container.GetInstance<IRunAtStartup>();
+//            var serviceProvider = _container.GetInstance<IServiceProvider>();
+//            
+//            startup.StartAsync().GetAwaiter().GetResult();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

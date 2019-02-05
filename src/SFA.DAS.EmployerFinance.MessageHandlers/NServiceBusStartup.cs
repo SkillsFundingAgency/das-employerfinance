@@ -9,7 +9,6 @@ using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
 using StructureMap;
-using IStartup = SFA.DAS.EmployerFinance.Startup.IStartup;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers
 {
