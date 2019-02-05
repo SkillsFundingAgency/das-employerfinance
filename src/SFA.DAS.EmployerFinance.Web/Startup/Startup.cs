@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseUnitOfWork();
+            //app.UseUnitOfWork();
             app.UseMvc();
         }
         
@@ -89,9 +89,9 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
 
         private void RunStartupServices(IServiceProvider serviceProvider)
         {
-            var startup = serviceProvider.GetService<IRunAtStartup>();
+            //var startup = serviceProvider.GetService<IRunAtStartup>();
             
-            startup.StartAsync().GetAwaiter().GetResult();
+            //startup.StartAsync().GetAwaiter().GetResult();
         }
     }
 }
