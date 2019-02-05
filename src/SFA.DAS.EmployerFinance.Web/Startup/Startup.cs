@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Configuration.Extensions;
+using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.EmployerFinance.Web.Authentication;
 using SFA.DAS.EmployerFinance.Web.DependencyResolution;
 using SFA.DAS.EmployerFinance.Web.Filters;
@@ -17,7 +19,6 @@ using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
 {
-    //todo: integrate config changes from https://github.com/SkillsFundingAgency/das-employerfinance/blob/master/src/SFA.DAS.EmployerFinance.Web/Startup.cs
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -52,20 +53,16 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             })
             .AddControllersAsServices()
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            //todo: how to marry up this with needing config in this method (for setting up auth)
-//            var startup = _container.GetInstance<IRunAtStartup>();
-//            var serviceProvider = _container.GetInstance<IServiceProvider>();
-//            
-//            startup.StartAsync().GetAwaiter().GetResult();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             var cultureInfo = new CultureInfo("en-GB");
 
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+         
+            RunStartupServices(serviceProvider);
             
             if (env.IsDevelopment())
             {
@@ -88,6 +85,13 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
         public void ConfigureContainer(Registry registry)
         {
             IoC.Initialize(registry, Configuration);
+        }
+
+        private void RunStartupServices(IServiceProvider serviceProvider)
+        {
+            var startup = serviceProvider.GetService<IRunAtStartup>();
+            
+            startup.StartAsync().GetAwaiter().GetResult();
         }
     }
 }
