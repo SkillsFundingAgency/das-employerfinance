@@ -39,7 +39,7 @@ steps:
   displayName: 'dotnet pack'
   inputs:
     command: pack
-    packagesToPack: src/SFA.DAS.EmployerFinance.Types/SFA.DAS.EmployerFinance.Types.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;
+    packagesToPack: src/SFA.DAS.EmployerFinance.Types/SFA.DAS.EmployerFinance.Types.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;src/SFA.DAS.EmployerFinance.Api.Client/SFA.DAS.EmployerFinance.Api.Client.csproj
     versioningScheme: byEnvVar
     versionEnvVar: GitVersion.NuGetVersionV2
 
@@ -54,12 +54,37 @@ steps:
 
 
 - task: DotNetCoreCLI@2
+  displayName: 'Publish API WebApp'
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: src/SFA.DAS.EmployerFinance.Api/SFA.DAS.EmployerFinance.Api.csproj
+    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
+
+
+- task: DotNetCoreCLI@2
   displayName: 'Publish WebJobs'
   inputs:
     command: publish
     publishWebProjects: false
     projects: src/SFA.DAS.EmployerFinance.Jobs/SFA.DAS.EmployerFinance.Jobs.csproj
     arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish MessageHandler WebJobs'
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: src/SFA.DAS.EmployerFinance.MessageHandlers/SFA.DAS.EmployerFinance.MessageHandlers.csproj
+    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    Contents: |
+     azure/**
+     src\**\bin\Release\*.dacpac
+    TargetFolder: '$(build.artifactstagingdirectory)'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
