@@ -11,6 +11,8 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             For<EmployerFinanceConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerFinanceConfiguration>(ConfigurationKeys.EmployerFinance)).Singleton();
             For<IEmployerUrlsConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().EmployerUrls).Singleton();
             For<IOidcConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().Oidc).Singleton();
+            For<IGoogleAnalyticsConfigurationFactory>().Use<GoogleAnalyticsConfigurationFactory>();
+            For<GoogleAnalyticsConfiguration>().Use(c => c.GetInstance<IGoogleAnalyticsConfigurationFactory>().CreateConfiguration()).Singleton();
         }
     }
 }

@@ -21,8 +21,10 @@
         <link rel="stylesheet" href="~/css/govuk-frontend.min.css" asp-append-version="true"/>
         <link rel="stylesheet" href="~/css/das.min.css" asp-append-version="true"/>
     </environment>
+    <partial name="_GoogleAnalyticsHead" />
 </head>
 <body class="govuk-template__body">
+    <partial name="_GoogleAnalyticsBody" />
     <script>
         document.body.className = (document.body.className ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>
