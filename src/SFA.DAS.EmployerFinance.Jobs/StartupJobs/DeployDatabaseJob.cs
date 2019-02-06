@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using DbUp;
 using Microsoft.Azure.WebJobs;
@@ -27,6 +28,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.StartupJobs
                 .SqlDatabase(_configuration.DatabaseConnectionString)
                 .WithScriptsEmbeddedInAssembly(Assembly.GetAssembly(typeof(EmployerFinanceConfiguration)))
                 .WithTransaction()
+                .WithExecutionTimeout(TimeSpan.FromSeconds(180))
                 .LogToAutodetectedLog()
                 .Build();
 
