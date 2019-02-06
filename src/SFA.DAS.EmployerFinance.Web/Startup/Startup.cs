@@ -30,15 +30,13 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var serviceProvider = services.BuildServiceProvider();
-            
             services.Configure<CookiePolicyOptions>(o =>
             {
                 o.CheckConsentNeeded = c => true;
                 o.MinimumSameSitePolicy = SameSiteMode.None;
             })
             // ConfigureContainer() hasn't been called yet, so we have to get the Oidc config from IConfiguration, rather than serviceProvider
-            .AddAndConfigureAuthentication(serviceProvider.GetService<IHostingEnvironment>(), Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"))
+            .AddAndConfigureAuthentication(Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"))
             .AddMvc(o =>
             {
                 //todo: inject directly into view rather than using filter?
@@ -55,15 +53,13 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             var cultureInfo = new CultureInfo("en-GB");
 
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
          
-            RunStartupServices(serviceProvider);
-            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -78,20 +74,14 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            //todo: get working again
             //app.UseUnitOfWork();
             app.UseMvc();
         }
         
         public void ConfigureContainer(Registry registry)
         {
-            IoC.Initialize(registry, Configuration);
-        }
-
-        private void RunStartupServices(IServiceProvider serviceProvider)
-        {
-            //var startup = serviceProvider.GetService<IRunAtStartup>();
-            
-            //startup.StartAsync().GetAwaiter().GetResult();
+            IoC.Initialize(registry);
         }
     }
 }

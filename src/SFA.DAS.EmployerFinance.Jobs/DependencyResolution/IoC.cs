@@ -6,12 +6,12 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
 {
     public static class IoC
     {
-        public static IContainer Initialize(IConfiguration config, string environmentName)
+        public static IContainer Initialize(string environmentName)
         {
             return new Container(c =>
             {
                 c.AddRegistry(new DasNonMvcHostingEnvironmentRegistry(environmentName));
-                c.AddRegistry(new ConfigurationRegistry(config));
+                c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();

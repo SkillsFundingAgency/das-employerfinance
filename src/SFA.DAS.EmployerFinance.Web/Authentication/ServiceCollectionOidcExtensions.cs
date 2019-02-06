@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerFinance.Web.Authentication
     public static class ServiceCollectionOidcExtensions
     {
         //https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/additional-claims?view=aspnetcore-2.2
-        public static IServiceCollection AddAndConfigureAuthentication(this IServiceCollection services, IHostingEnvironment hostingEnvironment, IOidcConfiguration oidcConfig)
+        public static IServiceCollection AddAndConfigureAuthentication(this IServiceCollection services, IOidcConfiguration oidcConfig)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -31,12 +31,12 @@ namespace SFA.DAS.EmployerFinance.Web.Authentication
             })
             .AddCookie(options =>
             {
-                if (!hostingEnvironment.IsDevelopment())
-                {
-                    options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
-                    options.SlidingExpiration = true;
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                }
+//                if (!hostingEnvironment.IsDevelopment())
+//                {
+//                    options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+//                    options.SlidingExpiration = true;
+//                    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+//                }
 
                 //todo: once in same branch as error handling, point to forbidden error page
                 options.AccessDeniedPath = "/Error/403";
