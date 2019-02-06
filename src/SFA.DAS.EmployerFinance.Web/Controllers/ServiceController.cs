@@ -23,14 +23,11 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         }
 
         //todo: shouldn't need this if we supply /signout-oidc as the LogoutUrl in the RelyingParty table
-        // (which won't work locally on chrome because 'Refused to display '' in a frame because it set 'X-Frame-Options' to 'sameorigin'', but should work in the environment), but works in edge
+        // (works locally in edge, but not chrome because 'Refused to display '' in a frame because it set 'X-Frame-Options' to 'sameorigin'', but should work in the environment)
         [Route("signoutcleanup")]
         [AllowAnonymous]
         public void SignOutCleanup()
         {
-            // look at recruit, see what they're doing differently
-            // what's wsfederated??
-            
             Response.Cookies.Delete(CookieNames.Authentication);
         }
     }
