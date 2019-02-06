@@ -9,14 +9,10 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
 {
-    //todo: this code should be replaced by the nuget package generated from this PR, once the package is ready... (https://github.com/SkillsFundingAgency/das-shared-packages/pull/281)
+    //todo: this code will be replaced by the nuget package generated from this PR, once the package is ready... (https://github.com/SkillsFundingAgency/das-shared-packages/pull/281)
     //todo: implement reload on change if table supports it?
     //todo: use new table code in cosmos package ?? not currently an option: https://github.com/Azure/azure-cosmos-dotnet-v2/issues/344
     // ^^ could use this preview package: https://www.nuget.org/packages/Microsoft.Azure.Cosmos.Table/0.10.1-preview
-    /// <remarks>
-    /// Inspired by...
-    /// https://github.com/SkillsFundingAgency/das-reservations/blob/MF-7-reservations-web/src/SFA.DAS.Reservations.Infrastructure/Configuration/AzureTableStorageConfigurationProvider.cs
-    /// </remarks>
     public class AzureTableStorageConfigurationProvider : ConfigurationProvider
     {
         // das's tools (das-employer-config) don't currently support different versions, so might as well hardcode it
