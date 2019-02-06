@@ -21,5 +21,7 @@ namespace SFA.DAS.EmployerFinance.Environment
       }
       return hostingEnvironment.IsEnvironment(DasEnvironmentName.PreProduction);
     }
+    
+    //todo: add extensions for IsTest, IsTest2 etc. when required
   }
 }
