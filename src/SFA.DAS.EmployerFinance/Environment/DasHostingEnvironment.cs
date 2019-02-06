@@ -13,6 +13,7 @@ namespace SFA.DAS.EmployerFinance.Environment
         /// Creates a HostingEnvironment (useful for example, in console apps when not building a host).
         /// There are two different HostingEnvironment's in the framework. We've standardised on the AspNetCore version for consistency (for now).
         /// For more details, see https://andrewlock.net/the-asp-net-core-generic-host-namespace-clashes-and-extension-methods/
+        /// To swap, add a package reference to Microsoft.Extensions.Hosting.Abstractions, and swap the usings above.
         /// </summary>
         public static IHostingEnvironment Create(string environmentName)
         {
