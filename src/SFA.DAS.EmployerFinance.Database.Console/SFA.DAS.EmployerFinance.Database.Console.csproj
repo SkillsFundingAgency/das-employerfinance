@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="dbup-sqlserver" Version="4.2.0" />
+      <PackageReference Include="NLog.Extensions.Logging" Version="1.4.0" />
+      <PackageReference Include="NLog.Schema" Version="4.5.11" />
+      <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.1.5" />
+      <PackageReference Include="StructureMap" Version="4.7.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="dbup-core, Version=4.2.0.0, Culture=neutral, PublicKeyToken=4b419c53bdfd4cbf">
+        <HintPath>..\..\..\..\..\..\..\.nuget\packages\dbup-core\4.2.0\lib\netstandard2.0\dbup-core.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="nlog.config">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>
