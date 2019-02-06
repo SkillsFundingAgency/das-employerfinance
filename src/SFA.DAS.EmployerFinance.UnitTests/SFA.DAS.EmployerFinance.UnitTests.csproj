@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <IsPackable>false</IsPackable>
-    <LangVersion>latest</LangVersion>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <LangVersion>latest</LangVersion>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="EfCore.TestSupport" Version="1.5.2" />
@@ -19,10 +19,10 @@
         <PackageReference Include="SFA.DAS.Testing" Version="3.0.22" />
     </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Types\SFA.DAS.EmployerFinance.Types.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Web\SFA.DAS.EmployerFinance.Web.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\SFA.DAS.EmployerFinance.Types\SFA.DAS.EmployerFinance.Types.csproj" />
+        <ProjectReference Include="..\SFA.DAS.EmployerFinance.Web\SFA.DAS.EmployerFinance.Web.csproj" />
+        <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
+    </ItemGroup>
 
 </Project>
