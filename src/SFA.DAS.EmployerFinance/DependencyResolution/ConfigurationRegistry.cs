@@ -9,7 +9,6 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
     {
         public ConfigurationRegistry()
         {
-            //todo: once fix jobs startup, check these will be injected properly
             // either get root and pick from there, or get individually
             // todo: don't have any values in root config, then won't rehydrate twice and will only rehydrate what gets injected
             For<EmployerFinanceConfiguration>().Use(c => c.GetInstance<IConfiguration>().GetEmployerFinanceSection<EmployerFinanceConfiguration>()).Singleton();
