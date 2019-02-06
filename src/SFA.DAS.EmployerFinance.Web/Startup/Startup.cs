@@ -37,19 +37,11 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                     o.CheckConsentNeeded = c => true;
                     o.MinimumSameSitePolicy = SameSiteMode.None;
                 })
-            // ConfigureContainer() hasn't been called yet, so we have to get the Oidc config from IConfiguration, rather than serviceProvider
             .AddAndConfigureAuthentication(Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"))
             .AddMvc(o =>
             {
-                //todo: inject directly into view rather than using filter?
                 o.Filters.Add(new UrlsViewBagFilter());
-                
-                // default to all pages/actions requiring authentication and allow opt-out with [AllowAnonymous], rather than opting in with [Authorize]
-                //todo: put in helper?
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                o.Filters.Add(new AuthorizeFilter(policy));
+                o.RequireAuthorizationByDefault();
             })
             .AddControllersAsServices()
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

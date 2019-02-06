@@ -13,7 +13,7 @@ using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
 
-namespace SFA.DAS.EmployerFinance.Web
+namespace SFA.DAS.EmployerFinance.Web.Startup
 {
     public class NServiceBusStartup : IRunAtStartup
     {
