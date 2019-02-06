@@ -28,13 +28,15 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
+        private IContainer _container;
+        
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(o =>
-            {
-                o.CheckConsentNeeded = c => true;
-                o.MinimumSameSitePolicy = SameSiteMode.None;
-            })
+                {
+                    o.CheckConsentNeeded = c => true;
+                    o.MinimumSameSitePolicy = SameSiteMode.None;
+                })
             // ConfigureContainer() hasn't been called yet, so we have to get the Oidc config from IConfiguration, rather than serviceProvider
             .AddAndConfigureAuthentication(Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"))
             .AddMvc(o =>
@@ -51,15 +53,30 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             })
             .AddControllersAsServices()
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            _container = IoC.Initialize(services);
+
+            var startup = _container.GetInstance<IRunAtStartup>();
+            startup.StartAsync().GetAwaiter().GetResult();
+
+            return _container.GetInstance<IServiceProvider>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime, IHostingEnvironment env)
         {
+            applicationLifetime.ApplicationStopping.Register(() =>
+            {
+                using (_container)
+                {
+                    _container.GetInstance<IRunAtStartup>().StopAsync().GetAwaiter().GetResult();
+                }
+            });
+            
             var cultureInfo = new CultureInfo("en-GB");
 
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-         
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -74,14 +91,8 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            //todo: get working again
-            //app.UseUnitOfWork();
+            app.UseUnitOfWork();
             app.UseMvc();
-        }
-        
-        public void ConfigureContainer(Registry registry)
-        {
-            IoC.Initialize(registry);
         }
     }
 }
