@@ -23,7 +23,12 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 {
                     config.AddAzureTableStorageConfiguration(
                         environmentVariables.StorageConnectionString,
-                        environmentVariables.EnvironmentName, new[] {ConfigurationKeys.EmployerFinance});
+                        environmentVariables.EnvironmentName,
+                        new[] 
+                        {
+                            ConfigurationKeys.EmployerFinance, 
+                            Api.Client.Configuration.ConfigurationKeys.ApiClient
+                        });
                 })
                 .UseKestrel(options => options.AddServerHeader = false)
                 .UseNLog()
