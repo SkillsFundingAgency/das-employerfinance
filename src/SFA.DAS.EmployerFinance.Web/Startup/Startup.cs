@@ -30,12 +30,15 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
         
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            var sp = services.BuildServiceProvider();
+            var hostingEnvironment = sp.GetService<IHostingEnvironment>();
+            
             services.Configure<CookiePolicyOptions>(o =>
             {
                 o.CheckConsentNeeded = c => true;
                 o.MinimumSameSitePolicy = SameSiteMode.None;
             })
-            .AddAndConfigureAuthentication(Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"))
+            .AddAndConfigureAuthentication(Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"), hostingEnvironment.IsDevelopment())
             .AddMvc(o =>
             {
                 o.Filters.Add(new UrlsViewBagFilter());
