@@ -74,7 +74,7 @@
         "resourceNamePrefix": "[toLower(concat('das-', parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
         "storageAccountName": "[toLower(concat('das', parameters('resourceEnvironmentName'), parameters('serviceName'), 'str'))]",
         "appServiceName": "[concat(variables('resourceNamePrefix'), '-as')]",
-        "apiAppServiceName": "[concat(variables('resourceNamePrefix'), '-intapi-as')]",
+        "apiAppServiceName": "[concat(variables('resourceNamePrefix'), 'intapi-as')]",
         "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
         "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]"
