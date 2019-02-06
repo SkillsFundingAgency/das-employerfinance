@@ -1,8 +1,8 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using NServiceBus.Persistence;
-using SFA.DAS.AutoConfiguration;
 using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.UnitOfWork;
 
@@ -10,13 +10,13 @@ namespace SFA.DAS.EmployerFinance.Data
 {
     public class EmployerFinanceDbContextWithNServiceBusTransactionFactory : IEmployerFinanceDbContextFactory
     {
-        private readonly IEnvironmentService _environmentService;
+        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IUnitOfWorkContext _unitOfWorkContext;
         private readonly ILoggerFactory _loggerFactory;
 
-        public EmployerFinanceDbContextWithNServiceBusTransactionFactory(IEnvironmentService environmentService, IUnitOfWorkContext unitOfWorkContext, ILoggerFactory loggerFactory)
+        public EmployerFinanceDbContextWithNServiceBusTransactionFactory(IHostingEnvironment hostingEnvironment, IUnitOfWorkContext unitOfWorkContext, ILoggerFactory loggerFactory)
         {
-            _environmentService = environmentService;
+            _hostingEnvironment = hostingEnvironment;
             _unitOfWorkContext = unitOfWorkContext;
             _loggerFactory = loggerFactory;
         }
@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerFinance.Data
                 .UseSqlServer(sqlStorageSession.Connection)
                 .ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
 
-            if (_environmentService.IsCurrent(DasEnv.LOCAL))
+            if (_hostingEnvironment.IsDevelopment())
             {
                 optionsBuilder.UseLoggerFactory(_loggerFactory);
             }

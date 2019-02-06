@@ -19,9 +19,9 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
             ServicePointManager.DefaultConnectionLimit = 50;
 
             var environmentVariables = ConfigurationBootstrapper.GetEnvironmentVariables();
-            //var config = ConfigurationBootstrapper.GetConfiguration(environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, ConfigurationKeys.EmployerFinance);
+            var configurationRoot = ConfigurationBootstrapper.GetConfiguration(environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, ConfigurationKeys.EmployerFinance);
 
-            using (var container = IoC.Initialize(environmentVariables.EnvironmentName))
+            using (var container = IoC.Initialize(environmentVariables.EnvironmentName, configurationRoot))
             {
                 var startup = container.GetInstance<IRunAtStartup>();
                 var hostingEnvironment = container.GetInstance<IHostingEnvironment>();
