@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Moq;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using Moq;
 using SFA.DAS.EmployerFinance.Web.DependencyResolution;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Web.DependencyResolution
@@ -11,14 +11,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.DependencyResolution
     [Parallelizable]
     public class IocTests
     {
-        [Test, Ignore("Fails on build server as doesn't have access to config")]
+        [Test, Ignore("Fails 1) everywhere as need to somehow mock IContext supplied by For() method 2) on build server as doesn't have access to config")]
         public void WhenIocIsInitializationThenContainerShouldBeValid()
         {
-            //todo: once DI has been fixed
-//            using (var container = IoC.Initialize(new List<ServiceDescriptor>(), Mock.Of<IConfiguration>()))
-//            {
-//                container.AssertConfigurationIsValid();
-//            }
+            using (var container = IoC.Initialize(new List<ServiceDescriptor> {ServiceDescriptor.Singleton(Mock.Of<IConfiguration>())}))
+            {
+                container.AssertConfigurationIsValid();
+            }
         }
     }
 }
