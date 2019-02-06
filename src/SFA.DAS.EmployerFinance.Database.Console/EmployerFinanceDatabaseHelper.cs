@@ -3,7 +3,6 @@ using SFA.DAS.EmployerFinance.Configuration;
 using System.Reflection;
 using DbUp;
 
-
 namespace SFA.DAS.EmployerFinance.Database.Console
 {
     public class EmployerFinanceDatabaseHelper
@@ -17,7 +16,7 @@ namespace SFA.DAS.EmployerFinance.Database.Console
             _configuration = configuration;
         }
 
-        public bool Deploy()
+        public void Deploy()
         {
             _logger.LogInformation("Started deploying database");
         
@@ -38,11 +37,8 @@ namespace SFA.DAS.EmployerFinance.Database.Console
             }
             else
             {
-                _logger.LogError(result.Error.Message, result.Error);
-                return false;
+                throw result.Error;
             }
-
-            return true;
         }
     }
 }
