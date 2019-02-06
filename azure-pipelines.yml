@@ -78,6 +78,14 @@ steps:
     projects: src/SFA.DAS.EmployerFinance.MessageHandlers/SFA.DAS.EmployerFinance.MessageHandlers.csproj
     arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
 
+- task: DotNetCoreCLI@2
+  displayName: 'Publish MessageHandler WebJobs'
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: src/SFA.DAS.EmployerFinance.Host/SFA.DAS.EmployerFinance.Host.csproj
+    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
+
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
   inputs:
