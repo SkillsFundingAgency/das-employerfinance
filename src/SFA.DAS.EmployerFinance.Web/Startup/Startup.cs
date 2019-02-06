@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Globalization;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Configuration;
@@ -33,10 +31,10 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(o =>
-                {
-                    o.CheckConsentNeeded = c => true;
-                    o.MinimumSameSitePolicy = SameSiteMode.None;
-                })
+            {
+                o.CheckConsentNeeded = c => true;
+                o.MinimumSameSitePolicy = SameSiteMode.None;
+            })
             .AddAndConfigureAuthentication(Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"))
             .AddMvc(o =>
             {

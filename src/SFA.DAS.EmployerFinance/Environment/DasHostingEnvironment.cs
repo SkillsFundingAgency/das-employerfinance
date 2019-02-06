@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerFinance.Environment
             var dasEnvNameToCoreEnvNameMap = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase)
             {
                 {"LOCAL", EnvironmentName.Development },
+                {"PREPROD", DasEnvironmentName.PreProduction },
                 {"PROD", EnvironmentName.Production }
             };
 
