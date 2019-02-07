@@ -26,9 +26,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
             const string environmentName = "LOCAL";
             
             var configurationRoot = new ConfigurationBuilder()
-                .AddAzureTableStorageConfiguration(
-                    storageConnectionString, environmentName,
-                    new[] { ConfigurationKeys.EmployerFinance })
+                .AddAzureTableStorageConfiguration(storageConnectionString, environmentName, ConfigurationKeys.EmployerFinance)
                 .Build();
             
             var employerFinanceConfiguration = configurationRoot.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
