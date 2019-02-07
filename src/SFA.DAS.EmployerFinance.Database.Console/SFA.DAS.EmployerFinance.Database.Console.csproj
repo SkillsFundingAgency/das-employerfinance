@@ -2,7 +2,9 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
+        <LangVersion>latest</LangVersion>
         <TargetFramework>netcoreapp2.2</TargetFramework>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,13 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="dbup-core, Version=4.2.0.0, Culture=neutral, PublicKeyToken=4b419c53bdfd4cbf">
-        <HintPath>..\..\..\..\..\..\..\.nuget\packages\dbup-core\4.2.0\lib\netstandard2.0\dbup-core.dll</HintPath>
-      </Reference>
-    </ItemGroup>
+    </ItemGroup>   
 
     <ItemGroup>
       <Content Include="nlog.config">

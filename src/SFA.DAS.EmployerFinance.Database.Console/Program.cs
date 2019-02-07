@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerFinance.Database.Console.DependencyResolution;
+using SFA.DAS.EmployerFinance.Extensions;
 
 namespace SFA.DAS.EmployerFinance.Database.Console
 {
@@ -20,7 +21,7 @@ namespace SFA.DAS.EmployerFinance.Database.Console
                 }
                 catch (Exception e)
                 {
-                    logger.LogError(e.Message, e);
+                    logger.LogError(e.GetAggregateMessage(), e);
                     
                     return -1;
                 }
