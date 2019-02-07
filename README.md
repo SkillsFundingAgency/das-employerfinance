@@ -68,7 +68,9 @@ Run in the `src/SFA.DAS.EmployerFinance.Database` directory:
 ```
 
 * Wait until you see the following in the shell window and then press Ctrl + C:
-  * [INFO] [SFA.DAS.EmployerFinance.Database.EmployerFinanceDatabaseHelper] - Finished deploying database 
+  ``` 
+  [SFA.DAS.EmployerFinance.Database.EmployerFinanceDatabaseHelper] - Finished deploying database 
+  ```
   
 
 ### Add packages
