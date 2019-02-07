@@ -1,6 +1,5 @@
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using NLog.Extensions.Logging;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
-using SFA.DAS.EmployerFinance.Jobs.StartupJobs;
 using SFA.DAS.EmployerFinance.Startup;
 
 namespace SFA.DAS.EmployerFinance.Jobs
@@ -34,14 +32,11 @@ namespace SFA.DAS.EmployerFinance.Jobs
                     .ConfigureServices(c => c.AddSingleton<IJobActivator>(jobActivator))
                     .UseConsoleLifetime()
                     .Build();
-
-                var jobHost = host.Services.GetService<IJobHost>();
                 
                 await startup.StartAsync();
                 
                 using (host)
                 {
-                    await jobHost.CallAsync(nameof(DeployDatabaseJob));
                     await host.RunAsync();
                 }
 

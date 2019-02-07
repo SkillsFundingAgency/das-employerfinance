@@ -20,7 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="dbup-sqlserver" Version="4.2.0" />
         <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.3" />
         <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="3.0.1" />
         <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.2" />
@@ -34,7 +33,6 @@
         <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="4.1.1" />
         <PackageReference Include="StructureMap" Version="4.7.0" />
         <PackageReference Include="StructureMap.Microsoft.DependencyInjection" Version="1.4.0" />
-        <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
         <PackageReference Include="WindowsAzure.Storage" Version="9.3.1" />
     </ItemGroup>
 
