@@ -1,38 +1,86 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using SFA.DAS.EmployerFinance.Configuration.Extensions;
 
 namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
 {
     //todo: this code will be replaced by the nuget package generated from this PR, once the package is ready... (https://github.com/SkillsFundingAgency/das-shared-packages/pull/281)
-    //todo: implement reload on change if table supports it?
-    //todo: use new table code in cosmos package ?? not currently an option: https://github.com/Azure/azure-cosmos-dotnet-v2/issues/344
-    // ^^ could use this preview package: https://www.nuget.org/packages/Microsoft.Azure.Cosmos.Table/0.10.1-preview
     public class AzureTableStorageConfigurationProvider : ConfigurationProvider
     {
         // das's tools (das-employer-config) don't currently support different versions, so might as well hardcode it
-        // we provider versioning by appending a 'Vn' on to the name
+        // we provide versioning by appending a 'Vn' on to the name
         private const string Version = "1.0";
         private const string ConfigurationTableName = "Configuration";
-        private readonly IEnumerable<string> _configNames;
-        private readonly string _environment;
+        
+        private readonly IEnumerable<string> _configKeys;
+        private readonly string _environmentName;
         private readonly CloudStorageAccount _storageAccount;
-        //todo: would be better to create jit
-        private readonly ConcurrentDictionary<string, string> _concurrentData;
 
-        public AzureTableStorageConfigurationProvider(CloudStorageAccount cloudStorageAccount, string environment, IEnumerable<string> configNames)
+        public AzureTableStorageConfigurationProvider(CloudStorageAccount cloudStorageAccount, string environmentName, IEnumerable<string> configKeys)
         {
-            _configNames = configNames;
-            _environment = environment;
+            _configKeys = configKeys;
+            _environmentName = environmentName;
             _storageAccount = cloudStorageAccount;
-            _concurrentData = new ConcurrentDictionary<string, string>();
+        }
+        
+        public override void Load()
+        {
+            Data = ReadAndParseConfigurationTableRows().GetAwaiter().GetResult();
+        }
+        
+        //pass instance props in??
+        private async Task<ConcurrentDictionary<string, string>> ReadAndParseConfigurationTableRows()
+        {
+            var concurrentData = new ConcurrentDictionary<string, string>();
+
+            var table = GetTable();
+            
+            var parseRowsTasks = _configKeys.Select(configKey => ParseConfigurationTableRow(concurrentData, table, configKey));
+            await Task.WhenAll(parseRowsTasks).ConfigureAwait(false);
+            
+            return concurrentData;
         }
 
+        private CloudTable GetTable()
+        {
+            var tableClient = _storageAccount.CreateCloudTableClient();
+            return tableClient.GetTableReference(ConfigurationTableName);
+        }
+
+        private async Task ParseConfigurationTableRow(ConcurrentDictionary<string, string> data, CloudTable table, string configKey)
+        {
+            string config = await GetRowConfiguration(table, configKey).ConfigureAwait(false);
+
+            using (var stream = config.ToStream())
+            {
+                var configData = JsonConfigurationStreamParser.Parse(stream);
+
+                foreach (var configItem in configData)
+                    data.AddOrUpdate($"{configKey}:{configItem.Key}", configItem.Value, (key, oldValue) => configItem.Value);
+            }
+        }
+
+        private async Task<string> GetRowConfiguration(CloudTable table, string configKey)
+        {
+            var tableResult = await table.ExecuteAsync(GetOperation(configKey)).ConfigureAwait(false);
+            return ((ConfigurationRow) tableResult.Result).Data;
+        }
+
+        /// <remarks>
+        /// protected virtual so can create a derived object and override for unit testing
+        /// bit of a hack, until MS update fakes for core, or they release a easily unit testable library
+        /// alternative is to introduce an injected class to provide a level of indirection
+        /// </remarks>
+        protected virtual TableOperation GetOperation(string configKey)
+        {
+            return TableOperation.Retrieve<ConfigurationRow>(_environmentName, $"{configKey}_{Version}");
+        }
+        
         internal interface IConfigurationRow : ITableEntity
         {
             string Data { get; set; }
@@ -41,77 +89,6 @@ namespace SFA.DAS.EmployerFinance.Configuration.AzureTableStorage
         internal class ConfigurationRow : TableEntity, IConfigurationRow
         {
             public string Data { get; set; }
-        }
-        
-        public override void Load()
-        {
-            var configJsons = GetRows().Select(r => ((ConfigurationRow)r.Result).Data);
-
-            IEnumerable<Stream> configStreams = null;
-            try
-            {
-                configStreams = configJsons.Select(GenerateStreamFromString);
-
-                var configNameAndStreams = _configNames.Zip(configStreams, (name, stream) => (name, stream));
-
-                Parallel.ForEach(configNameAndStreams, AddToData);
-                Data = _concurrentData;
-            }
-            finally
-            {
-                foreach (var stream in configStreams)
-                {
-                    stream.Dispose();
-                }
-            }
-        }
-
-        /// <returns>Stream that contains the supplied string. The caller is responsible for disposing the stream.</returns>
-        private static Stream GenerateStreamFromString(string s)
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(s);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
-        
-        private CloudTable GetTable()
-        {
-            var tableClient = _storageAccount.CreateCloudTableClient();
-            return tableClient.GetTableReference(ConfigurationTableName);
-        }
-
-        private IEnumerable<TableResult> GetRows()
-        {
-            var table = GetTable();
-            var operations = _configNames.Select(name => GetTableResult(table, name));
-            return Task.WhenAll(operations).GetAwaiter().GetResult();
-        }
-
-        private Task<TableResult> GetTableResult(CloudTable table, string serviceName)
-        {
-            var tableOperation = GetOperation(serviceName);
-            return table.ExecuteAsync(tableOperation);
-        }
-        
-        /// <remarks>
-        /// protected virtual so can create a derived object and override for unit testing
-        /// bit of a hack, until MS update fakes for core, or they release a easily unit testable library
-        /// alternative is to introduce an injected class to provide a level of indirection
-        /// </remarks>
-        protected virtual TableOperation GetOperation(string serviceName)
-        {
-            return TableOperation.Retrieve<ConfigurationRow>(_environment, $"{serviceName}_{Version}");
-        }
-        
-        private void AddToData((string name, Stream stream) configNameAndStream)
-        {
-            var configData = JsonConfigurationStreamParser.Parse(configNameAndStream.stream);
-
-            foreach (var configItem in configData)
-                _concurrentData.AddOrUpdate($"{configNameAndStream.name}:{configItem.Key}", configItem.Value, (key, oldValue) => configItem.Value);
         }
     }
 }
