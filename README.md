@@ -59,7 +59,7 @@ $ npm install -g gulp
 
 ### Add database
 
-* Before adding the database, make sure you have setup you configuration correctly as a valid database connection string is required in the configuration.
+> Before adding the database, make sure you have setup your configuration correctly as a valid database connection string is required in the configuration.
 
 Run in the `src/SFA.DAS.EmployerFinance.Database` directory:
 
