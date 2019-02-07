@@ -10,7 +10,7 @@ using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
 using StructureMap;
 
-namespace SFA.DAS.EmployerFinance.Jobs
+namespace SFA.DAS.EmployerFinance.Jobs.Startup
 {
     public class NServiceBusStartup : IRunAtStartup
     {
