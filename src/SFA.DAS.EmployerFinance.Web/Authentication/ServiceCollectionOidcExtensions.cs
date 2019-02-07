@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerFinance.Web.Authentication
 {
     public static class ServiceCollectionOidcExtensions
     {
-        public static IServiceCollection AddAndConfigureAuthentication(this IServiceCollection services, IOidcConfiguration oidcConfig, bool isDevelopment)
+        public static IServiceCollection AddOidcAuthentication(this IServiceCollection services, IOidcConfiguration oidcConfig, bool isDevelopment)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

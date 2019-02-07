@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 o.CheckConsentNeeded = c => true;
                 o.MinimumSameSitePolicy = SameSiteMode.None;
             })
-            .AddAndConfigureAuthentication(Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"), hostingEnvironment.IsDevelopment())
+            .AddOidcAuthentication(Configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc"), hostingEnvironment.IsDevelopment())
             .AddMvc(o =>
             {
                 o.Filters.Add(new UrlsViewBagFilter());
