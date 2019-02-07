@@ -21,12 +21,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         [Ignore("To be run adhoc (but could live in an integration test)")]
         public void CheckDatabaseSchemaAgainstEntityFrameworkExpectedSchema()
         {
-            // set these accordingly...
-            const string storageConnectionString = "UseDevelopmentStorage=true";
-            const string environmentName = "LOCAL";
-            
+            // set "APPSETTING_ConfigurationStorageConnectionString" environment variable to override default of using local emulator for storage if required
             var configurationRoot = new ConfigurationBuilder()
-                .AddAzureTableStorageConfiguration(storageConnectionString, environmentName, ConfigurationKeys.EmployerFinance)
+                .AddAzureTableStorageConfiguration(ConfigurationKeys.EmployerFinance)
                 .Build();
             
             var employerFinanceConfiguration = configurationRoot.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
