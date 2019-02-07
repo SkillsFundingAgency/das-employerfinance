@@ -48,7 +48,6 @@ steps:
   displayName: 'Publish Website'
   inputs:
     command: publish
-    publishWebProjects: false
     projects: src/SFA.DAS.EmployerFinance.Web/SFA.DAS.EmployerFinance.Web.csproj
     arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
 
@@ -57,7 +56,6 @@ steps:
   displayName: 'Publish API WebApp'
   inputs:
     command: publish
-    publishWebProjects: false
     projects: src/SFA.DAS.EmployerFinance.Api/SFA.DAS.EmployerFinance.Api.csproj
     arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
 
@@ -66,8 +64,8 @@ steps:
   displayName: 'Publish WebJobs'
   inputs:
     command: publish
-    publishWebProjects: false
     projects: src/SFA.DAS.EmployerFinance.Jobs/SFA.DAS.EmployerFinance.Jobs.csproj
+    PublishWebProjects: false
     arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
 
 - task: DotNetCoreCLI@2
