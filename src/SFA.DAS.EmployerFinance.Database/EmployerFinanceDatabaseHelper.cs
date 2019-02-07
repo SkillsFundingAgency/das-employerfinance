@@ -3,7 +3,7 @@ using SFA.DAS.EmployerFinance.Configuration;
 using System.Reflection;
 using DbUp;
 
-namespace SFA.DAS.EmployerFinance.Database.Console
+namespace SFA.DAS.EmployerFinance.Database
 {
     public class EmployerFinanceDatabaseHelper
     {

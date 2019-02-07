@@ -2,7 +2,7 @@
 using SFA.DAS.EmployerFinance.DependencyResolution;
 using StructureMap;
 
-namespace SFA.DAS.EmployerFinance.Database.Console.DependencyResolution
+namespace SFA.DAS.EmployerFinance.Database.DependencyResolution
 {
     public static class IoC
     {

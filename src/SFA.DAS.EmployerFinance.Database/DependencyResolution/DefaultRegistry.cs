@@ -4,7 +4,7 @@ using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Configuration;
 using StructureMap;
 
-namespace SFA.DAS.EmployerFinance.Database.Console.DependencyResolution
+namespace SFA.DAS.EmployerFinance.Database.DependencyResolution
 {
     public class DefaultRegistry : Registry
     {

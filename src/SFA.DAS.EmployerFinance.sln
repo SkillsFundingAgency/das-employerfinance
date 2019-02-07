@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Mes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Api.Client", "SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj", "{5C5AF443-8996-4BA1-BBD7-96F15AE43D8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Database.Console", "SFA.DAS.EmployerFinance.Database.Console\SFA.DAS.EmployerFinance.Database.Console.csproj", "{9253BCC7-5D9C-4CE3-B014-EFF1EA9409FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Database", "SFA.DAS.EmployerFinance.Database\SFA.DAS.EmployerFinance.Database.csproj", "{9253BCC7-5D9C-4CE3-B014-EFF1EA9409FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
