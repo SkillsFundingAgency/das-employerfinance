@@ -19,12 +19,13 @@ steps:
     command: restore
     projects: '**/*.sln'
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet build'
+- task: VSBuild@1
+  displayName: 'Build solution'
   inputs:
-    command: test
-    projects: '**/*.sln'
-    arguments: '--configuration $(BuildConfiguration)'
+    solution: '**/*.sln'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
 
 
 - task: DotNetCoreCLI@2
