@@ -16,14 +16,10 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
 
         private static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-            var environmentVariables = ConfigurationBootstrapper.GetEnvironmentVariables();
-
             return WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     config.AddAzureTableStorageConfiguration(
-                        environmentVariables.StorageConnectionString,
-                        environmentVariables.EnvironmentName,
                         new[] 
                         {
                             ConfigurationKeys.EmployerFinance, 
