@@ -32,7 +32,6 @@ namespace SFA.DAS.EmployerFinance.Api
             }
             else
             {
-                
                 app.UseHsts();
             }
 

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
 using NLog.Web;
-using StructureMap.AspNetCore;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
 {
@@ -19,17 +18,11 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             return WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
-                    config.AddAzureTableStorageConfiguration(
-                        new[] 
-                        {
-                            ConfigurationKeys.EmployerFinance, 
-                            Api.Client.Configuration.ConfigurationKeys.ApiClient
-                        });
+                    config.AddAzureTableStorageConfiguration(ConfigurationKeys.EmployerFinance, Api.Client.Configuration.ConfigurationKeys.ApiClient);
                 })
                 .UseKestrel(options => options.AddServerHeader = false)
                 .UseNLog()
-                .UseStartup<Startup>()
-                .UseStructureMap();
+                .UseStartup<Startup>();
         }
     }
 }
