@@ -20,8 +20,8 @@ namespace SFA.DAS.EmployerFinance.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddHealthChecks();
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -38,6 +38,7 @@ namespace SFA.DAS.EmployerFinance.Api
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseHealthChecks("/probe");
         }
         
         public void ConfigureContainer(Registry registry)
