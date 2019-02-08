@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Api.DependencyResolution;
+using SFA.DAS.EmployerFinance.Helpers;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api
@@ -37,7 +39,10 @@ namespace SFA.DAS.EmployerFinance.Api
 
             app.UseHttpsRedirection();
             app.UseMvc();
-            app.UseHealthChecks("/probe");
+            app.UseHealthChecks("/probe", new HealthCheckOptions
+            {
+                ResponseWriter = HealthCheckHelper.WriteJsonResponse
+            });
         }
         
         public void ConfigureContainer(Registry registry)

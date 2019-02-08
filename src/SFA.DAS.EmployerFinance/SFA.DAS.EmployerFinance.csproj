@@ -28,11 +28,12 @@
         <PackageReference Include="SFA.DAS.UnitOfWork" Version="4.1.1" />
         <PackageReference Include="StructureMap" Version="4.7.0" />
         <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="2.2.0" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj" />
         <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj" />
-    </ItemGroup>
+    </ItemGroup>  
 
 </Project>
