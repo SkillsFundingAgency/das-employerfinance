@@ -1,28 +1,27 @@
-using System.Reflection;
-using DbUp;
-using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerFinance.Configuration;
+using System.Reflection;
+using DbUp;
 
-namespace SFA.DAS.EmployerFinance.Jobs.StartupJobs
+namespace SFA.DAS.EmployerFinance.Database
 {
-    public class DeployDatabaseJob
+    public class EmployerFinanceDatabaseHelper
     {
+        private readonly ILogger _logger;
         private readonly EmployerFinanceConfiguration _configuration;
-
-        public DeployDatabaseJob(EmployerFinanceConfiguration configuration)
+       
+        public EmployerFinanceDatabaseHelper(ILogger logger, EmployerFinanceConfiguration configuration)
         {
+            _logger = logger;
             _configuration = configuration;
         }
-        
-        [FunctionName(nameof(DeployDatabaseJob))]
-        [NoAutomaticTrigger]
-        public void Run(ILogger logger)
+
+        public void Deploy()
         {
-            logger.LogInformation("Started deploying database");
-            
+            _logger.LogInformation("Started deploying database");
+        
             EnsureDatabase.For.SqlDatabase(_configuration.DatabaseConnectionString);
-            
+        
             var upgradeEngine = DeployChanges.To
                 .SqlDatabase(_configuration.DatabaseConnectionString)
                 .WithScriptsEmbeddedInAssembly(Assembly.GetAssembly(typeof(EmployerFinanceConfiguration)))
@@ -34,11 +33,11 @@ namespace SFA.DAS.EmployerFinance.Jobs.StartupJobs
 
             if (result.Successful)
             {
-                logger.LogInformation("Finished deploying database");
+                _logger.LogInformation("Finished deploying database");
             }
             else
             {
-                logger.LogError(result.Error.Message);
+                throw result.Error;
             }
         }
     }
