@@ -24,7 +24,6 @@ steps:
   inputs:
     solution: '**/*.sln'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
-    platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
 
 
@@ -43,47 +42,6 @@ steps:
     packagesToPack: src/SFA.DAS.EmployerFinance.Types/SFA.DAS.EmployerFinance.Types.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;src/SFA.DAS.EmployerFinance.Api.Client/SFA.DAS.EmployerFinance.Api.Client.csproj
     versioningScheme: byEnvVar
     versionEnvVar: GitVersion.NuGetVersionV2
-
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publish Website'
-  inputs:
-    command: publish
-    projects: src/SFA.DAS.EmployerFinance.Web/SFA.DAS.EmployerFinance.Web.csproj
-    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
-
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publish API WebApp'
-  inputs:
-    command: publish
-    projects: src/SFA.DAS.EmployerFinance.Api/SFA.DAS.EmployerFinance.Api.csproj
-    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
-
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publish WebJobs'
-  inputs:
-    command: publish
-    projects: src/SFA.DAS.EmployerFinance.Jobs/SFA.DAS.EmployerFinance.Jobs.csproj
-    PublishWebProjects: false
-    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publish MessageHandler WebJobs'
-  inputs:
-    command: publish
-    publishWebProjects: false
-    projects: src/SFA.DAS.EmployerFinance.MessageHandlers/SFA.DAS.EmployerFinance.MessageHandlers.csproj
-    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publish MessageHandler WebJobs'
-  inputs:
-    command: publish
-    publishWebProjects: false
-    projects: src/SFA.DAS.EmployerFinance.Host/SFA.DAS.EmployerFinance.Host.csproj
-    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
