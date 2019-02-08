@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerFinance.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddHealthChecks();
+            services.AddHealthChecks().AddSqlServer(Configuration["ConnectionStrings:DefaultConnection"]);
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -32,7 +32,6 @@ namespace SFA.DAS.EmployerFinance.Api
             }
             else
             {
-                
                 app.UseHsts();
             }
 
