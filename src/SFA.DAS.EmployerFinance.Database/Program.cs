@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerFinance.Database.DependencyResolution;
 using SFA.DAS.EmployerFinance.Extensions;
@@ -17,7 +18,7 @@ namespace SFA.DAS.EmployerFinance.Database
                 
                 try
                 {
-                    helper.Deploy();
+                    helper.Deploy(args?.FirstOrDefault());
                 }
                 catch (Exception e)
                 {

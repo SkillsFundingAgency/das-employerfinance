@@ -16,14 +16,16 @@ namespace SFA.DAS.EmployerFinance.Database
             _configuration = configuration;
         }
 
-        public void Deploy()
+        public void Deploy(string connectionString = null)
         {
             _logger.LogInformation("Started deploying database");
-        
-            EnsureDatabase.For.SqlDatabase(_configuration.DatabaseConnectionString);
+
+            var databaseConnectionString = connectionString ?? _configuration.DatabaseConnectionString;
+            
+            EnsureDatabase.For.SqlDatabase(databaseConnectionString);
         
             var upgradeEngine = DeployChanges.To
-                .SqlDatabase(_configuration.DatabaseConnectionString)
+                .SqlDatabase(databaseConnectionString)
                 .WithScriptsEmbeddedInAssembly(Assembly.GetAssembly(typeof(EmployerFinanceConfiguration)))
                 .WithTransaction()
                 .LogToAutodetectedLog()
