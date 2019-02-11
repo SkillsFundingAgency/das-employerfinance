@@ -1,9 +1,12 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EmployerFinance.HealthChecks;
 using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.EmployerFinance.Web.DependencyResolution;
 using SFA.DAS.EmployerFinance.Web.Filters;
@@ -15,6 +18,12 @@ namespace SFA.DAS.EmployerFinance.Web
     public class Startup
     {
         private IContainer _container;
+        private readonly IConfiguration _configuration;
+        
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
@@ -30,6 +39,8 @@ namespace SFA.DAS.EmployerFinance.Web
                 })
                 .AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
+            services.AddHealthChecks().AddSqlServer(_configuration["ConnectionStrings:DefaultConnection"]);
 
             _container = IoC.Initialize(services);
             
@@ -66,6 +77,11 @@ namespace SFA.DAS.EmployerFinance.Web
             app.UseCookiePolicy();
             app.UseUnitOfWork();
             app.UseMvc();
+            
+            app.UseHealthChecks("/health", new HealthCheckOptions
+            {
+                ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
+            });
         }
     }
 }
