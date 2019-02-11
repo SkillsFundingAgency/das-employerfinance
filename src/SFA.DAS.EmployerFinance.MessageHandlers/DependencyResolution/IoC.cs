@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using StructureMap;
+﻿using StructureMap;
 using SFA.DAS.EmployerFinance.DependencyResolution;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.UnitOfWork.EntityFrameworkCore;
@@ -9,21 +8,15 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
 {
     public static class IoC
     {
-        public static IContainer Initialize(string environmentName, IConfiguration configuration)
+        public static void Initialize(Registry registry)
         {
-            return new Container(c =>
-            {
-                c.For<IConfiguration>().Use(configuration).Singleton();
-                c.AddRegistry<ConfigurationRegistry>();
-                c.AddRegistry(new DasNonMvcHostingEnvironmentRegistry(environmentName));
-                c.AddRegistry<DataRegistry>();
-                c.AddRegistry<EntityFrameworkCoreUnitOfWorkRegistry<EmployerFinanceDbContext>>();
-                c.AddRegistry<MapperRegistry>();
-                c.AddRegistry<MediatorRegistry>();
-                c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
-                c.AddRegistry<StartupRegistry>();
-                c.AddRegistry<DefaultRegistry>();
-            });
+            registry.IncludeRegistry<ConfigurationRegistry>();
+            registry.IncludeRegistry<DataRegistry>();
+            registry.IncludeRegistry<EntityFrameworkCoreUnitOfWorkRegistry<EmployerFinanceDbContext>>();
+            registry.IncludeRegistry<MapperRegistry>();
+            registry.IncludeRegistry<MediatorRegistry>();
+            registry.IncludeRegistry<NServiceBusUnitOfWorkRegistry>();
+            registry.IncludeRegistry<DefaultRegistry>();
         }
     }
 }

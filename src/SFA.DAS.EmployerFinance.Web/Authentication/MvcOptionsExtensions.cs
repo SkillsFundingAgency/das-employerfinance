@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerFinance.Web.Authentication
             var policy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build();
+            
             mvcOptions.Filters.Add(new AuthorizeFilter(policy));
         }
     }

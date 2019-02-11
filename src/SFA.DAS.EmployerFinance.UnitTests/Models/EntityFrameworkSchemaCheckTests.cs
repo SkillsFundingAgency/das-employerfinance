@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
-using SFA.DAS.EmployerFinance.Configuration.Extensions;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Types.Configuration;
 using TestSupport.EfSchemeCompare;
@@ -22,8 +21,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         [Ignore("To be run adhoc (but could live in an integration test)")]
         public void CheckDatabaseSchemaAgainstEntityFrameworkExpectedSchema()
         {
-            var configurationRoot = new ConfigurationBuilder().AddAzureTableStorageConfiguration(EmployerFinanceConfigurationKeys.Base).Build();
-            var employerFinanceConfiguration = configurationRoot.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
+            var configuration = new ConfigurationBuilder().AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base).Build();
+            var employerFinanceConfiguration = configuration.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
             
             using (var connection = new SqlConnection(employerFinanceConfiguration.DatabaseConnectionString))
             {

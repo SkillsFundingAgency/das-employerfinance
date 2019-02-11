@@ -2,7 +2,7 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.EmployerFinance.Types.Configuration;
 
-namespace SFA.DAS.EmployerFinance.Configuration.Extensions
+namespace SFA.DAS.EmployerFinance.Configuration
 {
     public static class ConfigurationExtensions
     {

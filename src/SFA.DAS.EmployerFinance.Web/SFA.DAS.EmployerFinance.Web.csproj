@@ -24,7 +24,7 @@
         <PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="4.1.1" />
         <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="4.1.1" />
         <PackageReference Include="StructureMap" Version="4.7.0" />
-        <PackageReference Include="StructureMap.Microsoft.DependencyInjection" Version="1.4.0" />
+        <PackageReference Include="StructureMap.AspNetCore" Version="2.0.0" />
         <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
     </ItemGroup>
 

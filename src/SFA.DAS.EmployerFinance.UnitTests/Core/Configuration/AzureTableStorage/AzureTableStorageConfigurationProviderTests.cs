@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Core.Configuration.AzureTableStorage
         {
         }
         
-        protected override TableOperation GetOperation(string serviceName)
+        protected override TableOperation GetTableRowOperation(string serviceName)
         {
             var tableEntity = new Mock<IConfigurationRow>();
             tableEntity.SetupGet(te => te.RowKey).Returns(serviceName);
