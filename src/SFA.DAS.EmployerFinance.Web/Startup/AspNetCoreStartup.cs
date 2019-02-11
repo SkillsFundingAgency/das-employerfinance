@@ -17,9 +17,9 @@ using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
 {
-    public class Startup
+    public class AspNetCoreStartup
     {
-        public Startup(IConfiguration configuration)
+        public AspNetCoreStartup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
