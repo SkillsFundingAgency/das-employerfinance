@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands
 
             Db.SaveChanges();
             
-            EmployerFinanceApiClient.Setup(c => c.Ping()).Returns((Task<string>) Task.CompletedTask);
+            EmployerFinanceApiClient.Setup(c => c.Ping()).Returns((Task<string>) Task.Run(() => "Healthy"));
 
             Handler = new RunHealthCheckCommandHandler(new Lazy<EmployerFinanceDbContext>(() => Db), EmployerFinanceApiClient.Object);
         }
