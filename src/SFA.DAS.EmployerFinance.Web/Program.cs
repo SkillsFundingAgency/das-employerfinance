@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using NLog.Web;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
-using NLog.Web;
 
-namespace SFA.DAS.EmployerFinance.Web.Startup
+namespace SFA.DAS.EmployerFinance.Web
 {
     public static class Program
     {
@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 })
                 .UseKestrel(options => options.AddServerHeader = false)
                 .UseNLog()
-                .UseStartup<Startup>();
+                .UseStartup<Startup.Startup>();
         }
     }
 }
