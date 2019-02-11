@@ -7,7 +7,7 @@ variables:
   BuildConfiguration: release
 
 steps:
-- task: gittools.gitversion.gitversion-task.GitVersion@3
+- task: gittools.gitversion.gitversion-task.GitVersion@4
   displayName: GitVersion
   inputs:
     updateAssemblyInfo: true
