@@ -5,9 +5,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace SFA.DAS.EmployerFinance.Helpers
+namespace SFA.DAS.EmployerFinance.HealthChecks
 {
-    public static class HealthCheckHelper
+    public static class HealthCheckResponseWriter
     {
         public static Task WriteJsonResponse(HttpContext httpContext, HealthReport result)
         {

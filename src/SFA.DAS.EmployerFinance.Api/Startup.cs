@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Api.DependencyResolution;
-using SFA.DAS.EmployerFinance.Helpers;
+using SFA.DAS.EmployerFinance.HealthChecks;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api
@@ -39,9 +39,15 @@ namespace SFA.DAS.EmployerFinance.Api
 
             app.UseHttpsRedirection();
             app.UseMvc();
-            app.UseHealthChecks("/probe", new HealthCheckOptions
+            
+            app.UseHealthChecks("/health", new HealthCheckOptions
             {
-                ResponseWriter = HealthCheckHelper.WriteJsonResponse
+                ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
+            });
+            
+            app.UseHealthChecks("/ping", new HealthCheckOptions
+            {
+                Predicate = (_) => false
             });
         }
         
