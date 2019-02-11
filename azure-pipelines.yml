@@ -40,7 +40,8 @@ steps:
     command: publish
     publishWebProjects: false
     projects: src/SFA.DAS.EmployerFinance.Database/SFA.DAS.EmployerFinance.Database.csproj
-    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
+    zipAfterPublish: false
+    arguments: '--self-contained -r "win-x64" --output $(build.artifactstagingdirectory) '
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
@@ -48,15 +49,14 @@ steps:
     Contents: |
      azure/**
      src\**\bin\Release\*.dacpac
-     src\SFA.DAS.EmployerFinance.Database\bin\release\**
+     src\SFA.DAS.EmployerFinance.Database\bin\Debug\Release\netcoreapp2.2\win-x64\publish\*
     TargetFolder: '$(build.artifactstagingdirectory)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
   inputs:
     command: pack
-    packagesToPack: src/SFA.DAS.EmployerFinance.Types/SFA.DAS.EmployerFinance.Types.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;src/SFA.DAS.EmployerFinance.Api.Client/SFA.DAS.EmployerFinance.Api.Client.csproj;src/SFA.DAS.EmployerFinance.Database/SFA.DAS.EmployerFinance.Database.csproj
-    versioningScheme: byEnvVar
+    packagesToPack: src/SFA.DAS.EmployerFinance.Types/SFA.DAS.EmployerFinance.Types.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;src/SFA.DAS.EmployerFinance.Api.Client/SFA.DAS.EmployerFinance.Api.Client.csproj;
     versionEnvVar: GitVersion.NuGetVersionV2
 
 - task: PublishBuildArtifacts@1
