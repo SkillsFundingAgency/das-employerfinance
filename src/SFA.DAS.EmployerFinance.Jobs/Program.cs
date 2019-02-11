@@ -10,6 +10,7 @@ using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
 using SFA.DAS.EmployerFinance.Jobs.StartupJobs;
 using SFA.DAS.EmployerFinance.Startup;
+using SFA.DAS.EmployerFinance.Types.Configuration;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace SFA.DAS.EmployerFinance.Jobs
@@ -21,7 +22,7 @@ namespace SFA.DAS.EmployerFinance.Jobs
             ServicePointManager.DefaultConnectionLimit = 50;
             
             var environmentVariables = ConfigurationBootstrapper.GetEnvironmentVariables();
-            var configurationRoot = ConfigurationBootstrapper.GetConfiguration(environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, ConfigurationKeys.EmployerFinance);
+            var configurationRoot = ConfigurationBootstrapper.GetConfiguration(environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, EmployerFinanceConfigurationKeys.Base);
             
             using (var container = IoC.Initialize(environmentVariables.EnvironmentName, configurationRoot))
             {

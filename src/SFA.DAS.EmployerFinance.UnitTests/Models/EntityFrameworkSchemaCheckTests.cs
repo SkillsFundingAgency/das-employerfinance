@@ -7,6 +7,7 @@ using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerFinance.Configuration.Extensions;
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Types.Configuration;
 using TestSupport.EfSchemeCompare;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Models
@@ -21,11 +22,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         [Ignore("To be run adhoc (but could live in an integration test)")]
         public void CheckDatabaseSchemaAgainstEntityFrameworkExpectedSchema()
         {
-            // set "APPSETTING_ConfigurationStorageConnectionString" environment variable to override default of using local emulator for storage if required
-            var configurationRoot = new ConfigurationBuilder()
-                .AddAzureTableStorageConfiguration(ConfigurationKeys.EmployerFinance)
-                .Build();
-            
+            var configurationRoot = new ConfigurationBuilder().AddAzureTableStorageConfiguration(EmployerFinanceConfigurationKeys.Base).Build();
             var employerFinanceConfiguration = configurationRoot.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
             
             using (var connection = new SqlConnection(employerFinanceConfiguration.DatabaseConnectionString))

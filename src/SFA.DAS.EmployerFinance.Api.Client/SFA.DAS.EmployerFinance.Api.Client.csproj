@@ -24,4 +24,8 @@
       <PackageReference Include="StructureMap" Version="4.7.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SFA.DAS.EmployerFinance.Types\SFA.DAS.EmployerFinance.Types.csproj" />
+    </ItemGroup>
+
 </Project>

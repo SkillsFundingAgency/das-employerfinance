@@ -8,6 +8,7 @@ using NLog.Extensions.Logging;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
+using SFA.DAS.EmployerFinance.Types.Configuration;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers
@@ -19,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
             ServicePointManager.DefaultConnectionLimit = 50;
 
             var environmentVariables = ConfigurationBootstrapper.GetEnvironmentVariables();
-            var configurationRoot = ConfigurationBootstrapper.GetConfiguration(environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, ConfigurationKeys.EmployerFinance);
+            var configurationRoot = ConfigurationBootstrapper.GetConfiguration(environmentVariables.StorageConnectionString, environmentVariables.EnvironmentName, EmployerFinanceConfigurationKeys.Base);
 
             using (var container = IoC.Initialize(environmentVariables.EnvironmentName, configurationRoot))
             {
