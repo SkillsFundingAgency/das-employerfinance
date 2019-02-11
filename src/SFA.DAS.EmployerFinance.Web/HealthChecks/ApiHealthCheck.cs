@@ -1,9 +1,12 @@
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerFinance.Api.Client;
 using SFA.DAS.EmployerFinance.Api.Client.Http;
+using SFA.DAS.EmployerFinance.Web.Extensions;
 
 namespace SFA.DAS.EmployerFinance.Web.HealthChecks
 {
@@ -12,7 +15,7 @@ namespace SFA.DAS.EmployerFinance.Web.HealthChecks
         private readonly IEmployerFinanceApiClient _apiClient;
         private readonly ILogger _logger;
 
-        public ApiHealthCheck(IEmployerFinanceApiClient apiClient, ILogger logger)
+        public ApiHealthCheck(IEmployerFinanceApiClient apiClient, ILogger<ApiHealthCheck> logger)
         {
             _apiClient = apiClient;
             _logger = logger;
@@ -24,10 +27,15 @@ namespace SFA.DAS.EmployerFinance.Web.HealthChecks
             
             try
             {
+                var timer = Stopwatch.StartNew();
                 await _apiClient.Ping();
-                _logger.LogInformation("Employer Finance API ping successful");
+                timer.Stop();
+
+                var durationString = timer.Elapsed.ToHumanReadableString();
                 
-                return HealthCheckResult.Healthy("Api ping succeeded");
+                _logger.LogInformation($"Employer Finance API ping successful and took {durationString}");
+                
+                return HealthCheckResult.Healthy("Api ping succeeded", new Dictionary<string, object>(){{"Duration", durationString}});
             }
             catch (RestHttpClientException e)
             {

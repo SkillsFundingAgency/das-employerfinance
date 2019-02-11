@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SFA.DAS.EmployerFinance.HealthChecks;
 using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.EmployerFinance.Web.DependencyResolution;
 using SFA.DAS.EmployerFinance.Web.Filters;
+using SFA.DAS.EmployerFinance.Web.HealthChecks;
 using SFA.DAS.UnitOfWork.Mvc;
 using StructureMap;
 
@@ -40,7 +42,12 @@ namespace SFA.DAS.EmployerFinance.Web
                 .AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             
-            services.AddHealthChecks().AddSqlServer(_configuration["ConnectionStrings:DefaultConnection"]);
+            services.AddHealthChecks()
+                .AddSqlServer(_configuration["ConnectionStrings:DefaultConnection"])
+                .AddCheck<ApiHealthCheck>(
+                    "Employer Finance Api", 
+                    failureStatus: HealthStatus.Unhealthy, 
+                    tags: new[] { "ready" });;
 
             _container = IoC.Initialize(services);
             
@@ -80,6 +87,7 @@ namespace SFA.DAS.EmployerFinance.Web
             
             app.UseHealthChecks("/health", new HealthCheckOptions
             {
+                Predicate = (check) => check.Tags.Contains("ready"),
                 ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
             });
         }

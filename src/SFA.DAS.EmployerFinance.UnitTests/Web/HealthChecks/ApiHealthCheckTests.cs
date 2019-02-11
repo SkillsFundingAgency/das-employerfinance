@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
     public class ApiHealthCheckTestsFixture
     {
         public Mock<IEmployerFinanceApiClient> Client { get; }
-        public Mock<ILogger> Logger { get; }
+        public Mock<ILogger<ApiHealthCheck>> Logger { get; }
         public ApiHealthCheck ApiHealthCheck { get; }
 
         public HealthCheckResult HealthCheckResult { get; private set; }
@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
         public ApiHealthCheckTestsFixture()
         {
             Client = new Mock<IEmployerFinanceApiClient>();
-            Logger = new Mock<ILogger>();
+            Logger = new Mock<ILogger<ApiHealthCheck>>();
             
             ApiHealthCheck = new ApiHealthCheck(Client.Object, Logger.Object);
 
