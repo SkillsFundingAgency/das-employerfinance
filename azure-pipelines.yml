@@ -34,6 +34,22 @@ steps:
     projects: '*\**\*UnitTests.csproj'
     arguments: '--configuration $(BuildConfiguration)'
 
+- task: DotNetCoreCLI@2
+  displayName: 'Publish DB Job'
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: src/SFA.DAS.EmployerFinance.Database/SFA.DAS.EmployerFinance.Database.csproj
+    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    Contents: |
+     azure/**
+     src\**\bin\Release\*.dacpac
+     src\SFA.DAS.EmployerFinance.Database\bin\release\**
+    TargetFolder: '$(build.artifactstagingdirectory)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
@@ -42,14 +58,6 @@ steps:
     packagesToPack: src/SFA.DAS.EmployerFinance.Types/SFA.DAS.EmployerFinance.Types.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;src/SFA.DAS.EmployerFinance.Api.Client/SFA.DAS.EmployerFinance.Api.Client.csproj;src/SFA.DAS.EmployerFinance.Database/SFA.DAS.EmployerFinance.Database.csproj
     versioningScheme: byEnvVar
     versionEnvVar: GitVersion.NuGetVersionV2
-
-- task: CopyFiles@2
-  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
-  inputs:
-    Contents: |
-     azure/**
-     src\**\bin\Release\*.dacpac
-    TargetFolder: '$(build.artifactstagingdirectory)'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
