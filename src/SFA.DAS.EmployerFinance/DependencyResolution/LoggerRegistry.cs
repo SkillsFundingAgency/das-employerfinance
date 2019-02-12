@@ -1,12 +1,11 @@
 using Microsoft.Extensions.Logging;
 using StructureMap;
 
-
 namespace SFA.DAS.EmployerFinance.DependencyResolution
 {
-    public class LoggingRegistry : Registry
+    public class LoggerRegistry : Registry
     {
-        public LoggingRegistry()
+        public LoggerRegistry()
         {
             For<ILogger>().Use(c => c.GetInstance<ILoggerFactory>().CreateLogger(c.ParentType));
         }

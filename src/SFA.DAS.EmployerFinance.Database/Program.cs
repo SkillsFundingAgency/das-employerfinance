@@ -6,23 +6,23 @@ using SFA.DAS.EmployerFinance.Extensions;
 
 namespace SFA.DAS.EmployerFinance.Database
 {
-    internal class Program
+    public static class Program
     {
         private static int Main(string[] args)
         {
             using (var container = IoC.Initialize())
             {
                 var loggerFactory = container.GetInstance<ILoggerFactory>();
-                var logger = loggerFactory.CreateLogger<Program>();
-                var helper = container.GetInstance<EmployerFinanceDatabaseHelper>();
+                var logger = loggerFactory.CreateLogger(typeof(Program));
+                var deployDatabaseJob = container.GetInstance<DeployDatabaseJob>();
                 
                 try
                 {
-                    helper.Deploy(args?.FirstOrDefault());
+                    deployDatabaseJob.Deploy(args?.FirstOrDefault());
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    logger.LogError(e.GetAggregateMessage(), e);
+                    logger.LogError(ex.GetAggregateMessage(), ex);
                     
                     return -1;
                 }

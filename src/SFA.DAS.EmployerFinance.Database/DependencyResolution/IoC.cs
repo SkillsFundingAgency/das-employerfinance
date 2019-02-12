@@ -1,5 +1,4 @@
-﻿using SFA.DAS.AutoConfiguration.DependencyResolution;
-using SFA.DAS.EmployerFinance.DependencyResolution;
+﻿using SFA.DAS.EmployerFinance.DependencyResolution;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Database.DependencyResolution
@@ -10,8 +9,8 @@ namespace SFA.DAS.EmployerFinance.Database.DependencyResolution
         {
             return new Container(c =>
             {
-                c.AddRegistry<AutoConfigurationRegistry>();
-                c.AddRegistry<LoggingRegistry>();
+                c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

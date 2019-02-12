@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
             registry.IncludeRegistry<DataRegistry>();
             registry.IncludeRegistry<EmployerFinanceApiClientRegistry>();
             registry.IncludeRegistry<EntityFrameworkCoreUnitOfWorkRegistry<EmployerFinanceDbContext>>();
-            registry.IncludeRegistry<LoggingRegistry>();
+            registry.IncludeRegistry<LoggerRegistry>();
             registry.IncludeRegistry<MapperRegistry>();
             registry.IncludeRegistry<MediatorRegistry>();
             registry.IncludeRegistry<NServiceBusClientUnitOfWorkRegistry>();

@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-using SFA.DAS.AutoConfiguration;
-using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
+using SFA.DAS.EmployerFinance.Types.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Database.DependencyResolution
@@ -10,9 +11,8 @@ namespace SFA.DAS.EmployerFinance.Database.DependencyResolution
     {
         public DefaultRegistry()
         {
-            For<ILoggerFactory>().Use<NLogLoggerFactory>();
-            For<EmployerFinanceConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerFinanceConfiguration>(ConfigurationKeys.EmployerFinance)).Singleton();
-            For<EmployerFinanceDatabaseHelper>().Use<EmployerFinanceDatabaseHelper>();        
+            For<IConfiguration>().Use(() => new ConfigurationBuilder().AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base).Build()).Singleton();
+            For<ILoggerFactory>().Use(() => new LoggerFactory().AddNLog()).Singleton();
         }
     }
 }

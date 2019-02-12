@@ -5,15 +5,15 @@ using DbUp;
 
 namespace SFA.DAS.EmployerFinance.Database
 {
-    public class EmployerFinanceDatabaseHelper
+    public class DeployDatabaseJob
     {
         private readonly ILogger _logger;
         private readonly EmployerFinanceConfiguration _configuration;
        
-        public EmployerFinanceDatabaseHelper(ILogger logger, EmployerFinanceConfiguration configuration)
+        public DeployDatabaseJob(EmployerFinanceConfiguration configuration, ILogger logger)
         {
-            _logger = logger;
             _configuration = configuration;
+            _logger = logger;
         }
 
         public void Deploy(string connectionString = null)
