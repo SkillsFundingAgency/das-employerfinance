@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.NServiceBus;
 using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.NServiceBus;
@@ -43,11 +42,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.Startup
                         .UseStructureMapBuilder(container);
                     
                     var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
-                    
-                    applicationLifetime.ApplicationStopping.Register(() =>
-                    {
-                        endpoint.Stop().GetAwaiter().GetResult();
-                    });
                     
                     return endpoint;
                 })
