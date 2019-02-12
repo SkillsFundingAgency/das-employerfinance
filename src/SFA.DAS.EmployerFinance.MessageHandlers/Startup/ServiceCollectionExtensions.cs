@@ -11,6 +11,7 @@ using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.Startup
@@ -38,7 +39,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.Startup
                         .UseOutbox()
                         .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                         .UseInstallers()
-                        .UseStructureMapBuilder(container);
+                        .UseStructureMapBuilder(container)
+                        .UseUnitOfWork();
                     
                     var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
                     
