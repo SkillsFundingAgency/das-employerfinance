@@ -22,7 +22,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.Startup
             return services
                 .AddSingleton(s =>
                 {
-                    var applicationLifetime = s.GetService<IApplicationLifetime>();
                     var configuration = s.GetService<IConfiguration>();
                     var container = s.GetService<IContainer>();
                     var hostingEnvironment = s.GetService<IHostingEnvironment>();
