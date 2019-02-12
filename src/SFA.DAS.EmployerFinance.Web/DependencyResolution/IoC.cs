@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.AutoConfiguration.DependencyResolution;
 using SFA.DAS.EmployerFinance.Api.Client.DependencyResolution;
 using SFA.DAS.EmployerFinance.Data;
 using StructureMap;
@@ -13,24 +10,18 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
 {
     public static class IoC
     {
-        public static IContainer Initialize(IEnumerable<ServiceDescriptor> descriptors)
+        public static void Initialize(Registry registry)
         {
-            return new Container(c =>
-            {
-                c.AddRegistry<AutoConfigurationRegistry>();
-                c.AddRegistry<ConfigurationRegistry>();
-                c.AddRegistry<DataRegistry>();
-                c.AddRegistry<EmployerFinanceApiClientRegistry>();
-                c.AddRegistry<EntityFrameworkCoreUnitOfWorkRegistry<EmployerFinanceDbContext>>();
-                c.AddRegistry<LoggingRegistry>();
-                c.AddRegistry<MapperRegistry>();
-                c.AddRegistry<MediatorRegistry>();
-                c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
-                c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
-                c.AddRegistry<StartupRegistry>();
-                c.AddRegistry<DefaultRegistry>();
-                c.Populate(descriptors);
-            });
+            registry.IncludeRegistry<ConfigurationRegistry>();
+            registry.IncludeRegistry<DataRegistry>();
+            registry.IncludeRegistry<EmployerFinanceApiClientRegistry>();
+            registry.IncludeRegistry<EntityFrameworkCoreUnitOfWorkRegistry<EmployerFinanceDbContext>>();
+            registry.IncludeRegistry<LoggerRegistry>();
+            registry.IncludeRegistry<MapperRegistry>();
+            registry.IncludeRegistry<MediatorRegistry>();
+            registry.IncludeRegistry<NServiceBusClientUnitOfWorkRegistry>();
+            registry.IncludeRegistry<NServiceBusUnitOfWorkRegistry>();
+            registry.IncludeRegistry<DefaultRegistry>();
         }
     }
 }
