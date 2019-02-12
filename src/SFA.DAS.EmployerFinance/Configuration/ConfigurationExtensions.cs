@@ -6,9 +6,13 @@ namespace SFA.DAS.EmployerFinance.Configuration
 {
     public static class ConfigurationExtensions
     {
-        public static TConfig GetEmployerFinanceSection<TConfig>(this IConfiguration configuration, params string[] subSectionPath)
+        public static TConfiguration GetEmployerFinanceSection<TConfiguration>(this IConfiguration configuration, params string[] subSectionPath)
         {
-            return configuration.GetSection(string.Join(":", Enumerable.Repeat(EmployerFinanceConfigurationKeys.Base, 1).Concat(subSectionPath))).Get<TConfig>();
+            var key = string.Join(":", Enumerable.Repeat(EmployerFinanceConfigurationKeys.Base, 1).Concat(subSectionPath));
+            var configurationSection = configuration.GetSection(key);
+            var value = configurationSection.Get<TConfiguration>();
+
+            return value;
         }
     }
 }

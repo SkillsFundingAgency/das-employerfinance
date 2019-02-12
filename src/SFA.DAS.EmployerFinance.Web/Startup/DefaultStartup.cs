@@ -1,19 +1,27 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Web.Authentication;
 using SFA.DAS.EmployerFinance.Web.DependencyResolution;
-using SFA.DAS.EmployerFinance.Web.Extensions;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
 {
     public class DefaultStartup
     {
+        private readonly EmployerFinanceConfiguration _employerFinanceConfiguration;
+
+        public DefaultStartup(IConfiguration configuration)
+        {
+            _employerFinanceConfiguration = configuration.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDasCookiePolicy()
                 .AddDasMvc()
-                .AddDasOidcAuthentication()
+                .AddDasOidcAuthentication(_employerFinanceConfiguration.Oidc)
                 .AddDasNServiceBus();
         }
 

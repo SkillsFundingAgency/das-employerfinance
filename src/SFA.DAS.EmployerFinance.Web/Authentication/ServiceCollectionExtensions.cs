@@ -15,14 +15,8 @@ namespace SFA.DAS.EmployerFinance.Web.Authentication
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddDasOidcAuthentication(this IServiceCollection services)
+        public static IServiceCollection AddDasOidcAuthentication(this IServiceCollection services, IOidcConfiguration oidcConfiguration)
         {
-            var serviceProvider = services.BuildServiceProvider();
-            var configuration = serviceProvider.GetService<IConfiguration>();
-            var hostingEnvironment = serviceProvider.GetService<IHostingEnvironment>();
-            var oidcConfiguration = configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc");
-            var isDevelopment = hostingEnvironment.IsDevelopment();
-            
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services
@@ -35,15 +29,11 @@ namespace SFA.DAS.EmployerFinance.Web.Authentication
                 })
                 .AddCookie(o =>
                 {
-                    if (!isDevelopment)
-                    {
-                        o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                        o.SlidingExpiration = true;
-                        o.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                    }
-                    
                     o.AccessDeniedPath = "/Error/403"; // TODO: once in same branch as error handling, point to forbidden error page
                     o.Cookie.Name = CookieNames.Authentication;
+                    o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    o.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                    o.SlidingExpiration = true;
                 })
                 .AddOpenIdConnect(o =>
                 {

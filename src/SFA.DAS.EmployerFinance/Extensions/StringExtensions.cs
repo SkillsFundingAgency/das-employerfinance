@@ -19,7 +19,6 @@ namespace SFA.DAS.EmployerFinance.Extensions
             return output;
         }
         
-        /// <returns>Stream that contains the supplied source string. The caller is responsible for disposing the stream.</returns>
         public static Stream ToStream(this string source)
         {
             var stream = new MemoryStream();
