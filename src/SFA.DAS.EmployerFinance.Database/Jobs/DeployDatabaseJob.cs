@@ -1,9 +1,9 @@
-using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerFinance.Configuration;
 using System.Reflection;
 using DbUp;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerFinance.Configuration;
 
-namespace SFA.DAS.EmployerFinance.Database
+namespace SFA.DAS.EmployerFinance.Database.Jobs
 {
     public class DeployDatabaseJob
     {
