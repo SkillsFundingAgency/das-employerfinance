@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         
         public IActionResult Index()
         {
-            _logger.LogDebug("Index page has been viewed");
+            _logger.LogInformation("Index page has been viewed");
             
             return View();
         }
