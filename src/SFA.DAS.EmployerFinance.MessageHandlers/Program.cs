@@ -9,13 +9,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
 {
     public static class Program
     {
-        public static void Main()
+        public static void Main(string[] args)
         {
             ServicePointManager.DefaultConnectionLimit = 50;
             
             var host = new HostBuilder()
                 .ConfigureDasWebJobs()
-                .ConfigureDasAppConfiguration()
+                .ConfigureDasAppConfiguration(args)
                 .ConfigureDasLogging()
                 .UseDasEnvironment()
                 .UseStructureMap()

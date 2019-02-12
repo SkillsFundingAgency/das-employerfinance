@@ -13,13 +13,14 @@ namespace SFA.DAS.EmployerFinance.Startup
 {
     public static class HostBuilderExtensions
     {
-        public static IHostBuilder ConfigureDasAppConfiguration(this IHostBuilder builder)
+        public static IHostBuilder ConfigureDasAppConfiguration(this IHostBuilder builder, string[] args)
         {
             return builder.ConfigureAppConfiguration((c, b) => b
+                .AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base)
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{c.HostingEnvironment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables()
-                .AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base));
+                .AddCommandLine(args));
         }
 
         public static IHostBuilder ConfigureDasLogging(this IHostBuilder builder)
