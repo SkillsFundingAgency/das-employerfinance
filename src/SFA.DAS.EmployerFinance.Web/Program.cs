@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerFinance.Web
                 .ConfigureDasAppConfiguration()
                 .ConfigureDasLogging()
                 .UseStructureMap()
-                .UseStartup<AspNetCoreStartup>();
+                .UseStartup<DefaultStartup>();
         }
     }
 }

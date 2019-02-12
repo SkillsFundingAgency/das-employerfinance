@@ -7,7 +7,7 @@ using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
 {
-    public class AspNetCoreStartup
+    public class DefaultStartup
     {
         public void ConfigureServices(IServiceCollection services)
         {
