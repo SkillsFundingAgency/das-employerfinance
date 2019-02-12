@@ -30,7 +30,6 @@
     <ItemGroup>
       <Folder Include="Application\Commands" />
       <Folder Include="Application\Queries" />
-      <Folder Include="Messaging" />
       <Folder Include="Web\Controllers" />
     </ItemGroup>
 

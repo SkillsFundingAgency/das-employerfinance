@@ -24,6 +24,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
         }
         
         [Test]
+        public Task WhenSendingHealthCheckRequest_ShouldGetUnhealthyStatusIfResponseReceivedIsOtherMessage()
+        {
+            return TestAsync(f => f.ReceiveOtherResponseMessage(), 
+                f => f.HealthCheckResult.Status.ShouldEqual(HealthStatus.Unhealthy));
+        }
+        
+        [Test]
         public Task WhenSendingHealthCheckRequest_ShouldGetUnHealthyStatusIfResponseNotReceived()
         {
             return TestAsync(f => f.DoNotReceiveResponseMessage(), 
@@ -81,6 +88,21 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
         {
             MessageSession.Setup(s => s.Send(It.IsAny<object>(), It.IsAny<SendOptions>()))
                           .Throws<Exception>();
+            
+            HealthCheckResult = await NServiceBusHealthCheck.CheckHealthAsync(new HealthCheckContext());
+        }
+        
+        public async Task ReceiveOtherResponseMessage()
+        {
+            MessageSession.Setup(s => s.Send(It.IsAny<object>(), It.IsAny<SendOptions>()))
+                .Callback<object, SendOptions>((obj, opt) =>
+                {
+                    if (obj is HealthCheckRequestMessage message)
+                    {
+                        ResponseHandler.Raise(handler =>
+                            handler.ReceivedResponse += null, ResponseHandler.Object, Guid.NewGuid());
+                    }
+                }).Returns(Task.CompletedTask);
             
             HealthCheckResult = await NServiceBusHealthCheck.CheckHealthAsync(new HealthCheckContext());
         }

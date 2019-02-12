@@ -29,16 +29,21 @@ namespace SFA.DAS.EmployerFinance.Web.HealthChecks
         
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
         {
+            var messageGuid = Guid.NewGuid();
+            
             var action = new EventHandler<Guid>((sender, messageId) =>
             {
-                _resetEvent.Set();
+                if (messageId == messageGuid)
+                {
+                    _resetEvent.Set();
+                }
             });
             
             _responseHandler.ReceivedResponse += action;
 
             try
             {
-                await _messageSession.SendLocal(new HealthCheckRequestMessage {Id = Guid.NewGuid()});
+                await _messageSession.SendLocal(new HealthCheckRequestMessage {Id = messageGuid});
 
                 if (_resetEvent.Wait(MessageResponseTimeoutMilliseconds))
                 {
