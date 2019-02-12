@@ -3,7 +3,8 @@
     "SFA.DAS.EmployerFinance.Jobs": {
       "commandName": "Project",
       "environmentVariables": {
-        "APPSETTING_EnvironmentName": "LOCAL"
+        "APPSETTING_EnvironmentName": "LOCAL",
+        "APPSETTING_LoggingRedisConnectionString": "localhost:6379"
       }
     }
   }
