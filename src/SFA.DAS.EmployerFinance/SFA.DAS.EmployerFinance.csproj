@@ -13,6 +13,7 @@
         <EmbeddedResource Include="Data\Scripts\Script0001CreateOutboxData.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0004CreateUsers.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0006DropHealthChecksUserRef.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0007DropHealthChecksTable.sql" />
     </ItemGroup>
 
     <ItemGroup>
@@ -34,6 +35,12 @@
     <ItemGroup>
         <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj" />
         <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Application\Commands" />
+      <Folder Include="Application\Queries" />
+      <Folder Include="Mappings" />
     </ItemGroup>  
 
 </Project>

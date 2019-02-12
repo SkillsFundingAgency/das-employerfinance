@@ -41,4 +41,8 @@
         <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="EventHandlers\EmployerFinance" />
+    </ItemGroup>
+
 </Project>

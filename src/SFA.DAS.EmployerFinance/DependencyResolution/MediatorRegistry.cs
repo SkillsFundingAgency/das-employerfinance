@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using SFA.DAS.EmployerFinance.Application.Commands.RunHealthCheck;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
@@ -13,7 +12,6 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             
             Scan(s =>
             {
-                s.AssemblyContainingType<RunHealthCheckCommandHandler>();
                 s.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
             });
         }

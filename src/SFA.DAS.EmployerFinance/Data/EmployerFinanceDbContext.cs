@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerFinance.Data
 {
     public class EmployerFinanceDbContext : DbContext
     {
-        public DbSet<HealthCheck> HealthChecks { get; set; }
+        
 
         public EmployerFinanceDbContext(DbContextOptions<EmployerFinanceDbContext> options) : base(options)
         {
@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerFinance.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new HealthCheckConfiguration());
+            
         }
     }
 }

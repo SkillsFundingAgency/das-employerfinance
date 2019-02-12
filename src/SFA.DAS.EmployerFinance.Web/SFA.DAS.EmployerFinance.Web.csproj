@@ -36,4 +36,12 @@
       <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="ViewModels" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\HealthCheck\Index.cshtml" />
+    </ItemGroup>
+
 </Project>
