@@ -107,10 +107,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
 
             //Assert
             Assert.IsNotNull(actual);
-            Assert.AreEqual(5, actual.Count);
+            Assert.AreEqual(4, actual.Count);
             Assert.AreEqual(0, actual.First().Value);
             Assert.AreEqual(9, actual.Skip(1).First().Value);
-            Assert.AreEqual(5, actual.Skip(2).First().Value);
+            Assert.AreEqual(8, actual.Skip(2).First().Value);
             Assert.AreEqual(5, actual.Last().Value);
         }
 
@@ -133,11 +133,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
 
             //Assert
             Assert.IsNotNull(actual);
-            Assert.AreEqual(6, actual.Count);
+            Assert.AreEqual(4, actual.Count);
             Assert.AreEqual(0, actual.First().Value);
             Assert.AreEqual(9, actual.Skip(1).First().Value);
-            Assert.AreEqual(5, actual.Skip(2).First().Value);
-            Assert.AreEqual(8, actual.Skip(3).First().Value);
+            Assert.AreEqual(8, actual.Skip(2).First().Value);
             Assert.AreEqual(5, actual.Last().Value);
         }
 
@@ -554,7 +553,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
 
             //Assert
             Assert.IsNotNull(actual);
-            Assert.AreEqual(7, actual.Count);
+            Assert.AreEqual(6, actual.Count);
             Assert.AreEqual(10, actual.First().Value);
             Assert.AreEqual(9, actual.Skip(1).First().Value);
             Assert.AreEqual(0, actual.Skip(2).First().Value);
