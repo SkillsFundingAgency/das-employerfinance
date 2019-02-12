@@ -7,7 +7,7 @@ variables:
   BuildConfiguration: release
 
 steps:
-- task: gittools.gitversion.gitversion-task.GitVersion@3
+- task: gittools.gitversion.gitversion-task.GitVersion@4
   displayName: GitVersion
   inputs:
     updateAssemblyInfo: true
@@ -19,12 +19,12 @@ steps:
     command: restore
     projects: '**/*.sln'
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet build'
+- task: VSBuild@1
+  displayName: 'Build solution'
   inputs:
-    command: test
-    projects: '**/*.sln'
-    arguments: '--configuration $(BuildConfiguration)'
+    solution: '**/*.sln'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
+    configuration: '$(BuildConfiguration)'
 
 
 - task: DotNetCoreCLI@2
@@ -34,57 +34,29 @@ steps:
     projects: '*\**\*UnitTests.csproj'
     arguments: '--configuration $(BuildConfiguration)'
 
-
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet pack'
-  inputs:
-    command: pack
-    packagesToPack: src/SFA.DAS.EmployerFinance.Types/SFA.DAS.EmployerFinance.Types.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;src/SFA.DAS.EmployerFinance.Api.Client/SFA.DAS.EmployerFinance.Api.Client.csproj
-    versioningScheme: byEnvVar
-    versionEnvVar: GitVersion.NuGetVersionV2
-
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publish Website'
+  displayName: 'Publish DB Job'
   inputs:
     command: publish
     publishWebProjects: false
-    projects: src/SFA.DAS.EmployerFinance.Web/SFA.DAS.EmployerFinance.Web.csproj
-    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
-
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publish API WebApp'
-  inputs:
-    command: publish
-    publishWebProjects: false
-    projects: src/SFA.DAS.EmployerFinance.Api/SFA.DAS.EmployerFinance.Api.csproj
-    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
-
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publish WebJobs'
-  inputs:
-    command: publish
-    publishWebProjects: false
-    projects: src/SFA.DAS.EmployerFinance.Jobs/SFA.DAS.EmployerFinance.Jobs.csproj
-    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publish MessageHandler WebJobs'
-  inputs:
-    command: publish
-    publishWebProjects: false
-    projects: src/SFA.DAS.EmployerFinance.MessageHandlers/SFA.DAS.EmployerFinance.MessageHandlers.csproj
-    arguments: '--configuration $(BuildConfiguration)  --output $(build.artifactstagingdirectory)'
+    projects: src/SFA.DAS.EmployerFinance.Database/SFA.DAS.EmployerFinance.Database.csproj
+    zipAfterPublish: false
+    arguments: '--self-contained -r "win-x64" --output $(build.artifactstagingdirectory)'
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
   inputs:
     Contents: |
      azure/**
-     src\**\bin\Release\*.dacpac
     TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack'
+  inputs:
+    command: pack
+    packagesToPack: src/SFA.DAS.EmployerFinance.Types/SFA.DAS.EmployerFinance.Types.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;src/SFA.DAS.EmployerFinance.Api.Client/SFA.DAS.EmployerFinance.Api.Client.csproj;
+    versioningScheme: byEnvVar
+    versionEnvVar: GitVersion.NuGetVersionV2
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'

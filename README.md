@@ -59,15 +59,25 @@ $ npm install -g gulp
 
 ### Add database
 
-Run in the `src/SFA.DAS.EmployerFinance.Jobs` directory:
+> Before adding the database, make sure you have setup your configuration correctly. 
+> If you have not added a command line argument for the database connection string then it will be resolved from the configuration json instead.
+
+Run in the `src/SFA.DAS.EmployerFinance.Database` directory:
 
 ```powershell
 > dotnet run
 ```
+Or to run with a custom database connection string:
+
+```powershell
+> dotnet run <database connection string>
+```
 
 * Wait until you see the following in the shell window and then press Ctrl + C:
-  * Finished deploying database
-  * Executed 'DeployDatabaseJob.Run'
+  ``` 
+  [SFA.DAS.EmployerFinance.Database.EmployerFinanceDatabaseHelper] - Finished deploying database 
+  ```
+  
 
 ### Add packages
 

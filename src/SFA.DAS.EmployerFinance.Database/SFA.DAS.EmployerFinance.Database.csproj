@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <LangVersion>latest</LangVersion>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="dbup-sqlserver" Version="4.2.0" />
+      <PackageReference Include="NLog.Extensions.Logging" Version="1.4.0" />
+      <PackageReference Include="NLog.Schema" Version="4.5.11" />
+      <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.1.5" />
+      <PackageReference Include="StructureMap" Version="4.7.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
+    </ItemGroup>   
+
+    <ItemGroup>
+      <Content Include="nlog.config">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>

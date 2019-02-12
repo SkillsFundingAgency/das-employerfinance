@@ -1,10 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk;Microsoft.NET.Sdk.Publish">
 
     <PropertyGroup>
         <LangVersion>latest</LangVersion>
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        
+        <IsWebJobProject>true</IsWebJobProject>
+        <OutputType>Exe</OutputType>
+        <WebJobName>EmployerFinance-Jobs</WebJobName>
+        <WebJobType>Continuous</WebJobType>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,10 +22,15 @@
         <Content Include="nlog.config">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <Content Include="run.cmd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="settings.job">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="dbup-sqlserver" Version="4.2.0" />
         <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.3" />
         <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="3.0.1" />
         <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.2" />
@@ -31,7 +41,6 @@
         <PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="4.1.1" />
         <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="4.1.1" />
         <PackageReference Include="StructureMap" Version="4.7.0" />
-        <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
         <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
     </ItemGroup>
 

@@ -150,7 +150,7 @@ namespace SFA.DAS.EmployerFinance.Types.Models
         private static decimal CalculateExpiryAmount(IDictionary<CalendarPeriod, decimal> fundsOut, DateTime expiryDate, decimal expiryAmount)
         {
             var fundsOutAvailable = fundsOut
-                .Where(c => new DateTime(c.Key.Year, c.Key.Month, 1) < expiryDate && c.Value > 0)
+                .Where(c => new DateTime(c.Key.Year, c.Key.Month, 1) <= expiryDate && c.Value > 0)
                 .ToList();
 
             if (!fundsOutAvailable.Any())
