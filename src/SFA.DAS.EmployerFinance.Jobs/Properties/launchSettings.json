@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "SFA.DAS.EmployerFinance.Jobs": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "APPSETTING_EnvironmentName": "LOCAL"
+      }
+    }
+  }
+}
