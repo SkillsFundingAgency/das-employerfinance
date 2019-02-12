@@ -33,22 +33,25 @@ namespace SFA.DAS.EmployerFinance.Web.HealthChecks
             
             var action = new EventHandler<Guid>((sender, messageId) =>
             {
-                if (messageId == messageGuid)
-                {
-                    _resetEvent.Set();
-                }
+                if (messageId != messageGuid) return;
+                
+                _logger.LogInformation($"Received response for health check request Id: {messageId}");
+                _resetEvent.Set();
             });
             
             _responseHandler.ReceivedResponse += action;
 
             try
             {
+                _logger.LogInformation($"Sending health check NServiceBus request message with Id: {messageGuid}");
                 await _messageSession.SendLocal(new HealthCheckRequestMessage {Id = messageGuid});
 
                 if (_resetEvent.Wait(MessageResponseTimeoutMilliseconds))
                 {
                     return HealthCheckResult.Healthy();
                 }
+                
+                _logger.LogInformation($"Failed to get health check response before timeout for request ID: {messageGuid}");
             }
             catch (Exception e)
             {

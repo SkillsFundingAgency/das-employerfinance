@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.HealthChecks
         {
             _logger.LogInformation($"Received health check request ID: {message.Id}");
             
-            var response = new HealthCheckResponseMessage()
+            var response = new HealthCheckResponseMessage
             {
                 Id = message.Id
             };
