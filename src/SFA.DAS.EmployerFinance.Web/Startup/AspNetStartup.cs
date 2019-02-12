@@ -8,11 +8,11 @@ using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
 {
-    public class DefaultStartup
+    public class AspNetStartup
     {
         private readonly EmployerFinanceConfiguration _employerFinanceConfiguration;
 
-        public DefaultStartup(IConfiguration configuration)
+        public AspNetStartup(IConfiguration configuration)
         {
             _employerFinanceConfiguration = configuration.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
         }

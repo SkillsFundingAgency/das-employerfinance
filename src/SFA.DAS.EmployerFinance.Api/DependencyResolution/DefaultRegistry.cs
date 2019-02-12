@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Hosting;
+using SFA.DAS.EmployerFinance.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api.DependencyResolution
@@ -6,7 +8,7 @@ namespace SFA.DAS.EmployerFinance.Api.DependencyResolution
     {
         public DefaultRegistry()
         {
-            
+            For<IHostingEnvironment>().Use<HostingEnvironmentAdapter>();
         }
     }
 }

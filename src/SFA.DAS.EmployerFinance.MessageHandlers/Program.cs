@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
                 .ConfigureDasWebJobs()
                 .ConfigureDasAppConfiguration()
                 .ConfigureDasLogging()
+                .UseDasEnvironment()
                 .UseStructureMap()
                 .UseConsoleLifetime()
                 .ConfigureServices(s => s.AddDasNServiceBus())

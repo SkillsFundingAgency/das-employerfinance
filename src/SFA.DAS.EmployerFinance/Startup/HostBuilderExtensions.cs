@@ -1,8 +1,10 @@
+using System;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog.Extensions.Logging;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerFinance.Types.Configuration;
 using StructureMap;
@@ -34,6 +36,14 @@ namespace SFA.DAS.EmployerFinance.Startup
 #pragma warning restore 618
 
             return builder;
+        }
+
+        public static IHostBuilder UseDasEnvironment(this IHostBuilder hostBuilder)
+        {
+            var environmentName = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
+            var mappedEnvironmentName = DasEnvironmentName.Map[environmentName];
+            
+            return hostBuilder.UseEnvironment(mappedEnvironmentName);
         }
         
         public static IHostBuilder UseStructureMap(this IHostBuilder builder)

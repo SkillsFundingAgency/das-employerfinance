@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.EmployerFinance.Web.Startup;
 using StructureMap.AspNetCore;
 
@@ -17,8 +18,10 @@ namespace SFA.DAS.EmployerFinance.Web
             return WebHost.CreateDefaultBuilder(args)
                 .ConfigureDasAppConfiguration()
                 .ConfigureDasLogging()
+                .UseDasEnvironment()
+                .UseKestrel(o => o.AddServerHeader = false)
                 .UseStructureMap()
-                .UseStartup<DefaultStartup>();
+                .UseStartup<AspNetStartup>();
         }
     }
 }
