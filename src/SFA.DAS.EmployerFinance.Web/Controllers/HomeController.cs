@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerFinance.Web.Models;
@@ -17,11 +18,12 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         
         public IActionResult Index()
         {
-            _logger.LogDebug("Index page has been viewed");
+            _logger.LogInformation("Index page has been viewed");
             
             return View();
         }
 
+        [AllowAnonymous]
         [Route("error")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -1,5 +1,4 @@
-﻿using SFA.DAS.AutoConfiguration.DependencyResolution;
-using StructureMap;
+﻿using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api.Client.DependencyResolution
 {
@@ -7,10 +6,8 @@ namespace SFA.DAS.EmployerFinance.Api.Client.DependencyResolution
     {
         public EmployerFinanceApiClientRegistry()
         {
-            IncludeRegistry<AutoConfigurationRegistry>();
             IncludeRegistry<ConfigurationRegistry>();
             IncludeRegistry<HttpRegistry>();
-          
         }
     }
 }

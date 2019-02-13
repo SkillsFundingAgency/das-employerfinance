@@ -59,15 +59,13 @@ $ npm install -g gulp
 
 ### Add database
 
-Run in the `src/SFA.DAS.EmployerFinance.Jobs` directory:
+Run in the `src/SFA.DAS.EmployerFinance.Database` directory:
 
 ```powershell
 > dotnet run
 ```
 
-* Wait until you see the following in the shell window and then press Ctrl + C:
-  * Finished deploying database
-  * Executed 'DeployDatabaseJob.Run'
+* Wait until you see `[SFA.DAS.EmployerFinance.Database.Jobs.DeployDatabaseJob] - Finished deploying database ` in the shell window and then press Ctrl + C.
 
 ### Add packages
 

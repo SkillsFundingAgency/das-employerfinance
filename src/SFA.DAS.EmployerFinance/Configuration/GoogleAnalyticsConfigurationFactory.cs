@@ -1,26 +1,26 @@
-using SFA.DAS.AutoConfiguration;
+using Microsoft.Extensions.Hosting;
 
 namespace SFA.DAS.EmployerFinance.Configuration
 {
     public class GoogleAnalyticsConfigurationFactory : IGoogleAnalyticsConfigurationFactory
     {
-        private readonly IEnvironmentService _environmentService;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public GoogleAnalyticsConfigurationFactory(IEnvironmentService environmentService)
+        public GoogleAnalyticsConfigurationFactory(IHostingEnvironment hostingEnvironment)
         {
-            _environmentService = environmentService;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public GoogleAnalyticsConfiguration CreateConfiguration()
         {
             var configuration = new GoogleAnalyticsConfiguration();
 
-            if (_environmentService.IsCurrent(DasEnv.PREPROD))
+            if (_hostingEnvironment.IsPreProduction())
             {
                 configuration.ContainerId = "GTM-KWQBWGJ";
                 configuration.TrackingId = "UA-83918739-9";
             }
-            else if (_environmentService.IsCurrent(DasEnv.PROD))
+            else if (_hostingEnvironment.IsProduction())
             {
                 configuration.ContainerId = "GTM-KWQBWGJ";
                 configuration.TrackingId = "UA-83918739-9";

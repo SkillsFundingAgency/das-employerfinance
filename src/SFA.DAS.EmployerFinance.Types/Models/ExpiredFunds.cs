@@ -40,41 +40,14 @@ namespace SFA.DAS.EmployerFinance.Types.Models
             }
             
             CalculateAndApplyExpiredFundsToFundsOut(fundsOut, expired);
-
-            CalculatedAndApplyRefundsToFundsIn(fundsIn, fundsOut);
-
+            
             CalculateAndApplyAdjustmentsToFundsIn(fundsIn, expiryPeriod);
             
             var expiredFunds = CalculatedExpiredFunds(fundsIn, fundsOut, expired, expiryPeriod);
 
             return expiredFunds;
         }
-
-        private static void CalculatedAndApplyRefundsToFundsIn(
-            IDictionary<CalendarPeriod, decimal> fundsIn, 
-            IDictionary<CalendarPeriod, decimal> fundsOut)
-        {
-            var refunds = fundsOut.Where(c => c.Value < 0)
-                                  .ToDictionary(key => key.Key, value => value.Value);
-
-            if (!refunds.Any())
-            {
-                return;
-            }
-            
-            foreach (var refund in refunds)
-            {
-                if (fundsIn.ContainsKey(refund.Key))
-                {
-                    fundsIn[refund.Key] += refund.Value * -1;
-                }
-                else
-                {
-                    fundsIn.Add(refund.Key,refund.Value * -1);
-                }
-            }
-        }
-
+        
         private static void CalculateAndApplyAdjustmentsToFundsIn(IDictionary<CalendarPeriod, decimal> fundsIn, int expiryPeriod)
         {
             if (!fundsIn.Any(c => c.Value < 0))
@@ -150,7 +123,7 @@ namespace SFA.DAS.EmployerFinance.Types.Models
         private static decimal CalculateExpiryAmount(IDictionary<CalendarPeriod, decimal> fundsOut, DateTime expiryDate, decimal expiryAmount)
         {
             var fundsOutAvailable = fundsOut
-                .Where(c => new DateTime(c.Key.Year, c.Key.Month, 1) < expiryDate && c.Value > 0)
+                .Where(c => new DateTime(c.Key.Year, c.Key.Month, 1) <= expiryDate && c.Value > 0)
                 .ToList();
 
             if (!fundsOutAvailable.Any())

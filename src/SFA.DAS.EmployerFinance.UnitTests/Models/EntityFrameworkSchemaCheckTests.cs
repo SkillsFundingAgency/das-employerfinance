@@ -1,11 +1,12 @@
 using System.Data.SqlClient;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.EmployerFinance.DependencyResolution;
-using StructureMap;
+using SFA.DAS.EmployerFinance.Types.Configuration;
 using TestSupport.EfSchemeCompare;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Models
@@ -20,31 +21,26 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         [Ignore("To be run adhoc (but could live in an integration test)")]
         public void CheckDatabaseSchemaAgainstEntityFrameworkExpectedSchema()
         {
-            using (var container = new Container(c =>
+            var configuration = new ConfigurationBuilder().AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base).Build();
+            var employerFinanceConfiguration = configuration.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
+            
+            using (var connection = new SqlConnection(employerFinanceConfiguration.DatabaseConnectionString))
             {
-                c.AddRegistry<ConfigurationRegistry>();
-            }))
-            {
-                var configuration = container.GetInstance<EmployerFinanceConfiguration>();
-                
-                using (var connection = new SqlConnection(configuration.DatabaseConnectionString))
+                var optionsBuilder = new DbContextOptionsBuilder<EmployerFinanceDbContext>().UseSqlServer(connection);
+
+                using (var context = new EmployerFinanceDbContext(optionsBuilder.Options))
                 {
-                    var optionsBuilder = new DbContextOptionsBuilder<EmployerFinanceDbContext>().UseSqlServer(connection);
-
-                    using (var context = new EmployerFinanceDbContext(optionsBuilder.Options))
+                    var config = new CompareEfSqlConfig
                     {
-                        var config = new CompareEfSqlConfig
-                        {
-                            TablesToIgnoreCommaDelimited = "ClientOutboxData,OutboxData"
-                        };
-                        
-                        config.IgnoreTheseErrors("EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Column 'Users', column name. Found = Id");
-                        
-                        var comparer = new CompareEfSql(config);
-                        var hasErrors = comparer.CompareEfWithDb(context);
+                        TablesToIgnoreCommaDelimited = "ClientOutboxData,OutboxData"
+                    };
+                    
+                    config.IgnoreTheseErrors("EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Column 'Users', column name. Found = Id");
+                    
+                    var comparer = new CompareEfSql(config);
+                    var hasErrors = comparer.CompareEfWithDb(context);
 
-                        hasErrors.Should().BeFalse(comparer.GetAllErrors);
-                    }
+                    hasErrors.Should().BeFalse(comparer.GetAllErrors);
                 }
             }
         }
