@@ -41,13 +41,17 @@ namespace SFA.DAS.EmployerFinance.Web
                 })
                 .AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            
+
             services.AddHealthChecks()
                 .AddSqlServer(_configuration["ConnectionStrings:DefaultConnection"])
                 .AddCheck<ApiHealthCheck>(
-                    "Employer Finance Api", 
-                    failureStatus: HealthStatus.Unhealthy, 
-                    tags: new[] { "ready" });;
+                    "Employer Finance Api",
+                    failureStatus: HealthStatus.Unhealthy,
+                    tags: new[] {"ready"})
+                .AddCheck<NServiceBusHealthCheck>(
+                    "Employer Finance NServiceBus",
+                    failureStatus: HealthStatus.Unhealthy,
+                    tags: new[] {"ready"});
 
             _container = IoC.Initialize(services);
             

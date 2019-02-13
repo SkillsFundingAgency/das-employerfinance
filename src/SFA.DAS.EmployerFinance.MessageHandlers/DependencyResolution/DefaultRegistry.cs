@@ -1,4 +1,7 @@
-﻿using SFA.DAS.EmployerFinance.Data;
+﻿using NServiceBus;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.MessageHandlers.HealthChecks;
+using SFA.DAS.EmployerFinance.Messages.Messages;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
@@ -8,6 +11,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
         public DefaultRegistry()
         {
             For<IEmployerFinanceDbContextFactory>().Use<EmployerFinanceDbContextWithNServiceBusTransactionFactory>();
+            For<IHandleMessages<HealthCheckRequestMessage>>().Use<HealthCheckRequestMessageHandler>();
         }
     }
 }
