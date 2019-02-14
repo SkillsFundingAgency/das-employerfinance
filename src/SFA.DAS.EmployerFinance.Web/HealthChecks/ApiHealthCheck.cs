@@ -12,8 +12,10 @@ namespace SFA.DAS.EmployerFinance.Web.HealthChecks
 {
     public class ApiHealthCheck : IHealthCheck
     {
+        private const string HealthCheckResultDescription = "Employer Finance Api check";
+        
         private readonly IEmployerFinanceApiClient _apiClient;
-        private readonly ILogger _logger;
+        private readonly ILogger<ApiHealthCheck> _logger;
 
         public ApiHealthCheck(IEmployerFinanceApiClient apiClient, ILogger<ApiHealthCheck> logger)
         {
@@ -35,12 +37,13 @@ namespace SFA.DAS.EmployerFinance.Web.HealthChecks
                 
                 _logger.LogInformation($"Employer Finance API ping successful and took {durationString}");
                 
-                return HealthCheckResult.Healthy("Api ping succeeded", new Dictionary<string, object>(){{"Duration", durationString}});
+                return HealthCheckResult.Healthy(HealthCheckResultDescription, 
+                    new Dictionary<string, object>(){{"Duration", durationString}});
             }
             catch (RestHttpClientException e)
             {
                 _logger.LogWarning($"Employer Finance API ping failed : [Code: {e.StatusCode}] - {e.ReasonPhrase}");
-                return HealthCheckResult.Unhealthy("Api ping failed", e);
+                return HealthCheckResult.Unhealthy(HealthCheckResultDescription, e);
             }
         }
     }

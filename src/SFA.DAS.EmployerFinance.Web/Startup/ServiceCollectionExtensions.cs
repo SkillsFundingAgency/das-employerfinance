@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                     "Employer Finance NServiceBus",
                     failureStatus: HealthStatus.Unhealthy,
                     tags: new[] {"ready"});
-
+            
             return services;
         }
 
@@ -88,6 +88,11 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                         .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                         .UseStructureMapBuilder(container)
                         .UseUnitOfWork();
+                    
+                    endpointConfiguration.EnableCallbacks(true);
+                    
+                    //TODO: DO we want to make the discriminator unique?
+                    endpointConfiguration.MakeInstanceUniquelyAddressable("SFA.DAS.EmployerFinanceV2.Web");
                     
                     var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
                     

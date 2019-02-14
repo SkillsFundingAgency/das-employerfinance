@@ -1,9 +1,11 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NServiceBus;
+using NServiceBus.Callbacks.Testing;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Messages.Messages;
 using SFA.DAS.EmployerFinance.Web.HealthChecks;
@@ -47,63 +49,51 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
 
     public class NServiceBusHealthCheckTestsFixture
     {
-        public Mock<IMessageSession> MessageSession { get; }
-        public Mock<INServiceBusHealthCheckResponseHandler> ResponseHandler { get; }
+        public TestableCallbackAwareSession MessageSession { get; }
         public Mock<ILogger<NServiceBusHealthCheck>> Logger { get; }
         public NServiceBusHealthCheck NServiceBusHealthCheck { get; }
         public HealthCheckResult HealthCheckResult { get; private set; }
 
         public NServiceBusHealthCheckTestsFixture()
         {
-            MessageSession = new Mock<IMessageSession>();
+            MessageSession = new TestableCallbackAwareSession();
             Logger = new Mock<ILogger<NServiceBusHealthCheck>>();
-            ResponseHandler = new Mock<INServiceBusHealthCheckResponseHandler>();
-            NServiceBusHealthCheck = new NServiceBusHealthCheck(MessageSession.Object, ResponseHandler.Object, Logger.Object)
-            {
-                MessageResponseTimeoutMilliseconds = 10
-            };
+
+            NServiceBusHealthCheck = new NServiceBusHealthCheck(MessageSession, Logger.Object, 500);
         }
 
         public async Task ReceiveResponseMessage()
         {
-            MessageSession.Setup(s => s.Send(It.IsAny<object>(), It.IsAny<SendOptions>()))
-                          .Callback<object, SendOptions>((obj, opt) =>
-            {
-                if (obj is HealthCheckRequestMessage message)
-                {
-                    ResponseHandler.Raise(handler =>
-                        handler.ReceivedResponse += null, ResponseHandler.Object, message.Id);
-                }
-            }).Returns(Task.CompletedTask);
-            
+            MessageSession.When(matcher: (HealthCheckRequestMessage message) => true, response: HealthStatus.Healthy);
             HealthCheckResult = await NServiceBusHealthCheck.CheckHealthAsync(new HealthCheckContext());
         }
         
         public async Task DoNotReceiveResponseMessage()
         {
-            HealthCheckResult = await NServiceBusHealthCheck.CheckHealthAsync(new HealthCheckContext());
+            var tokenSource = new CancellationTokenSource();
+
+            MessageSession.When(matcher: (HealthCheckRequestMessage message) =>
+            {
+                tokenSource.Cancel();
+                return false;
+            }, response: HealthStatus.Healthy);
+            
+            HealthCheckResult = await NServiceBusHealthCheck.CheckHealthAsync(new HealthCheckContext(), tokenSource.Token);
         }
         
         public async Task ExceptionThrownOnSend()
         {
-            MessageSession.Setup(s => s.Send(It.IsAny<object>(), It.IsAny<SendOptions>()))
-                          .Throws<Exception>();
-            
-            HealthCheckResult = await NServiceBusHealthCheck.CheckHealthAsync(new HealthCheckContext());
+            var messageSessionMock = new Mock<IMessageSession>();
+            messageSessionMock.Setup(s => s.Send(It.IsAny<object>(), It.IsAny<SendOptions>()))
+                              .Throws<Exception>();
+
+            var exceptionHealthChecker = new NServiceBusHealthCheck(messageSessionMock.Object, Logger.Object);
+            HealthCheckResult = await exceptionHealthChecker.CheckHealthAsync(new HealthCheckContext());
         }
         
         public async Task ReceiveOtherResponseMessage()
-        {
-            MessageSession.Setup(s => s.Send(It.IsAny<object>(), It.IsAny<SendOptions>()))
-                .Callback<object, SendOptions>((obj, opt) =>
-                {
-                    if (obj is HealthCheckRequestMessage message)
-                    {
-                        ResponseHandler.Raise(handler =>
-                            handler.ReceivedResponse += null, ResponseHandler.Object, Guid.NewGuid());
-                    }
-                }).Returns(Task.CompletedTask);
-            
+        {           
+            MessageSession.When(matcher: (HealthCheckRequestMessage message) => true, response: HealthStatus.Unhealthy);
             HealthCheckResult = await NServiceBusHealthCheck.CheckHealthAsync(new HealthCheckContext());
         }
     }

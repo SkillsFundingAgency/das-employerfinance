@@ -42,6 +42,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.Startup
                         .UseStructureMapBuilder(container)
                         .UseUnitOfWork();
                     
+                    endpointConfiguration.EnableCallbacks(makesRequests: false);
+                    
                     var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
                     
                     return endpoint;

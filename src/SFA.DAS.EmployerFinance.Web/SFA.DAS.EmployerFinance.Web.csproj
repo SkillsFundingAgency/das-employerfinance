@@ -21,6 +21,7 @@
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="2.2.0" />
         <PackageReference Include="NLog" Version="4.5.11" />
         <PackageReference Include="NLog.Schema" Version="4.5.11" />
+        <PackageReference Include="NServiceBus.Callbacks" Version="3.0.0" />
         <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.1.5" />
         <PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="4.1.1" />
         <PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="4.1.1" />
