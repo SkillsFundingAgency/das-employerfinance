@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using System.Reflection;
+using DbUp;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Database.DependencyResolution;
-using SFA.DAS.EmployerFinance.Database.Jobs;
-using SFA.DAS.EmployerFinance.Extensions;
 
 namespace SFA.DAS.EmployerFinance.Database
 {
@@ -15,21 +15,33 @@ namespace SFA.DAS.EmployerFinance.Database
             {
                 var loggerFactory = container.GetInstance<ILoggerFactory>();
                 var logger = loggerFactory.CreateLogger(typeof(Program));
-                var deployDatabaseJob = container.GetInstance<DeployDatabaseJob>();
+                var employerFinanceConfiguration = container.GetInstance<EmployerFinanceConfiguration>();
+                var databaseConnectionString = args?.FirstOrDefault() ?? employerFinanceConfiguration.DatabaseConnectionString;
                 
-                try
+                logger.LogInformation("Started deploying database");
+            
+                EnsureDatabase.For.SqlDatabase(databaseConnectionString);
+        
+                var upgradeEngine = DeployChanges.To
+                    .SqlDatabase(databaseConnectionString)
+                    .WithScriptsEmbeddedInAssembly(Assembly.GetAssembly(typeof(EmployerFinanceConfiguration)))
+                    .WithTransaction()
+                    .LogToAutodetectedLog()
+                    .Build();
+
+                var result = upgradeEngine.PerformUpgrade();
+
+                if (!result.Successful)
                 {
-                    deployDatabaseJob.Deploy(args?.FirstOrDefault());
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex.GetAggregateMessage(), ex);
-                    
+                    logger.LogError(result.Error, "Failed deploying database");
+
                     return -1;
                 }
-            }
+                
+                logger.LogInformation("Finished deploying database");
 
-            return 0;
+                return 0;
+            }
         }
     }
 }

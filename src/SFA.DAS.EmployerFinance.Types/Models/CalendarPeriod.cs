@@ -45,11 +45,19 @@ namespace SFA.DAS.EmployerFinance.Types.Models
 
         private static bool CheckPeriodsAreInSameTaxYear(DateTime firstPeriod, DateTime secondPeriod)
         {
-            var startPeriodTaxYear = GetTaxYearFromDate(firstPeriod);
 
-            var endPeriodTaxYear = GetTaxYearFromDate(secondPeriod);
+            var taxYearFirstMonth = GetTaxYearFromTransactionDate(firstPeriod);
+            var taxYearSecondMonth = GetTaxYearFromTransactionDate(secondPeriod);
+            var startPeriodTaxYear = GetTaxYearFromDate(taxYearFirstMonth);
+
+            var endPeriodTaxYear = GetTaxYearFromDate(taxYearSecondMonth);
 
             return startPeriodTaxYear == endPeriodTaxYear;
+        }
+
+        private static DateTime GetTaxYearFromTransactionDate(DateTime transactionDate)
+        {
+            return transactionDate.AddMonths(-1);
         }
 
         private static int GetTaxYearFromDate(DateTime firstPeriod)

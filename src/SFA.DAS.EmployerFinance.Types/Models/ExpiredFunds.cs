@@ -63,16 +63,12 @@ namespace SFA.DAS.EmployerFinance.Types.Models
                 var adjustmentAmount = adjustment.Value * -1;
 
                 var orderFundsIn = fundsIn.Where(c => c.Value > 0)
+                                          .Where(c=>c.Key <=adjustment.Key)
                                           .ToDictionary(c => c.Key, c => c.Value)
                                           .OrderByDescending(c => c.Key);
 
                 foreach (var fundsInValue in orderFundsIn)
                 {
-                    if (!FundsAreInExpiryPeriod(fundsInValue, adjustment.Key, expiryPeriod))
-                    {
-                        continue;
-                    }
-
                     if (fundsInValue.Value >= adjustmentAmount)
                     {
                         fundsIn[fundsInValue.Key] = fundsInValue.Value - adjustmentAmount;
@@ -146,25 +142,7 @@ namespace SFA.DAS.EmployerFinance.Types.Models
 
             return expiryAmount;
         }
-
-        private static bool FundsAreInExpiryPeriod(
-            KeyValuePair<CalendarPeriod, decimal> fundsInValue,
-            CalendarPeriod adjustment, int expiryPeriod)
-        {
-            var adjustmentStartPeriod = new DateTime(adjustment.Year, adjustment.Month, 1).AddMonths(expiryPeriod * -1);
-            
-            if (!adjustment.AreSameTaxYear(fundsInValue.Key))
-            {
-                return false;
-            }
-
-            var fundsInExpiredPeriod = fundsInValue.Key > new CalendarPeriod(adjustmentStartPeriod.Year, adjustmentStartPeriod.Month) 
-                                       && fundsInValue.Key <= adjustment;
-
-            return fundsInExpiredPeriod;
-
-        }
-
+        
         private static IDictionary<CalendarPeriod, decimal> CalculatedExpiredFunds(
             IDictionary<CalendarPeriod, decimal> fundsIn, 
             IDictionary<CalendarPeriod, decimal> fundsOut, 
