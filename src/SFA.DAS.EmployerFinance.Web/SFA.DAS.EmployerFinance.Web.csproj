@@ -16,7 +16,6 @@
         <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
         <PackageReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-        <PackageReference Include="NLog" Version="4.5.11" />
         <PackageReference Include="NLog.Schema" Version="4.5.11" />
         <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
         <PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="4.1.1" />

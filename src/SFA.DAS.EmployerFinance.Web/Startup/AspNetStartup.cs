@@ -21,8 +21,8 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
         {
             services.AddDasCookiePolicy()
                 .AddDasMvc()
-                .AddDasOidcAuthentication(_employerFinanceConfiguration.Oidc)
-                .AddDasNServiceBus();
+                .AddDasNServiceBus()
+                .AddDasOidcAuthentication(_employerFinanceConfiguration.Oidc);
         }
 
         public void ConfigureContainer(Registry registry)
@@ -32,13 +32,13 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
         
         public void Configure(IApplicationBuilder app)
         {
-            app.UseAuthentication()
-                .UseDasCultureInfo()
+            app.UseDasCultureInfo()
+                .UseDasErrorPages()
                 .UseHttpsRedirection()
                 .UseDasHsts()
-                .UseDasErrorPages()
                 .UseStaticFiles()
                 .UseCookiePolicy()
+                .UseAuthentication()
                 .UseDasUnitOfWork()
                 .UseMvc();
         }
