@@ -4,8 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog.Extensions.Logging;
+using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerFinance.Types.Configuration;
 using StructureMap;
 
@@ -16,11 +16,11 @@ namespace SFA.DAS.EmployerFinance.Startup
         public static IHostBuilder ConfigureDasAppConfiguration(this IHostBuilder builder, string[] args)
         {
             return builder.ConfigureAppConfiguration((c, b) => b
-                .AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base)
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{c.HostingEnvironment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables()
-                .AddCommandLine(args));
+                .AddCommandLine(args)
+                .AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base));
         }
 
         public static IHostBuilder ConfigureDasLogging(this IHostBuilder builder)

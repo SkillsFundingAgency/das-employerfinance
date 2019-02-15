@@ -3,10 +3,8 @@
 namespace SFA.DAS.EmployerFinance.Api.Controllers
 {
     [Route("healthcheck")]
-    [ApiController]
-    public class HealthCheckController : ControllerBase
+    public class HealthCheckController : Controller
     {
-        [HttpGet]
         public IActionResult Get()
         {
             return Ok();

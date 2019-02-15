@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Api.DependencyResolution;
 using StructureMap;
@@ -18,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.Api.Startup
             IoC.Initialize(registry);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseDasCultureInfo()
                 .UseDasHsts()

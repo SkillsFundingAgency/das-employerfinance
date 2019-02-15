@@ -1,11 +1,12 @@
 using System.Data.Common;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NServiceBus;
+using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.NServiceBus;
 using SFA.DAS.EmployerFinance.Startup;
@@ -38,7 +39,8 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             services
                 .AddMvc(o =>
                 {
-                    o.Filters.Add(new UrlsViewBagFilter());
+                    o.AddDasAuthorization();
+                    o.Filters.Add<UrlsViewBagFilter>();
                     o.RequireAuthorizationByDefault();
                 })
                 .AddControllersAsServices()

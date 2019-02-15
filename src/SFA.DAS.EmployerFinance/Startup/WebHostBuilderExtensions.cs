@@ -1,8 +1,8 @@
 using System;
 using Microsoft.AspNetCore.Hosting;
 using NLog.Web;
+using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerFinance.Types.Configuration;
 
 namespace SFA.DAS.EmployerFinance.Startup
@@ -11,9 +11,8 @@ namespace SFA.DAS.EmployerFinance.Startup
     {
         public static IWebHostBuilder ConfigureDasAppConfiguration(this IWebHostBuilder hostBuilder)
         {
-            return hostBuilder.ConfigureAppConfiguration(c => c.AddAzureTableStorage(
-                EmployerFinanceConfigurationKeys.Base,
-                EmployerFinanceConfigurationKeys.ApiClient));
+            return hostBuilder.ConfigureAppConfiguration(c => c
+                .AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base, EmployerFinanceConfigurationKeys.ApiClient));
         }
 
         public static IWebHostBuilder ConfigureDasLogging(this IWebHostBuilder hostBuilder)

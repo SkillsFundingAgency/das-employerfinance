@@ -13,15 +13,13 @@ namespace SFA.DAS.EmployerFinance.Web
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        private static IWebHostBuilder CreateWebHostBuilder(string[] args)
-        {
-            return WebHost.CreateDefaultBuilder(args)
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args) => 
+            WebHost.CreateDefaultBuilder(args)
                 .ConfigureDasAppConfiguration()
                 .ConfigureDasLogging()
                 .UseDasEnvironment()
                 .UseKestrel(o => o.AddServerHeader = false)
                 .UseStructureMap()
                 .UseStartup<AspNetStartup>();
-        }
     }
 }

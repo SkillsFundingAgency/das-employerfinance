@@ -1,3 +1,4 @@
+using SFA.DAS.Authorization.EmployerUserRoles;
 using SFA.DAS.EmployerFinance.Api.Client.DependencyResolution;
 using SFA.DAS.EmployerFinance.Data;
 using StructureMap;
@@ -15,7 +16,9 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
             registry.IncludeRegistry<ConfigurationRegistry>();
             registry.IncludeRegistry<DataRegistry>();
             registry.IncludeRegistry<EmployerFinanceApiClientRegistry>();
+            registry.IncludeRegistry<EmployerUserRolesAuthorizationRegistry>();
             registry.IncludeRegistry<EntityFrameworkCoreUnitOfWorkRegistry<EmployerFinanceDbContext>>();
+            registry.IncludeRegistry<HashingRegistry>();
             registry.IncludeRegistry<LoggerRegistry>();
             registry.IncludeRegistry<MapperRegistry>();
             registry.IncludeRegistry<MediatorRegistry>();
