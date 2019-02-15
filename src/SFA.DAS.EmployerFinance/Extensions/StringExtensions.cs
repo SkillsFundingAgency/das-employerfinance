@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Net;
+﻿using System.Net;
 
 namespace SFA.DAS.EmployerFinance.Extensions
 {
@@ -10,25 +9,6 @@ namespace SFA.DAS.EmployerFinance.Extensions
             var output = WebUtility.HtmlDecode(input);
 
             return output;
-        }
-
-        public static string HtmlEncode(this string input)
-        {
-            var output = WebUtility.HtmlEncode(input);
-
-            return output;
-        }
-        
-        public static Stream ToStream(this string source)
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            
-            writer.Write(source);
-            writer.Flush();
-            stream.Position = 0;
-            
-            return stream;
         }
     }
 }

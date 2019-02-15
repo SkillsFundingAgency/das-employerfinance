@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-using SFA.DAS.EmployerFinance.Configuration.AzureTableStorage;
+using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerFinance.Types.Configuration;
 using StructureMap;
 
