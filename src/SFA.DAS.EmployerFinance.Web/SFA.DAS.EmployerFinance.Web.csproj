@@ -17,6 +17,8 @@
         <PackageReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
         <PackageReference Include="NLog.Schema" Version="4.5.11" />
+        <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="2.0.1" />
+        <PackageReference Include="SFA.DAS.Authorization.Mvc" Version="2.0.1" />
         <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
         <PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="4.1.1" />
         <PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="4.1.1" />

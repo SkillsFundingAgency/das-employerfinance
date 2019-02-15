@@ -1,26 +1,32 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerFinance.Web.Models;
+using SFA.DAS.EmployerFinance.Web.Urls;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
     [Route("")]
     public class HomeController : Controller
     {
-        private readonly ILogger _logger;
+        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IEmployerUrls _employerUrls;
 
-        public HomeController(ILogger logger)
+        public HomeController(IHostingEnvironment hostingEnvironment, IEmployerUrls employerUrls)
         {
-            _logger = logger;
+            _hostingEnvironment = hostingEnvironment;
+            _employerUrls = employerUrls;
         }
         
         public IActionResult Index()
         {
-            _logger.LogInformation("Index page has been viewed");
-            
-            return View();
+            if (_hostingEnvironment.IsDevelopment())
+            {
+                return RedirectToAction("Index", "Transactions", new { accountHashedId = "JRML7V" });
+            }
+
+            return Redirect(_employerUrls.Homepage());
         }
 
         [AllowAnonymous]
