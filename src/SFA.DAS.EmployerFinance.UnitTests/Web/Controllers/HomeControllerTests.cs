@@ -1,6 +1,6 @@
 using FluentAssertions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Web.Controllers;

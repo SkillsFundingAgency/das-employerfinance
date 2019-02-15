@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerFinance.Web.Authorization
