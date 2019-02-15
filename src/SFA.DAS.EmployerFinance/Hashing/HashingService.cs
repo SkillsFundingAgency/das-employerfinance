@@ -11,13 +11,6 @@ namespace SFA.DAS.EmployerFinance.Hashing
         {
             _hashIds = new Hashids(salt, 6, characters);
         }
-        
-        public long DecodeValue(string input)
-        {
-            var output = _hashIds.DecodeLong(input).Single();
-
-            return output;
-        }
 
         public bool TryDecodeValue(string input, out long output)
         {
