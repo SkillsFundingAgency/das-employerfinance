@@ -1,7 +1,7 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 
-namespace SFA.DAS.EmployerFinance.Api.Startup
+namespace SFA.DAS.EmployerFinance.Startup
 {
     public static class CultureInfoStartup
     {

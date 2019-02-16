@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Api.DependencyResolution;
+using SFA.DAS.EmployerFinance.Startup;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api.Startup

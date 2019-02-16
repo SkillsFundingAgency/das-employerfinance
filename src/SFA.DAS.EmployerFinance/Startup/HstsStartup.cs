@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace SFA.DAS.EmployerFinance.Web.Startup
+namespace SFA.DAS.EmployerFinance.Startup
 {
     public static class HstsStartup
     {
