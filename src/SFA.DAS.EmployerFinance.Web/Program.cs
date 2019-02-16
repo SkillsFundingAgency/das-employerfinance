@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using NLog.Web;
+using SFA.DAS.EmployerFinance.Startup;
+using SFA.DAS.EmployerFinance.Web.Startup;
 using StructureMap.AspNetCore;
 
 namespace SFA.DAS.EmployerFinance.Web
@@ -12,12 +13,13 @@ namespace SFA.DAS.EmployerFinance.Web
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args) => 
             WebHost.CreateDefaultBuilder(args)
-                .UseKestrel(options => options.AddServerHeader = false)
-                .UseStartup<Startup>()
+                .ConfigureDasAppConfiguration()
+                .ConfigureDasLogging()
+                .UseDasEnvironment()
+                .UseKestrel(o => o.AddServerHeader = false)
                 .UseStructureMap()
-                .UseNLog(); 
+                .UseStartup<AspNetStartup>();
     }
-
 }

@@ -2,126 +2,171 @@
 
 [![Build status](https://sfa-gov-uk.visualstudio.com/Digital%20Apprenticeship%20Service/_apis/build/status/Manage%20Apprenticeships/das-employerfinance)](https://sfa-gov-uk.visualstudio.com/Digital%20Apprenticeship%20Service/_build/latest?definitionId=1212)
 
-#### Requirements
+## Requirements
 
-1. Install [Visual Studio] with these workloads:
-    * ASP.NET and web development
-    * Azure development
-    * Data storage and processing
-    * .NET Core cross-platform development 
-2. Install [Azure Storage Explorer] 
-3. Download [Git] and clone the project to your desired local location.
+1. Install [.NET Core].
+2. Install [Docker].
+3. Install [Node].
+4. Install [Npm].
+5. Install [Gulp].
 
-[Azure Storage Explorer]: http://storageexplorer.com
-[Visual Studio]: https://www.visualstudio.com
-[Git]: https://git-scm.com/
+### Windows
 
-#### Setup
+Run the following PowerShell commands in the `tools` directory, [Choclatey] will also be installed:
 
-##### Add configuration to Azure Storage Emulator
+```powershell
+> iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
+> choco install dotnetcore-sdk
+> choco install docker-desktop
+> & "$Env:PROGRAMFILES\Docker\Docker\Docker for Windows.exe"
+> docker-compose up -d
+> choco install nodejs
+> npm install -g npm
+> npm install -g gulp
+```
+
+### macOS
+
+Run the following Bash commands in the `tools` directory, [Homebrew] will also be installed:
+
+```bash
+$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+$ brew tap caskroom/cask
+$ brew cask install dotnet-sdk
+$ brew cask install docker
+$ open -a docker
+$ docker-compose up -d
+$ brew install nodejs
+$ npm install -g npm
+$ npm install -g gulp
+```
+
+## Setup
+
+### Add configuration
 
 * Clone the [das-employer-config](https://github.com/SkillsFundingAgency/das-employer-config) repository.
 * Clone the [das-employer-config-updater](https://github.com/SkillsFundingAgency/das-employer-config-updater) repository.
-* Run Azure Storage Emulator.
-* Open the `das-employer-config-updater` solution in Visual Studio.
-* Press F5 and follow the instructions to import the config from the directory that you cloned the `das-employer-config repository` to.
+* Run in the `das-employer-config-updater` directory:
+
+```powershell
+> dotnet run
+```
+
+* Follow the instructions to import the config from the directory that you cloned the `das-employer-config` repository to.
 
 > The two repositories above are private. If the links appear to be dead, make sure that you're logged into GitHub with an account that has access to these i.e. that you are part of the Skills Funding Agency Team organization.
 
-##### Add Certificates
+### Add database
 
-Execute DevInstall.ps1 as an admin in a legacy Powershell console (the script is currently not compatible with Powershell Core), to import required certificates into their appropriate store locations. If a dialog prompts you whether to install the dev certificate, click 'Yes'.
+Run in the `src/SFA.DAS.EmployerFinance.Database` directory:
 
-#### Development Tasks
+```powershell
+> dotnet run
+```
 
-##### Install GOV.UK Frontend
+* Wait until you see `[SFA.DAS.EmployerFinance.Database.Program] - Finished deploying database` in the shell window and then press Ctrl + C.
 
-GOV.UK Frontend is included in the project using npm. (There is also a direct reference in `_Layout.cshtml` to a GOV.UK Frontend asset stored in the CDN.)
+### Add packages
 
-To install the necessary node package locally to your worktree, which you'll need to do first if you want to e.g. update GOV.UK Frontend, follow one of these guides...
+Run in the `src/SFA.DAS.EmployerFinance.Web` directory:
 
-###### CLI
+```powershell
+> npm install
+```
 
-Change to the web project's directory, then run `npm install`.
+### Add certificates
 
-###### Visual Studio 2019
+```powershell
+> dotnet dev-certs https --trust
+```
 
-In the `SFA.DAS.EmployerFinance.Web` project, right click `package.json` and select `Restore Packages`.
+## Run
 
-###### Jetbrains Rider
+Run in the `src/SFA.DAS.EmployerFinance.Web` directory:
 
-In the `SFA.DAS.EmployerFinance.Web` project, right click `package.json` and select `Tools` > `Run 'npm install'`.
+```powershell
+> dotnet run
+```
 
-##### Update GOV.UK Frontend
+Alternatively:
 
-First, check to see if there is an update available. To do this, open your favourite shell, change directory to the web project, then execute...
+* Open `SFA.DAS.EmployerFinance.sln` in your IDE e.g. [Rider], [Visual Studio], [Visual Studio Code] etc.
+* Start debugging the `SFA.DAS.EmployerFinance.Web` project.
 
-`npm outdated govuk-frontend`
+## Test
 
-If an update is available, you'll see something like this...
+Run in the `src` directory:
+
+```powershell
+> dotnet test
+```
+
+## Gulp tasks
+
+Run in the `src/SFA.DAS.EmployerFinance.Web` directory:
+
+```powershell
+> gulp <task>
+```
+
+|Task|Description|
+|----|-----------|
+|`default`|Runs the `css` & `js` tasks.|
+|`css`|Compiles all scss files in `content/styles` to `wwwroot/css`.|
+|`js`|Copies all js files in `node_modules/govuk-frontend` to `content/javascript/govuk-frontend`.|
+
+Alternatively:
+
+### Rider
+
+* Right click `src/SFA.DAS.EmployerFinance.Web/gulpfile.js`.
+* Select `Tools` > `Show Gulp Tasks`.
+* Double click `<task>` or right click `<task>` then select `Run <task>`.
+
+### Visual Studio
+
+* Right click `src/SFA.DAS.EmployerFinance.Web/gulpfile.js`.
+* Select `Task Runner Explorer`.
+* Double click `<task>` or right click `<task>` then select `Run`.
+
+## GOV.UK Frontend
+
+GOV.UK Frontend is included in the project using npm. There is also a direct reference in `_Layout.cshtml` to a GOV.UK Frontend asset stored in the CDN. To ensure that the latest version is being used run in the `src/SFA.DAS.EmployerFinance.Web` directory:
+
+```powershell
+> npm outdated govuk-frontend
+```
+
+If an update is available then you'll see something like this:
 
 ```
 Package         Current  Wanted  Latest  Location
-govuk-frontend    2.5.0   2.5.1   2.5.1  asp.net
-``` 
+govuk-frontend    2.5.0   2.5.1   2.5.1   asp.net
+```
 
-If no update is available, the command will complete silently.
+If no update is available then the command will complete silently. To update the package run in the `src/SFA.DAS.EmployerFinance.Web` directory:
 
-To update the package, run
+```powershell
+> npm update govuk-frontend
+```
 
-`npm update govuk-frontend`
+As part of the update the default gulp task will run which will:
 
-As part of the update, the default gulp task will be run, which will...
+* Compile `content/styles/govuk-frontend.scss` to `wwwroot/css/govuk-frontend.css`.
+* Copy `node_modules/govuk-frontend/all.js` to `content/javascript/govuk-frontend/all.js`.
 
-* regenerate the GOV.UK Frontend css file in `wwwroot\css`
-* copy GOV.UK's `all.js` file to its location under the `Content\Javascript\govuk-frontend` folder
-
-When you next build the solution, the new `all.js` file is used as a source file in our bundling and minification process.
-
-##### Compile Sass
-
-The `das.css` file under `wwwroot/css` is generated from the sass file `content\styles\das.scss`, ~~which imports the GOV.UK Frontend's sass~~ and the `govuk-frontend.css` file is generated from `govuk-frontend.scss`, which imports the GOV.UK Frontend's sass.
-
-To generate a new version of the `wwwroot\css\das.css` file after updating our own `content\styles\das.scss` sass file, follow one of the following guides...
-
-###### CLI
-
-Change to the web project's directory, then run `gulp`.
-
-###### Visual Studio 2019
-
-In the `SFA.DAS.EmployerFinance.Web` project, right click `gulpfile.js` and select `Task Runner Explorer`.
-
-Then, in the Task Runner Explorer window, either double-click on `css`, or right click `css`, and select `Run`.
-
-###### Jetbrains Rider
-
-In the `SFA.DAS.EmployerFinance.Web` project, right click `gulpfile.js` and select `Tools` > `Show Gulp Tasks`.
-
-Then, in the Gulp window that appears, either double-click on `css`, or right click `css`, and select `Run css`.
-
-
-### macOS Differences
-
-#### Requirements
-
-1. Install [.Net Core]
-2. Install a .Net Core IDE (i.e [Jetbrains Rider], [VS Code])
-
-[.Net Core]: https://dotnet.microsoft.com/download
-[Jetbrains Rider]: https://www.jetbrains.com/rider
-[VS Code]: https://code.visualstudio.com/
-
-#### Setup
-
-##### Add Environment variables
-
-As macOS doesn't have an azure emulator you will need to set the configuration storage string to point to your external azure storage. To set this string just create the following environmental variable:
-
-**APPSETTING_ConfigurationStorageConnectionString --> 'You connection string'**
-
-Your IDE configuration will likely be the place to set any environmental variables. Jetbrains rider has this under the run time configuration settings.
-
-##### Add configuration to Azure Storage Emulator
-
-Currently the das-employer-config-updater does not run under .net core so you will need to import the config values manually.
+[.NET Core]: https://dotnet.microsoft.com/download
+[Azure Storage Explorer]: http://storageexplorer.com
+[Azurite]: https://github.com/azure/azurite
+[Choclatey]: https://chocolatey.org
+[Docker]: https://www.docker.com
+[Git]: https://git-scm.com
+[Gulp]: http://gulpjs.com
+[Homebrew]: https://brew.sh
+[Node]: http://nodejs.org
+[Npm]: https://www.npmjs.com/package/npm
+[Rider]: https://www.jetbrains.com/rider
+[SQL Server]: https://www.microsoft.com/en-us/sql-server/sql-server-2017
+[Visual Studio]: https://www.visualstudio.com
+[Visual Studio Code]: https://code.visualstudio.com

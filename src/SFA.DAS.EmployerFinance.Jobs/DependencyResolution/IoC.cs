@@ -1,20 +1,15 @@
 ﻿using SFA.DAS.EmployerFinance.DependencyResolution;
-using IContainer = StructureMap.IContainer;
-using Container = StructureMap.Container;
+using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
 {
     public static class IoC
     {
-        public static IContainer Initialize()
+        public static void Initialize(Registry registry)
         {
-            return new Container(c =>
-            {
-                c.AddRegistry<ConfigurationRegistry>();
-                c.AddRegistry<DataRegistry>();
-                c.AddRegistry<StartupRegistry>();
-                c.AddRegistry<DefaultRegistry>();
-            });
+            registry.IncludeRegistry<ConfigurationRegistry>();
+            registry.IncludeRegistry<DataRegistry>();
+            registry.IncludeRegistry<DefaultRegistry>();
         }
     }
 }

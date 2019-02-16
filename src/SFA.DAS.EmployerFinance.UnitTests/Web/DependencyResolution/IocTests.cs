@@ -8,13 +8,18 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.DependencyResolution
     [Parallelizable]
     public class IocTests
     {
-        [Test, Ignore("Fails on build server as doesn't have access to config")]
+        [Test]
+        [Ignore("Fails 1) everywhere as need to somehow mock IContext supplied by For() method 2) on build server as doesn't have access to config")]
         public void WhenIocIsInitializationThenContainerShouldBeValid()
         {
             var registry = new Registry();
+                
             IoC.Initialize(registry);
-            var container = new Container(registry);
-            container.AssertConfigurationIsValid();
+            
+            using (var container = new Container(registry))
+            {
+                container.AssertConfigurationIsValid();
+            }
         }
     }
 }

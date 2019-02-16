@@ -1,4 +1,5 @@
-﻿using StructureMap;
+﻿using SFA.DAS.EmployerFinance.Data;
+using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
 {
@@ -6,7 +7,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
     {
         public DefaultRegistry()
         {
-            
+            For<IEmployerFinanceDbContextFactory>().Use<EmployerFinanceDbContextWithNewTransactionFactory>();
         }
     }
 }

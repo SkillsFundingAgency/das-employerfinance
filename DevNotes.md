@@ -12,7 +12,11 @@ We might also want to bundle some or all of the GOV.UK / common DAS / site speci
 
 * GDPR / CheckConsentNeeded?
 * [Scope our node package](https://docs.npmjs.com/misc/scope) to Esfa?
+* Move npm & gulp configuration to the project root?
+* For federated sign-out, looks like we might be able to play with the cookie domain, path etc. and have 1 cookie, so any sub-site auto signs out of main site! see https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-2.2
+* authentication: ios on safari and same-site cookies, see https://brockallen.com/2019/01/11/same-site-cookies-asp-net-core-and-external-authentication-providers/
 
 ## Useful Links
 
-[Resolving dependencies during startup](https://stackoverflow.com/questions/32459670/resolving-instances-with-asp-net-core-di)
+* [Resolving dependencies during startup](https://stackoverflow.com/questions/32459670/resolving-instances-with-asp-net-core-di)
+* [Oidc](https://identityserver4.readthedocs.io/en/latest/quickstarts/3_interactive_login.html)

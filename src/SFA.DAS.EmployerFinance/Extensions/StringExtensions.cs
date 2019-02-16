@@ -10,12 +10,5 @@ namespace SFA.DAS.EmployerFinance.Extensions
 
             return output;
         }
-
-        public static string HtmlEncode(this string input)
-        {
-            var output = WebUtility.HtmlEncode(input);
-
-            return output;
-        }
     }
 }

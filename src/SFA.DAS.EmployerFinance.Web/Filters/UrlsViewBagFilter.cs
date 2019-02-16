@@ -1,34 +1,31 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Routing;
 using SFA.DAS.EmployerFinance.Web.RouteValues;
 using SFA.DAS.EmployerFinance.Web.Urls;
-using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Web.Filters
 {
     public class UrlsViewBagFilter : IAsyncActionFilter
     {
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        private readonly IEmployerUrls _employerUrls;
+
+        public UrlsViewBagFilter(IEmployerUrls employerUrls)
         {
-            var controller = context.Controller as Controller;
-            if (controller == null)
-            {
-                return;
-            }
-
-            var container = context.HttpContext.RequestServices.GetService<IContainer>();
-            var employerUrls = container.GetInstance<IEmployerUrls>();
-
-            var accountHashedId = (string)context.RouteData.Values[RouteValueKeys.AccountHashedId];
-            //todo: temporary hack
-            accountHashedId = "HASH";
-            employerUrls.Initialize(accountHashedId);
+            _employerUrls = employerUrls;
+        }
+        
+        public Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        {
+            var accountHashedId = (string)context.HttpContext.GetRouteValue(RouteValueKeys.AccountHashedId);
+            var controller = (Controller)context.Controller;
             
-            controller.ViewData["EmployerUrls"] = employerUrls;
+            _employerUrls.Initialize(accountHashedId);
 
-            await next();
+            controller.ViewData["EmployerUrls"] = _employerUrls;
+
+            return next();
         }
     }
 }
