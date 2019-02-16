@@ -16,7 +16,8 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/error.html");
+                app.UseStatusCodePagesWithReExecute("/{0}.html");
             }
 
             return app;

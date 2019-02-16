@@ -32,4 +32,10 @@
       <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\Shared\Errors\403.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Shared\Errors\404.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Shared\Errors\Error.cshtml" />
+    </ItemGroup>
+
 </Project>
