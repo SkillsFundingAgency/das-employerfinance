@@ -4,14 +4,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Web.Cookies;
 
-namespace SFA.DAS.EmployerFinance.Web.Authentication
+namespace SFA.DAS.EmployerFinance.Web.Startup
 {
-    public static class ServiceCollectionExtensions
+    public static class AuthenticationStartup
     {
         public static IServiceCollection AddDasOidcAuthentication(this IServiceCollection services, IOidcConfiguration oidcConfiguration)
         {
@@ -58,6 +61,14 @@ namespace SFA.DAS.EmployerFinance.Web.Authentication
                 });
             
             return services;
+        }
+        
+        public static void RequireAuthenticatedUser(this MvcOptions mvcOptions)
+        {
+            var authorizationPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+            var authorizeFilter = new AuthorizeFilter(authorizationPolicy);
+            
+            mvcOptions.Filters.Add(authorizeFilter);
         }
     }
 }
