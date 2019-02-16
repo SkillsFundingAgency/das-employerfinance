@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace SFA.DAS.EmployerFinance.Api.Startup
 {
-    public static class ServiceCollectionExtensions
+    public static class MvcStartup
     {
         public static IServiceCollection AddDasMvc(this IServiceCollection services)
         {

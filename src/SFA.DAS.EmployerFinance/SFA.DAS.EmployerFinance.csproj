@@ -13,6 +13,7 @@
         <EmbeddedResource Include="Data\Scripts\Script0001CreateOutboxData.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0004CreateUsers.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0006DropHealthChecksUserRef.sql" />
+        <EmbeddedResource Remove="Startup\**" />
     </ItemGroup>
 
     <ItemGroup>
