@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.EmployerUserRoles;
 using SFA.DAS.EmployerFinance.Hashing;
@@ -35,17 +36,17 @@ namespace SFA.DAS.EmployerFinance.Web.Authorization
         
         private (string HashedId, long? Id) GetAccountValues()
         {
-            if (!_httpContextAccessor.HttpContext.TryGetRouteValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
+            if (!_httpContextAccessor.HttpContext.GetRouteData().Values.TryGetValue(RouteValueKeys.AccountHashedId, out string accountHashedId))
             {
                 return (null, null);
             }
             
-            if (!_hashingService.TryDecodeValue(accountHashedId.ToString(), out var accountId))
+            if (!_hashingService.TryDecodeLong(accountHashedId, out var accountId))
             {
                 throw new UnauthorizedAccessException();
             }
 
-            return (accountHashedId.ToString(), accountId);
+            return (accountHashedId, accountId);
         }
 
         private (Guid? Ref, string Email) GetUserValues()

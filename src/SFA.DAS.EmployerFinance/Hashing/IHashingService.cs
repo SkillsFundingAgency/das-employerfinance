@@ -2,6 +2,6 @@ namespace SFA.DAS.EmployerFinance.Hashing
 {
     public interface IHashingService
     {
-        bool TryDecodeValue(string input, out long output);
+        bool TryDecodeLong(string input, out long output);
     }
 }

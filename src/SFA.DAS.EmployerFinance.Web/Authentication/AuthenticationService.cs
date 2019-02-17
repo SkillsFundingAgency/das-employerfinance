@@ -21,10 +21,11 @@ namespace SFA.DAS.EmployerFinance.Web.Authentication
         {
             var claimsIdentity = (ClaimsIdentity)_httpContextAccessor.HttpContext.User.Identity;
             var claim = claimsIdentity.FindFirst(key);
-            
-            value = claim?.Value;
+            var exists = claim != null;
 
-            return claim != null;
+            value = exists ? claim.Value : null;
+
+            return exists;
         }
     }
 }

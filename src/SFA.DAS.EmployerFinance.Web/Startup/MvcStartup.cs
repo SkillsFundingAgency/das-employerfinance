@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 .AddMvc(o =>
                 {
                     o.RequireAuthenticatedUser();
-                    o.AddDasAuthorization();
+                    o.AddAuthorization();
                     o.Filters.Add<UrlsViewBagFilter>();
                 })
                 .AddControllersAsServices()

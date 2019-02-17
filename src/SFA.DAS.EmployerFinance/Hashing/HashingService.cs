@@ -12,20 +12,14 @@ namespace SFA.DAS.EmployerFinance.Hashing
             _hashIds = new Hashids(salt, 6, characters);
         }
 
-        public bool TryDecodeValue(string input, out long output)
+        public bool TryDecodeLong(string input, out long output)
         {
-            var numbers = _hashIds.DecodeLong(input);
+            var results = _hashIds.DecodeLong(input);
+            var hasResults = results.Any();
 
-            if (!numbers.Any())
-            {
-                output = default;
-                
-                return false;
-            }
-
-            output = numbers.Single();
-
-            return true;
+            output = hasResults ? results.Single() : default;
+            
+            return hasResults;
         }
     }
 }

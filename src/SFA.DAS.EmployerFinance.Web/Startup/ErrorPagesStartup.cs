@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SFA.DAS.Authorization.Mvc;
 
 namespace SFA.DAS.EmployerFinance.Web.Startup
 {
@@ -17,10 +18,10 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             else
             {
                 app.UseExceptionHandler("/error.html");
-                app.UseStatusCodePagesWithReExecute("/{0}.html");
             }
 
-            return app;
+            return app.UseStatusCodePagesWithReExecute("/{0}.html")
+                .UseUnauthorizedAccessExceptionHandler();
         }
     }
 }

@@ -1,15 +1,23 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
 namespace SFA.DAS.EmployerFinance.Web.Extensions
 {
     public static class HttpContextExtensions
     {
-        public static bool TryGetRouteValue(this HttpContext httpContext, string key, out object value)
+        public static bool TryGetValue<T>(this RouteValueDictionary values, string key, out T value)
         {
-            value = httpContext.GetRouteValue(key);
+            var exists = values.TryGetValue(key, out var obj);
 
-            return value != null;
+            if (exists)
+            {
+                value = obj == null ? default : (T)obj;
+            }
+            else
+            {
+                value = default;
+            }
+
+            return exists;
         }
     }
 }

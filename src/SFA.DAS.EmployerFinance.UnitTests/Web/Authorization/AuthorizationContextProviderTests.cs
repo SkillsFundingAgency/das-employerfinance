@@ -100,7 +100,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.Authorization
             routeData.Values[RouteValueKeys.AccountHashedId] = AccountHashedId;
             
             RoutingFeature.Setup(f => f.RouteData).Returns(routeData);
-            HashingService.Setup(h => h.TryDecodeValue(AccountHashedId, out accountId)).Returns(true);
+            HashingService.Setup(h => h.TryDecodeLong(AccountHashedId, out accountId)).Returns(true);
             
             return this;
         }
@@ -115,7 +115,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.Authorization
             routeData.Values[RouteValueKeys.AccountHashedId] = AccountHashedId;
             
             RoutingFeature.Setup(f => f.RouteData).Returns(routeData);
-            HashingService.Setup(h => h.TryDecodeValue(AccountHashedId, out accountId)).Returns(false);
+            HashingService.Setup(h => h.TryDecodeLong(AccountHashedId, out accountId)).Returns(false);
             
             return this;
         }
