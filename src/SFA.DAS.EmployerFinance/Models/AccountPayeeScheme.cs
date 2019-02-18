@@ -4,7 +4,9 @@ namespace SFA.DAS.EmployerFinance.Models
 {
     public class AccountPayeeScheme
     {
+        public Account Account { get; private set; }
         public long AccountId { get; private set; }
+        public PayeScheme PayeeScheme { get; private set; }
         public string EmployerReferenceNumber { get; private set; }
         public DateTime Created { get; private set; }
         public DateTime? Updated { get; private set; }
