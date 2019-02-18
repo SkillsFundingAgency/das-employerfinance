@@ -25,6 +25,17 @@ namespace SFA.DAS.EmployerFinance.Models
         {
         }
         
+        public void UpdateName(string name, DateTime updated)
+        {
+            if (IsUpdatedNameDateChronological(updated) && IsUpdatedNameDifferent(name))
+            {
+                EnsureHasNotBeenDeleted();
+
+                Name = name;
+                Updated = updated;
+            }
+        }
+        
         internal void Delete(DateTime deleted)
         {
             EnsureHasNotBeenDeleted();
@@ -45,6 +56,16 @@ namespace SFA.DAS.EmployerFinance.Models
             {
                 throw new InvalidOperationException("Requires payee scheme has not been deleted");
             }
+        }
+        
+        private bool IsUpdatedNameDateChronological(DateTime updated)
+        {
+            return (Updated == null || updated > Updated.Value) && (Deleted == null || updated > Deleted.Value);
+        }
+
+        private bool IsUpdatedNameDifferent(string name)
+        {
+            return name != Name;
         }
     }
 }
