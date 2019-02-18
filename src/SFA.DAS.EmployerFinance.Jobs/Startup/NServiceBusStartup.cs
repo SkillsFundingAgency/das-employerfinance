@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.NServiceBus;
+using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.Startup
                     var isDevelopment = hostingEnvironment.IsDevelopment();
                 
                     var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinanceV2.Jobs")
-                        .UseAzureServiceBusTransport(() => configurationSection.ServiceBusConnectionString, isDevelopment)
+                        .UseAzureServiceBusTransport(isDevelopment, () => configurationSection.ServiceBusConnectionString)
                         .UseInstallers()
                         .UseLicense(configurationSection.NServiceBusLicense)
                         .UseMessageConventions()

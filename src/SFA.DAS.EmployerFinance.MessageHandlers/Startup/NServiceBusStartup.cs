@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.NServiceBus;
+using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
@@ -26,13 +26,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.Startup
                     var configuration = s.GetService<IConfiguration>();
                     var container = s.GetService<IContainer>();
                     var hostingEnvironment = s.GetService<IHostingEnvironment>();
-                    var configurationSection = configuration.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
+                    var employerFinanceConfiguration = configuration.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
                     var isDevelopment = hostingEnvironment.IsDevelopment();
                 
                     var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinanceV2.MessageHandlers")
-                        .UseAzureServiceBusTransport(() => configurationSection.ServiceBusConnectionString, isDevelopment)
+                        .UseAzureServiceBusTransport(isDevelopment, () => employerFinanceConfiguration.ServiceBusConnectionString)
                         .UseInstallers()
-                        .UseLicense(configurationSection.NServiceBusLicense)
+                        .UseLicense(employerFinanceConfiguration.NServiceBusLicense)
                         .UseMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
