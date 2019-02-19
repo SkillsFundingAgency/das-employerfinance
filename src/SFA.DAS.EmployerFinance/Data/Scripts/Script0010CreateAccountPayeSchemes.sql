@@ -7,7 +7,7 @@ CREATE TABLE [dbo].[AccountPayeSchemes]
   [Updated] DATETIME2 NULL,
   [Deleted] DATETIME2 NULL,
   CONSTRAINT [PK_AccountPayeSchemes] PRIMARY KEY CLUSTERED ([Id] ASC),
-  CONSTRAINT [FK_AccountPayeSchemes_Account_AccountId] FOREIGN KEY ([AccountId]) REFERENCES [Account] ([Id]),
+  CONSTRAINT [FK_AccountPayeSchemes_Account_AccountId] FOREIGN KEY ([AccountId]) REFERENCES [Accounts] ([Id]),
   CONSTRAINT [FK_AccountPayeSchemes_PayeSchemes_EmployerReferenceNumber] FOREIGN KEY ([EmployerReferenceNumber]) REFERENCES [PayeSchemes] ([EmployerReferenceNumber]),
   CONSTRAINT [UK_AccountPayeSchemes_AccountId_EmployerReferenceNumber] UNIQUE ([AccountId] ASC, [EmployerReferenceNumber] ASC),
   INDEX [IX_AccountPayeSchemes_AccountId] NONCLUSTERED ([AccountId] ASC),
