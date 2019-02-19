@@ -10,9 +10,9 @@ namespace SFA.DAS.EmployerFinance.Models
         public DateTime Created { get; private set; }
         public DateTime? Updated { get; private set; }
         public DateTime? Deleted { get; private set; }
-        public IEnumerable<AccountPayeeScheme> AccountPayeeSchemes => _accountPayeeScheme;
+        public IEnumerable<AccountPayeScheme> AccountPayeeSchemes => _accountPayeeScheme;
 
-        private readonly List<AccountPayeeScheme> _accountPayeeScheme = new List<AccountPayeeScheme>();
+        private readonly List<AccountPayeScheme> _accountPayeeScheme = new List<AccountPayeScheme>();
         
         public PayeScheme(string employerReferenceNumber, string name, DateTime created)
         {

@@ -2,7 +2,7 @@ using System;
 
 namespace SFA.DAS.EmployerFinance.Models
 {
-    public class AccountPayeeScheme
+    public class AccountPayeScheme
     {
         public Account Account { get; private set; }
         public long AccountId { get; private set; }
@@ -12,14 +12,14 @@ namespace SFA.DAS.EmployerFinance.Models
         public DateTime? Updated { get; private set; }
         public DateTime? Deleted { get; private set; }
         
-        internal AccountPayeeScheme(long accountId, string employerReferenceNumber, DateTime created)
+        internal AccountPayeScheme(long accountId, string employerReferenceNumber, DateTime created)
         {
             AccountId = accountId;
             EmployerReferenceNumber = employerReferenceNumber;
             Created = created;
         }
 
-        private AccountPayeeScheme()
+        private AccountPayeScheme()
         {
         }
 

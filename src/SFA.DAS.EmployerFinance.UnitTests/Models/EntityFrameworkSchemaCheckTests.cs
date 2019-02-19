@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
                 {
                     var config = new CompareEfSqlConfig
                     {
-                        TablesToIgnoreCommaDelimited = "ClientOutboxData,OutboxData"
+                        TablesToIgnoreCommaDelimited = "ClientOutboxData,OutboxData,SchemaVersions"
                     };
                     
                     config.IgnoreTheseErrors("EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Column 'Users', column name. Found = Id");
