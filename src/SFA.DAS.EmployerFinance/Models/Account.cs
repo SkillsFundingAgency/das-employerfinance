@@ -13,10 +13,10 @@ namespace SFA.DAS.EmployerFinance.Models
         public DateTime Created { get; private set; }
         public DateTime? Updated { get; private set; }
         public IEnumerable<AccountLegalEntity> AccountLegalEntities => _accountLegalEntities;
-        public IEnumerable<PayeScheme> PayeSchemes => _payeSchemes;
+        public IEnumerable<AccountPayeScheme> AccountPayeSchemes => _accountPayeSchemes;
         
         private readonly List<AccountLegalEntity> _accountLegalEntities = new List<AccountLegalEntity>();
-        private readonly List<PayeScheme> _payeSchemes = new List<PayeScheme>();
+        private readonly List<AccountPayeScheme> _accountPayeSchemes = new List<AccountPayeScheme>();
 
         public Account(long id, string hashedId, string publicHashedId, string name, DateTime created)
         {

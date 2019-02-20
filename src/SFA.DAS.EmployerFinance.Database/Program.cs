@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerFinance.Database
                 
                 logger.LogInformation("Started deploying database");
             
-                EnsureDatabase.For.SqlDatabase(databaseConnectionString);
+                EnsureDatabase.For.SqlDatabase(databaseConnectionString, 120);
         
                 var upgradeEngine = DeployChanges.To
                     .SqlDatabase(databaseConnectionString)
