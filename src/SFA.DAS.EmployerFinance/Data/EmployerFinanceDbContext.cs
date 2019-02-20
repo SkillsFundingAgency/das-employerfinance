@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerFinance.Data
     public class EmployerFinanceDbContext : DbContext
     {
         public DbSet<AccountLegalEntity> AccountLegalEntities { get; set; }
-        public DbSet<AccountPayeScheme> AccountPayeeSchemes { get; set; }
+        //public DbSet<AccountPayeScheme> AccountPayeeSchemes { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<HealthCheck> HealthChecks { get; set; }
         public DbSet<PayeScheme> PayeSchemes { get; set; }
@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.Data
         {
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
             modelBuilder.ApplyConfiguration(new AccountLegalEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new AccountPayeSchemeConfiguration());
+            //modelBuilder.ApplyConfiguration(new AccountPayeSchemeConfiguration());
             modelBuilder.ApplyConfiguration(new HealthCheckConfiguration());
             modelBuilder.ApplyConfiguration(new PayeSchemeConfiguration());
             modelBuilder.ApplyConfiguration(new ProviderConfiguration());

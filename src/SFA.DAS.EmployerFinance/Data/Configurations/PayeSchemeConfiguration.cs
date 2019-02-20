@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerFinance.Data.Configurations
         {
             builder.HasKey(p => p.EmployerReferenceNumber);
             builder.Property(p => p.EmployerReferenceNumber).ValueGeneratedNever().IsRequired().HasColumnType("varchar(16)");
-            builder.Property(p => p.Name).IsRequired().HasColumnType("nvarchar(60)");
+            builder.Property(p => p.Name).HasColumnType("nvarchar(60)");
         }
     }
 }

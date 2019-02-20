@@ -13,8 +13,10 @@ namespace SFA.DAS.EmployerFinance.Models
         public DateTime Created { get; private set; }
         public DateTime? Updated { get; private set; }
         public IEnumerable<AccountLegalEntity> AccountLegalEntities => _accountLegalEntities;
+        public IEnumerable<PayeScheme> PayeSchemes => _payeSchemes;
         
         private readonly List<AccountLegalEntity> _accountLegalEntities = new List<AccountLegalEntity>();
+        private readonly List<PayeScheme> _payeSchemes = new List<PayeScheme>();
 
         public Account(long id, string hashedId, string publicHashedId, string name, DateTime created)
         {
@@ -40,6 +42,12 @@ namespace SFA.DAS.EmployerFinance.Models
             return accountLegalEntity;
         }
 
+        public PayeScheme AddPayeScheme(DateTime added)
+        {
+            //todo: AddPayeScheme
+            throw new NotImplementedException();
+        }
+        
         public void UpdateName(string name, DateTime updated)
         {
             if (IsUpdatedNameDateChronological(updated) && IsUpdatedNameDifferent(name))

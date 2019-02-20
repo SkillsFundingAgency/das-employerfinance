@@ -7,13 +7,12 @@ namespace SFA.DAS.EmployerFinance.Models
     {
         public string EmployerReferenceNumber { get; private set; }
         public string Name { get; private set; }
+        public Account Account { get; private set; }
+        public long AccountID { get; private set; }
         public DateTime Created { get; private set; }
         public DateTime? Updated { get; private set; }
         public DateTime? Deleted { get; private set; }
-        public IEnumerable<AccountPayeScheme> AccountPayeeSchemes => _accountPayeeScheme;
 
-        private readonly List<AccountPayeScheme> _accountPayeeScheme = new List<AccountPayeScheme>();
-        
         public PayeScheme(string employerReferenceNumber, string name, DateTime created)
         {
             EmployerReferenceNumber = employerReferenceNumber;
@@ -39,13 +38,6 @@ namespace SFA.DAS.EmployerFinance.Models
         internal void Delete(DateTime deleted)
         {
             EnsureHasNotBeenDeleted();
-            
-            foreach (var accountPayeeScheme in _accountPayeeScheme)
-            {
-                accountPayeeScheme.Delete(deleted);
-            }
-            
-            _accountPayeeScheme.Clear();
             
             Deleted = deleted;
         }
