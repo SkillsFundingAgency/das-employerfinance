@@ -8,9 +8,9 @@ namespace SFA.DAS.EmployerFinance.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<PayeScheme> builder)
         {
-            builder.HasKey(p => p.EmployerReferenceNumber);
-            builder.Property(p => p.EmployerReferenceNumber).ValueGeneratedNever().IsRequired().HasColumnType("varchar(16)");
-            builder.Property(p => p.Name).HasColumnType("nvarchar(60)");
+            builder.HasKey(ps => ps.EmployerReferenceNumber);
+            builder.Property(ps => ps.EmployerReferenceNumber).ValueGeneratedNever().IsRequired().HasColumnType("varchar(16)");
+            builder.Property(ps => ps.Name).HasColumnType("nvarchar(60)");
         }
     }
 }
