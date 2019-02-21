@@ -3,7 +3,7 @@ Script to populate Account/Legal Entity data for employer finance v2 from MA sou
 
 Instructions for use:
 1. Think about obtaining a prod db backup for sourcing the data, since it kills the db
-2. Turn on SQL CMD mode
+2. Select 'Results to Text'
 3. Execute this script against MA employer_account database
 4. Execute the resulting script against EmployerFinanceV2 database
 
@@ -70,7 +70,7 @@ BEGIN TRY
 	insert into AccountLegalEntities([Id],[PublicHashedId],[AccountId],[Name], [Created])
 	select ale.[Id], ale.[PublicHashedId], ale.[AccountId], ale.[Name], ale.[Created] 
 	from @AccountLegalEntities ale
-	left join AccountLegalEntities e on e.[Id] = ale.[AccountLegalEntityId]
+	left join AccountLegalEntities e on e.[Id] = ale.[Id]
 	where e.[Id] is null --skip existing
 	print ''Inserted '' + convert(varchar,@@ROWCOUNT) + '' AccountLegalEntities''
 	print ''Completed''
