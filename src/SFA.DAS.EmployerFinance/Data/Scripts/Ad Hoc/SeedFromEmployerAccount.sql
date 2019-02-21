@@ -14,6 +14,8 @@ Expectations:
 ~27k+ AccountLegalEntities created
 */
 
+--todo: get copy of live and run against it, so no surprises!
+
 SET NOCOUNT ON
 
 declare @MAXINSERT int = 1000 --insert values() batch size (cannot be more than 1000)
@@ -21,6 +23,8 @@ declare @MAXINSERT int = 1000 --insert values() batch size (cannot be more than 
 --Some table var declarations
 print 'declare @Accounts table ([Id] bigint,[HashedId] char(6),[PublicHashedId] char(6),[Name] nvarchar(100),[Created] datetime2)'
 print 'declare @AccountLegalEntities table ([Id] bigint,[PublicHashedId] char(6),[AccountId] bigint,[Name] nvarchar(100),[Created] datetime2)'
+print 'declare @PayeSchemes table ([Id] bigint,[EmployerReferenceNumber] varchar(16),[Name] nvarchar(60),[Created] datetime2)'
+print 'declare @AccountPayeSchemes table ([Id] bigint,[AccountId] bigint,[EmployerReferenceNumber] varchar(16),[Created] datetime2)'
 
 BEGIN TRY
 
@@ -55,10 +59,25 @@ BEGIN TRY
     and ale.Deleted is null
   order by ale.Id asc
 
+    
+  --PayeSchemes
+  select
+      case (ROW_NUMBER() OVER (ORDER BY p.Ref) % @MAXINSERT) when 1 then 'insert into @PayeSchemes ([EmployerReferenceNumber],[Name],[Created]) values' + char(13) + char(10) else '' end +
+      ' (''' + convert(varchar,[Ref]) + '''' + ', ' + '''' + replace([Name],'''','''''') + '''' + ', ' + '''' + convert(varchar,CURRENT_TIMESTAMP,121) + '''' + ')' +
+      case when ((ROW_NUMBER() OVER (ORDER BY p.Ref) % @MAXINSERT = 0) OR (ROW_NUMBER() OVER (ORDER BY p.Ref) = (select count(1) from [employer_account].[Paye]))) then '' else ',' end
+  from
+    [employer_account].[Paye] p
+  order by p.Ref asc    
+
+    
+  --AccountPayeSchemes
+    
   --Final inserts
   print '
 	BEGIN TRANSACTION
-
+  '
+    
+  print '
 	insert into Accounts ([Id], [HashedId], [PublicHashedId], [Name], [Created])
 	select a.[Id], a.[HashedId], a.[PublicHashedId], a.[Name], a.[Created] from @Accounts a
 	left join Accounts e on e.[Id] = a.[Id]
@@ -67,14 +86,25 @@ BEGIN TRY
 	'
 
   print '
-	insert into AccountLegalEntities([Id],[PublicHashedId],[AccountId],[Name], [Created])
+	insert into AccountLegalEntities ([Id],[PublicHashedId],[AccountId],[Name], [Created])
 	select ale.[Id], ale.[PublicHashedId], ale.[AccountId], ale.[Name], ale.[Created] 
 	from @AccountLegalEntities ale
 	left join AccountLegalEntities e on e.[Id] = ale.[Id]
 	where e.[Id] is null --skip existing
 	print ''Inserted '' + convert(varchar,@@ROWCOUNT) + '' AccountLegalEntities''
-	print ''Completed''
+  '
 
+    --todo: generate created here, not into table var
+  print '
+	insert into PayeSchemes ([EmployerReferenceNumber], [Name], [Created])
+	select p.[EmployerReferenceNumber], p.[Name], p.[Created] from @PayeSchemes p
+	left join PayeSchemes e on e.[EmployerReferenceNumber] = p.[EmployerReferenceNumber]
+	where e.[EmployerReferenceNumber] is null --skip existing
+	print ''Inserted '' + convert(varchar,@@ROWCOUNT) + '' PayeSchemes''
+	'
+    
+  print '
+	print ''That''''s All Folks!''
 
 	COMMIT TRANSACTION
 	'
