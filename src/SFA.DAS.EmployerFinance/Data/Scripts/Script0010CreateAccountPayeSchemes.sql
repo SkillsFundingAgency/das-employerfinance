@@ -4,7 +4,6 @@ CREATE TABLE [dbo].[AccountPayeSchemes]
   [AccountId] BIGINT NOT NULL,
   [EmployerReferenceNumber] VARCHAR(16) NOT NULL,
   [Created] DATETIME2 NOT NULL,
-  [Updated] DATETIME2 NULL,
   [Deleted] DATETIME2 NULL,
   CONSTRAINT [PK_AccountPayeSchemes] PRIMARY KEY CLUSTERED ([Id] ASC),
   CONSTRAINT [FK_AccountPayeSchemes_Accounts_AccountId] FOREIGN KEY ([AccountId]) REFERENCES [Accounts] ([Id]),
