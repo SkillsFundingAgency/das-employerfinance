@@ -23,8 +23,8 @@ declare @MAXINSERT int = 1000 --insert values() batch size (cannot be more than 
 --Some table var declarations
 print 'declare @Accounts table ([Id] bigint,[HashedId] char(6),[PublicHashedId] char(6),[Name] nvarchar(100),[Created] datetime2)'
 print 'declare @AccountLegalEntities table ([Id] bigint,[PublicHashedId] char(6),[AccountId] bigint,[Name] nvarchar(100),[Created] datetime2)'
-print 'declare @PayeSchemes table ([Id] bigint,[EmployerReferenceNumber] varchar(16),[Name] nvarchar(60),[Created] datetime2)'
-print 'declare @AccountPayeSchemes table ([Id] bigint,[AccountId] bigint,[EmployerReferenceNumber] varchar(16),[Created] datetime2)'
+print 'declare @PayeSchemes table ([EmployerReferenceNumber] varchar(16),[Name] nvarchar(60),[Created] datetime2)'
+print 'declare @AccountPayeSchemes table ([AccountId] bigint,[EmployerReferenceNumber] varchar(16),[Created] datetime2,[Deleted] datetime2)'
 
 BEGIN TRY
 
@@ -71,7 +71,16 @@ BEGIN TRY
 
     
   --AccountPayeSchemes
+  --we need the old (removed) ones also
+  select
+      case (ROW_NUMBER() OVER (ORDER BY ah.Id) % @MAXINSERT) when 1 then 'insert into @AccountPayeSchemes ([AccountId],[EmployerReferenceNumber],[Created],[Deleted]) values' + char(13) + char(10) else '' end +
+      ' (''' + convert(varchar,[AccountId]) + ''', ''' + [PayeRef] + ''', ''' + convert(varchar,[AddedDate],121) + ''', ''' + coalesce('''' + convert(varchar,[RemovedDate],121) + '''', 'null') + ')' +
+      case when ((ROW_NUMBER() OVER (ORDER BY ah.Id) % @MAXINSERT = 0) OR (ROW_NUMBER() OVER (ORDER BY ah.Id) = (select count(1) from [employer_account].[AccountHistory]))) then '' else ',' end
+  from
+    [employer_account].[AccountHistory] ah
+  order by ah.Id asc
     
+
   --Final inserts
   print '
 	BEGIN TRANSACTION
@@ -102,7 +111,16 @@ BEGIN TRY
 	where e.[EmployerReferenceNumber] is null --skip existing
 	print ''Inserted '' + convert(varchar,@@ROWCOUNT) + '' PayeSchemes''
 	'
-    
+
+    --todo: check if not exists
+  print '
+	insert into AccountPayeSchemes ([AccountId], [EmployerReferenceNumber], [Created], [Deleted])
+	select aps.[AccountId], aps.[EmployerReferenceNumber], aps.[Created], aps.[Deleted] from @AccountPayeSchemes aps
+	left join AccountPayeSchemes e on e.[AccountId] = aps.[AccountId] and e.[EmployerReferenceNumber] = aps.[EmployerReferenceNumber]
+	where e.[AccountId] is null and e.[EmployerReferenceNumber] is null --skip existing
+	print ''Inserted '' + convert(varchar,@@ROWCOUNT) + '' AccountPayeSchemes''
+	'
+
   print '
 	print ''That''''s All Folks!''
 
