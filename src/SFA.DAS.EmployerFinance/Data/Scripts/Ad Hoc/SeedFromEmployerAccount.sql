@@ -112,7 +112,6 @@ BEGIN TRY
 	print ''Inserted '' + convert(varchar,@@ROWCOUNT) + '' PayeSchemes''
 	'
 
-    --todo: check if not exists
   print '
 	insert into AccountPayeSchemes ([AccountId], [EmployerReferenceNumber], [Created], [Deleted])
 	select aps.[AccountId], aps.[EmployerReferenceNumber], aps.[Created], aps.[Deleted] from @AccountPayeSchemes aps
