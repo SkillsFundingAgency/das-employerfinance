@@ -40,7 +40,7 @@ BEGIN TRY
   --AccountPayeSchemes (we need the old removed ones also)
   select
       case (ROW_NUMBER() OVER (ORDER BY ah.Id) % @MAXINSERT) when 1 then 'insert into @AccountPayeSchemes ([AccountId],[EmployerReferenceNumber],[Created],[Deleted]) values' + char(13) + char(10) else '' end +
-      ' (''' + convert(varchar,[AccountId]) + ''', ''' + [PayeRef] + ''', ''' + convert(varchar,[AddedDate],121) + ''', ''' + coalesce('''' + convert(varchar,[RemovedDate],121) + '''', 'null') + ')' +
+      ' (''' + convert(varchar,[AccountId]) + ''', ''' + [PayeRef] + ''', ''' + convert(varchar,[AddedDate],121) + ''', ' + coalesce('''' + convert(varchar,[RemovedDate],121) + '''', 'null') + ')' +
       case when ((ROW_NUMBER() OVER (ORDER BY ah.Id) % @MAXINSERT = 0) OR (ROW_NUMBER() OVER (ORDER BY ah.Id) = (select count(1) from [employer_account].[AccountHistory]))) then '' else ',' end
   from
     [employer_account].[AccountHistory] ah
