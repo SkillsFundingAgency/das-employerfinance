@@ -8,6 +8,5 @@ CREATE TABLE [dbo].[AccountPayeSchemes]
   CONSTRAINT [PK_AccountPayeSchemes] PRIMARY KEY CLUSTERED ([Id] ASC),
   CONSTRAINT [FK_AccountPayeSchemes_Accounts_AccountId] FOREIGN KEY ([AccountId]) REFERENCES [Accounts] ([Id]),
   CONSTRAINT [UK_AccountPayeSchemes_AccountId_EmployerReferenceNumber] UNIQUE ([AccountId] ASC, [EmployerReferenceNumber] ASC),
-  INDEX [IX_AccountPayeSchemes_AccountId] NONCLUSTERED ([AccountId] ASC),
-  INDEX [IX_AccountPayeSchemes_EmployerReferenceNumber] NONCLUSTERED ([EmployerReferenceNumber] ASC)
+  INDEX [IX_AccountPayeSchemes_AccountId] NONCLUSTERED ([AccountId] ASC)
 )
