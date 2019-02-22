@@ -13,10 +13,8 @@
         <EmbeddedResource Include="Data\Scripts\Script0001CreateOutboxData.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0004CreateUsers.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0006DropHealthChecksUserRef.sql" />
-        <EmbeddedResource Include="Data\Scripts\Script0007CreateAccountLegalEntities.sql" />
-        <EmbeddedResource Include="Data\Scripts\Script0008CreateProviders.sql" />
-        <EmbeddedResource Include="Data\Scripts\Script0009CreatePayeSchemes.sql" />
-        <EmbeddedResource Include="Data\Scripts\Script0010CreateAccountPayeSchemes.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0007CreateProviders.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0008CreateAccountPayeSchemes.sql" />
         <EmbeddedResource Remove="Startup\**" />
     </ItemGroup>
 

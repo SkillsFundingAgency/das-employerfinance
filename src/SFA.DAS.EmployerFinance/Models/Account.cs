@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SFA.DAS.EmployerFinance.Models
 {
@@ -12,10 +11,8 @@ namespace SFA.DAS.EmployerFinance.Models
         public string Name { get; private set; }
         public DateTime Created { get; private set; }
         public DateTime? Updated { get; private set; }
-        public IEnumerable<AccountLegalEntity> AccountLegalEntities => _accountLegalEntities;
         public IEnumerable<AccountPayeScheme> AccountPayeSchemes => _accountPayeSchemes;
         
-        private readonly List<AccountLegalEntity> _accountLegalEntities = new List<AccountLegalEntity>();
         private readonly List<AccountPayeScheme> _accountPayeSchemes = new List<AccountPayeScheme>();
 
         public Account(long id, string hashedId, string publicHashedId, string name, DateTime created)
@@ -30,23 +27,6 @@ namespace SFA.DAS.EmployerFinance.Models
         private Account()
         {
         }
-
-        public AccountLegalEntity AddAccountLegalEntity(long accountLegalEntityId, string accountLegalEntityPublicHashedId, string name, DateTime added)
-        {
-            EnsureAccountLegalEntityHasNotAlreadyBeenAdded(accountLegalEntityId);
-            
-            var accountLegalEntity = new AccountLegalEntity(this, accountLegalEntityId, accountLegalEntityPublicHashedId, name, added);
-            
-            _accountLegalEntities.Add(accountLegalEntity);
-
-            return accountLegalEntity;
-        }
-
-        public PayeScheme AddPayeScheme(DateTime added)
-        {
-            //todo: AddPayeScheme
-            throw new NotImplementedException();
-        }
         
         public void UpdateName(string name, DateTime updated)
         {
@@ -54,29 +34,6 @@ namespace SFA.DAS.EmployerFinance.Models
             {
                 Name = name;
                 Updated = updated;
-            }
-        }
-
-        public void RemoveAccountLegalEntity(AccountLegalEntity accountLegalEntity, DateTime removed)
-        {
-            EnsureAccountLegalEntityHasBeenAdded(accountLegalEntity);
-            
-            accountLegalEntity.Delete(removed);
-        }
-
-        private void EnsureAccountLegalEntityHasBeenAdded(AccountLegalEntity accountLegalEntity)
-        {
-            if (_accountLegalEntities.All(ale => ale.Id != accountLegalEntity.Id))
-            {
-                throw new InvalidOperationException("Requires account legal entity has been added");
-            }
-        }
-
-        private void EnsureAccountLegalEntityHasNotAlreadyBeenAdded(long accountLegalEntityId)
-        {
-            if (_accountLegalEntities.Any(ale => ale.Id == accountLegalEntityId))
-            {
-                throw new InvalidOperationException("Requires account legal entity has not already been added");
             }
         }
 
