@@ -11,6 +11,7 @@ using SFA.DAS.Testing;
 namespace SFA.DAS.EmployerFinance.UnitTests.Web.Extensions
 {
     [TestFixture]
+    [Parallelizable]
     public class HtmlHelperExtensionsTests: FluentTest<HtmlHelperExtensionsTestsFixture>
     {
         [Test]
