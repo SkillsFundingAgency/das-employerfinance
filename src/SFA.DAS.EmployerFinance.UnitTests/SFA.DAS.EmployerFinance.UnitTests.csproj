@@ -16,10 +16,12 @@
         <PackageReference Include="Moq" Version="4.10.1" />
         <PackageReference Include="NUnit" Version="3.11.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="3.12.0" />
+        <PackageReference Include="SFA.DAS.Providers.Api.Client" Version="0.11.98" />
         <PackageReference Include="SFA.DAS.Testing" Version="3.0.22" />
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\SFA.DAS.EmployerFinance.Jobs\SFA.DAS.EmployerFinance.Jobs.csproj" />
         <ProjectReference Include="..\SFA.DAS.EmployerFinance.Types\SFA.DAS.EmployerFinance.Types.csproj" />
         <ProjectReference Include="..\SFA.DAS.EmployerFinance.Web\SFA.DAS.EmployerFinance.Web.csproj" />
         <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
