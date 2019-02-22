@@ -15,7 +15,8 @@
         <EmbeddedResource Include="Data\Scripts\Script0006DropHealthChecksUserRef.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0007CreateProviders.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0008CreateAccountPayeSchemes.sql" />
-        <EmbeddedResource Include="Data\Scripts\Script0009CreateImportProviders.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0009CreateProvidersType.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0010CreateImportProviders.sql" />
         <EmbeddedResource Remove="Startup\**" />
     </ItemGroup>
 
