@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using MediatR;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 
@@ -6,8 +7,11 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.EmployerAccounts
 {
     public class ChangedAccountNameEventHandler : IHandleMessages<ChangedAccountNameEvent>
     {
-        public ChangedAccountNameEventHandler()
+        private readonly IMediator _mediator;
+
+        public ChangedAccountNameEventHandler(IMediator mediator)
         {
+            _mediator = mediator;
         }
 
         public Task Handle(ChangedAccountNameEvent message, IMessageHandlerContext context)
