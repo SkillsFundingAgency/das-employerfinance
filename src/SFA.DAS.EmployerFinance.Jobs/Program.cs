@@ -1,7 +1,5 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
-using SFA.DAS.EmployerFinance.Jobs.ScheduledJobs;
 using SFA.DAS.EmployerFinance.Jobs.Startup;
 using SFA.DAS.EmployerFinance.Startup;
 using StructureMap;
@@ -24,7 +22,6 @@ namespace SFA.DAS.EmployerFinance.Jobs
                 .UseStructureMap()
                 .UseConsoleLifetime()
                 .ConfigureServices(s => s.AddDasNServiceBus())
-                .ConfigureServices(s => s.AddSingleton<ImportProvidersJob>())
                 .ConfigureContainer<Registry>(IoC.Initialize);
     }
 }
