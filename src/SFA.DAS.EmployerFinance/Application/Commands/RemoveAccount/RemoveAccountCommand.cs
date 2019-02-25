@@ -1,6 +1,8 @@
+using MediatR;
+
 namespace SFA.DAS.EmployerFinance.Application.Commands.RemoveAccount
 {
-    public class RemoveAccountCommand
+    public class RemoveAccountCommand : IRequest
     {
         
     }

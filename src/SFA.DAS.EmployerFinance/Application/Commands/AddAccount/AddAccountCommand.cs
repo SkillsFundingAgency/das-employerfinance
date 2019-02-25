@@ -1,6 +1,8 @@
+using MediatR;
+
 namespace SFA.DAS.EmployerFinance.Application.Commands.AddAccount
 {
-    public class AddAccountCommand
+    public class AddAccountCommand : IRequest
     {
         
     }
