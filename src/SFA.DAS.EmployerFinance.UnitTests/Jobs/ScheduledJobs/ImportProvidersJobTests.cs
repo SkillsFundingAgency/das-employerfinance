@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Apprenticeships.Api.Types.Providers;
@@ -43,6 +44,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Jobs.ScheduledJobs
         public Mock<IProviderApiClient> ProviderApiClient { get; set; }
         public List<ProviderSummary> Providers { get; set; }
         public List<ProviderSummary> ImportedProviders { get; set; }
+        public ILogger Logger { get; set; }
 
         public ImportProvidersJobTestsFixture()
         {
@@ -50,6 +52,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Jobs.ScheduledJobs
             Db = new Mock<EmployerFinanceDbContext>();
             ProviderApiClient = new Mock<IProviderApiClient>();
             ImportedProviders = new List<ProviderSummary>();
+            Logger = Mock.Of<ILogger>();
             
             Db.Setup(d => d.ExecuteSqlCommandAsync(It.IsAny<string>(), It.IsAny<SqlParameter>(), It.IsAny<SqlParameter>()))
                 .Returns(Task.CompletedTask)
@@ -70,7 +73,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Jobs.ScheduledJobs
 
         public Task Run()
         {
-            return Job.Run(null, null);
+            return Job.Run(null, Logger);
         }
 
         public ImportProvidersJobTestsFixture SetProviders(int count)
