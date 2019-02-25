@@ -21,15 +21,20 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
             _db = db;
         }
 
-        //todo: shouldn't need this according to docs, but doesn't find it otherwise
         [Singleton]
         public async Task Run([TimerTrigger("0 0 0 * * *", RunOnStartup = true)] TimerInfo timer, ILogger logger)
         {
+            const int batchSize = 1000;
+
+            logger.LogInformation("Retrieving all providers from provider API");
             var providers = await _providerApiClient.FindAllAsync();
-            var batches = providers.Batch(1000).Select(b => b.ToDataTable(p => p.Ukprn, p => p.ProviderName));
+            logger.LogInformation( $"Retrieved {providers.Count()} providers");
+            
+            var batches = providers.Batch(batchSize).Select(b => b.ToDataTable(p => p.Ukprn, p => p.ProviderName));
 
             foreach (var batch in batches)
             {
+                logger.LogInformation($"Saving batch of {batch.Rows.Count} to db");
                 await _db.Value.ImportProviders(batch);
             }
         }
