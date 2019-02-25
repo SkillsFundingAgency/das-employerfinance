@@ -21,6 +21,8 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
             _db = db;
         }
 
+        //todo: shouldn't need this according to docs, but doesn't find it otherwise
+        [Singleton]
         public async Task Run([TimerTrigger("0 0 0 * * *", RunOnStartup = true)] TimerInfo timer, ILogger logger)
         {
             var providers = await _providerApiClient.FindAllAsync();

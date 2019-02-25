@@ -58,7 +58,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Jobs.ScheduledJobs
                     var sqlParameter = (SqlParameter)p[0];
                     var dataTable = (DataTable)sqlParameter.Value;
                     
-                    //todo: construct here instead
                     ImportedProviders.AddRange(dataTable.Rows.Cast<DataRow>().Select(r => new ProviderSummary
                     {
                         Ukprn = (long)r[0],

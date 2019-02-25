@@ -8,6 +8,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
         public static void Initialize(Registry registry)
         {
             registry.IncludeRegistry<ConfigurationRegistry>();
+            registry.IncludeRegistry<ApprenticeshipInfoServiceApiRegistry>();
             registry.IncludeRegistry<DataRegistry>();
             registry.IncludeRegistry<DefaultRegistry>();
         }
