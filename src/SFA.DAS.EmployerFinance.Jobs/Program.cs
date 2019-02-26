@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerFinance.Jobs
         {
             CreateHostBuilder(args).Build().Run();
         }
-        
+
         private static IHostBuilder CreateHostBuilder(string[] args) => 
             new HostBuilder()
                 .ConfigureDasWebJobs()
