@@ -18,10 +18,10 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.RemoveAccountPayeScheme
 
         protected override async Task Handle(RemoveAccountPayeSchemeCommand request, CancellationToken cancellationToken)
         {
-            var account = await _db.Value.Accounts.FirstAsync(a => a.Id == request.AccountId, cancellationToken);
+            var account = await _db.Value.Accounts.SingleAsync(a => a.Id == request.AccountId, cancellationToken);
             
             var accountPayeScheme = await _db.Value.AccountPayeSchemes
-                .FirstAsync(aps => aps.AccountId == request.AccountId && aps.EmployerReferenceNumber == request.EmployerReferenceNumber, cancellationToken);
+                .SingleAsync(aps => aps.AccountId == request.AccountId && aps.EmployerReferenceNumber == request.EmployerReferenceNumber, cancellationToken);
 
             account.RemovePayeScheme(accountPayeScheme, request.Removed);
         }

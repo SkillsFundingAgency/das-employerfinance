@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.UpdateAccount
 
         protected override async Task Handle(UpdateAccountCommand request, CancellationToken cancellationToken)
         {
-            var account = await _db.Value.Accounts.FirstAsync(a => a.Id == request.AccountId, cancellationToken);
+            var account = await _db.Value.Accounts.SingleAsync(a => a.Id == request.AccountId, cancellationToken);
 
             account.UpdateName(request.Name, request.Updated);
         }
