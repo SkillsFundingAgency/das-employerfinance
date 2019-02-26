@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerFinance.Data;
 
 namespace SFA.DAS.EmployerFinance.Application.Commands.AddAccountPayeScheme
@@ -15,9 +16,10 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.AddAccountPayeScheme
             _db = db;
         }
 
-        protected override Task Handle(AddAccountPayeSchemeCommand request, CancellationToken cancellationToken)
+        protected override async Task Handle(AddAccountPayeSchemeCommand request, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            var account = await _db.Value.Accounts.FirstAsync(a => a.Id == request.AccountId, cancellationToken);
+            account.AddPayeScheme(request.EmployerReferenceNumber, request.Created);
         }
     }
 }

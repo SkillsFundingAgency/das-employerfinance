@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SFA.DAS.EmployerFinance.Models
 {
@@ -34,6 +35,26 @@ namespace SFA.DAS.EmployerFinance.Models
             {
                 Name = name;
                 Updated = updated;
+            }
+        }
+
+        public AccountPayeScheme AddPayeScheme(string employerReferenceNumber, DateTime created)
+        {
+            EnsurePayeSchemeHasNotAlreadyBeenAdded(employerReferenceNumber);
+            
+            var accountPayeScheme = new AccountPayeScheme(Id, employerReferenceNumber, created);
+            
+            _accountPayeSchemes.Add(accountPayeScheme);
+
+            return accountPayeScheme;
+        }
+
+        private void EnsurePayeSchemeHasNotAlreadyBeenAdded(string employerReferenceNumber)
+        {
+            //todo: this will require a db round-trip, better to catch error if it already exists?
+            if (_accountPayeSchemes.Any(aps => aps.EmployerReferenceNumber == employerReferenceNumber))
+            {
+                throw new InvalidOperationException("Requires account paye scheme has not already been added");
             }
         }
 
