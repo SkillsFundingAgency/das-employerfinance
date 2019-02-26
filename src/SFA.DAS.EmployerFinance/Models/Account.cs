@@ -66,7 +66,6 @@ namespace SFA.DAS.EmployerFinance.Models
 
         private void EnsurePayeSchemeHasNotAlreadyBeenAdded(string employerReferenceNumber)
         {
-            //todo: this will require a db round-trip, better to catch error if it already exists?
             if (_accountPayeSchemes.Any(aps => aps.EmployerReferenceNumber == employerReferenceNumber))
             {
                 throw new InvalidOperationException("Requires account paye scheme has not already been added");
