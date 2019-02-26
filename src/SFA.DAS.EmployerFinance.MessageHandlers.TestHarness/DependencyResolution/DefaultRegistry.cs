@@ -1,4 +1,5 @@
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.MessageHandlers.TestHarness.Scenarios;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.TestHarness.DependencyResolution
@@ -7,6 +8,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.TestHarness.DependencyResoluti
     {
         public DefaultRegistry()
         {
+            For<PublishAddedPayeSchemeEvent>().Use<PublishAddedPayeSchemeEvent>();
         }
     }
 }
