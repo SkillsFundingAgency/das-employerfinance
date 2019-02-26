@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.EmployerAccounts
 
         public Task Handle(CreatedAccountEvent message, IMessageHandlerContext context)
         {
-            return _mediator.Send(new AddAccountCommand());
+            return _mediator.Send(new AddAccountCommand(message.AccountId, message.HashedId, message.PublicHashedId, message.Name, message.Created));
         }
     }
 }

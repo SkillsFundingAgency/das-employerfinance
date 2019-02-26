@@ -3,10 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Models;
 
 namespace SFA.DAS.EmployerFinance.Application.Commands.AddAccount
 {
-    public class AddAccountCommandHandler : AsyncRequestHandler<AddAccountCommand>
+    public class AddAccountCommandHandler : RequestHandler<AddAccountCommand>
     {
         private readonly Lazy<EmployerFinanceDbContext> _db;
 
@@ -15,9 +16,11 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.AddAccount
             _db = db;
         }
 
-        protected override Task Handle(AddAccountCommand request, CancellationToken cancellationToken)
+        protected override void Handle(AddAccountCommand request)
         {
-            throw new System.NotImplementedException();
+            var account = new Account(request.Id, request.HashedId, request.PublicHashedId, request.Name, request.Added);
+            
+            _db.Value.Accounts.Add(account);
         }
     }
 }
