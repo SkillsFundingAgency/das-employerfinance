@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.TestHarness.DependencyResoluti
     {
         public DefaultRegistry()
         {
-            For<PublishAddedPayeSchemeEvent>().Use<PublishAddedPayeSchemeEvent>();
+            For<PublishEmployerAccountsEvent>().Use<PublishEmployerAccountsEvent>();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.TestHarness
             var host = CreateHostBuilder(args).Build();
             host.Start();
 
-            var publishAddedPayeSchemeEvent = host.Services.GetService<PublishAddedPayeSchemeEvent>();
+            var publishAddedPayeSchemeEvent = host.Services.GetService<PublishEmployerAccountsEvent>();
             await publishAddedPayeSchemeEvent.Run();
 
             await host.StopAsync();
