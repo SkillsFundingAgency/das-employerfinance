@@ -28,7 +28,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.TestHarness
                 .ConfigureDasLogging()
                 .UseDasEnvironment()
                 .UseStructureMap()
-                .UseConsoleLifetime()
                 .ConfigureServices(s => s.AddDasNServiceBus())
                 .ConfigureContainer<Registry>(IoC.Initialize);
     }
