@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.EmployerAccounts
 
         public Task Handle(ChangedAccountNameEvent message, IMessageHandlerContext context)
         {
-            return _mediator.Send(new UpdateAccountCommand());
+            return _mediator.Send(new UpdateAccountCommand(message.AccountId, message.CurrentName, message.Created));
         }
     }
 }
