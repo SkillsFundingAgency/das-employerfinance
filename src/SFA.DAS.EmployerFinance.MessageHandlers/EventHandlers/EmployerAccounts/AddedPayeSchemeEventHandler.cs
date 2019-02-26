@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using MediatR;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.EmployerFinance.Application.Commands.AddAccountPayeScheme;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.EmployerAccounts
 {
@@ -16,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.EmployerAccounts
 
         public Task Handle(AddedPayeSchemeEvent message, IMessageHandlerContext context)
         {
-            throw new System.NotImplementedException();
+            return _mediator.Send(new AddAccountPayeSchemeCommand());
         }
     }
 }
