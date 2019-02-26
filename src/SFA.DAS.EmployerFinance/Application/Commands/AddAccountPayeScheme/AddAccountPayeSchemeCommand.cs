@@ -7,13 +7,13 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.AddAccountPayeScheme
     {
         internal readonly long AccountId;
         internal readonly string EmployerReferenceNumber;
-        internal readonly DateTime Created;
+        internal readonly DateTime Added;
 
-        public AddAccountPayeSchemeCommand(long accountId, string employerReferenceNumber, DateTime created)
+        public AddAccountPayeSchemeCommand(long accountId, string employerReferenceNumber, DateTime added)
         {
             AccountId = accountId;
             EmployerReferenceNumber = employerReferenceNumber;
-            Created = created;
+            Added = added;
         }
     }
 }

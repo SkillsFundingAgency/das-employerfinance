@@ -49,6 +49,21 @@ namespace SFA.DAS.EmployerFinance.Models
             return accountPayeScheme;
         }
 
+        public void RemovePayeScheme(AccountPayeScheme accountPayeScheme, DateTime removed)
+        {
+            EnsureAccountPayeSchemeHasBeenAdded(accountPayeScheme);
+            
+            accountPayeScheme.Delete(removed);
+        }
+
+        private void EnsureAccountPayeSchemeHasBeenAdded(AccountPayeScheme accountPayeScheme)
+        {
+            if (_accountPayeSchemes.All(aps => aps.AccountId != accountPayeScheme.AccountId && aps.EmployerReferenceNumber != accountPayeScheme.EmployerReferenceNumber))
+            {
+                throw new InvalidOperationException("Requires account paye scheme has been added");
+            }
+        }
+
         private void EnsurePayeSchemeHasNotAlreadyBeenAdded(string employerReferenceNumber)
         {
             //todo: this will require a db round-trip, better to catch error if it already exists?

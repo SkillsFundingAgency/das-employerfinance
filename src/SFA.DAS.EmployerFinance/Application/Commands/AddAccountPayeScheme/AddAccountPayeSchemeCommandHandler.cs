@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.AddAccountPayeScheme
         protected override async Task Handle(AddAccountPayeSchemeCommand request, CancellationToken cancellationToken)
         {
             var account = await _db.Value.Accounts.FirstAsync(a => a.Id == request.AccountId, cancellationToken);
-            account.AddPayeScheme(request.EmployerReferenceNumber, request.Created);
+            account.AddPayeScheme(request.EmployerReferenceNumber, request.Added);
         }
     }
 }
