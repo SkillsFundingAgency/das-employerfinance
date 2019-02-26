@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.TestHarness.Scenarios
             {
                 AccountId = accountId,
                 Name = firstAccountName,
-                HashedId = "hashedId",
+                HashedId = "pvHash",
                 PublicHashedId = "pbHash",
                 Created = DateTime.UtcNow
             });
