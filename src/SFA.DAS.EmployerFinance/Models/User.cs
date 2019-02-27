@@ -4,12 +4,12 @@ namespace SFA.DAS.EmployerFinance.Models
 {
     public class User : Entity
     {
-        public Guid Ref { get; private set; }
-        public string Email { get; private set; }
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
-        public DateTime Created { get; private set; }
-        public DateTime? Updated { get; private set; }
+        public Guid Ref { get; internal set; }
+        public string Email { get; internal set; }
+        public string FirstName { get; internal set; }
+        public string LastName { get; internal set; }
+        public DateTime Created { get; internal set; }
+        public DateTime? Updated { get; internal set; }
 
         public User(Guid @ref, string email, string firstName, string lastName)
         {
