@@ -8,9 +8,14 @@ using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Models
 {
+    /// <summary>
+    /// Tests both Account & AccountPayeScheme models.
+    /// Usually would have an AccountsTest with a mocked AccountPayeScheme, and a separate AccountPayeSchemeTest,
+    /// but it is more convenient in this instance to test them together.
+    /// </summary>
     [TestFixture]
     [Parallelizable]
-    public class AccountTests : FluentTest<AccountTestsFixture>
+    public class AccountAndAccountPayeSchemeTests : FluentTest<AccountTestsFixture>
     {
         #region UpdateName
 
