@@ -55,18 +55,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         {
             Test(f => f.AddPayeScheme(), f => f.AssertPayeSchemeAdded());
         }
-        
-//        [Test]
-//        public void AddPayeScheme_WhenPayeSchemeIsNewToTheAccount_ThenPayeSchemeShouldBeReturned()
-//        {
-//            Test(f => f.AddPayeScheme(), f => f.);
-//        }
-//
-//        [Test]
-//        public void AddPayeScheme_WhenPayeSchemeIsNewToTheAccount_ThenPayeSchemeAddedToTheAccountShouldBeSameAsPayeSchemeReturned()
-//        {
-//            Test(f => f.AddPayeScheme(), f => f.);
-//        }
+
+        [Test]
+        public void AddPayeScheme_WhenPayeSchemeIsNewToTheAccount_ThenPayeSchemeShouldBeReturnedAndBeSameAsPayeSchemeAddedToAccount()
+        {
+            Test(f => f.AddPayeScheme(), (f, r) => f.AssertPayeSchemeIsReturnedAndSameAsPayeSchemeAdded(r));
+        }
     }
 
     public class AccountTestsFixture
@@ -118,31 +112,41 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
             Account.UpdateName(name, ActionDate);
         }
 
-        public void AddPayeScheme(string employerReferenceNumber = EmployerReferenceNumber)
+        public AccountPayeScheme AddPayeScheme(string employerReferenceNumber = EmployerReferenceNumber)
         {
             CloneOriginalAccount();
-            Account.AddPayeScheme(employerReferenceNumber, ActionDate);
+            return Account.AddPayeScheme(employerReferenceNumber, ActionDate);
         }
         
         #endregion Act
 
         #region Assert
 
-        public void AssertNameAndUpdatedDateUpdated()
+        public AccountTestsFixture AssertNameAndUpdatedDateUpdated()
         {
             Account.Name.Should().Be(NewName);
             Account.Updated.Should().Be(ActionDate);
+            return this;
         }
 
-        public void AssertNameAndUpdatedDateNotUpdated()
+        public AccountTestsFixture AssertNameAndUpdatedDateNotUpdated()
         {
             Account.Name.Should().Be(OriginalAccount.Name);
             Account.Updated.Should().Be(OriginalAccount.Updated);
+            return this;
         }
 
-        public void AssertPayeSchemeAdded()
+        public AccountTestsFixture AssertPayeSchemeAdded()
         {
             Account.AccountPayeSchemes.Should().BeEquivalentTo(new AccountPayeScheme(OriginalAccount.Id, EmployerReferenceNumber, ActionDate));
+            return this;
+        }
+
+        public AccountTestsFixture AssertPayeSchemeIsReturnedAndSameAsPayeSchemeAdded(AccountPayeScheme result)
+        {
+            result.Should().NotBeNull();
+            Account.AccountPayeSchemes.Should().BeEquivalentTo(new AccountPayeScheme(OriginalAccount.Id, EmployerReferenceNumber, ActionDate));
+            return this;
         }
         
         #endregion Assert
