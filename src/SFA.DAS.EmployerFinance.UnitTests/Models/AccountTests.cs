@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         [Test]
         public void UpdateName_WhenAccountNotPreviouslyUpdated_ThenAccountShouldBeUpdated()
         {
-            Test(f => f.Account.UpdateName(f.NewName, f.ActionDate), f =>
+            Test(f => f.UpdateName(f.NewName), f =>
             {
                 f.Account.Name.Should().Be(f.NewName);
                 f.Account.Updated.Should().Be(f.ActionDate);
@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         [Test]
         public void UpdateName_WhenAccountPreviouslyUpdatedAndUpdateNameHasLaterUpdatedTime_ThenAccountShouldBeUpdated()
         {
-            Test(f => f.UpdatedPreviously(), f => f.Account.UpdateName(f.NewName, f.ActionDate), f =>
+            Test(f => f.UpdatedPreviously(), f => f.UpdateName(f.NewName), f =>
             {
                 f.Account.Name.Should().Be(f.NewName);
                 f.Account.Updated.Should().Be(f.ActionDate);
@@ -35,7 +35,37 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         [Test]
         public void UpdateName_WhenAccountPreviouslyUpdatedAndUpdateNameHasEarlierUpdatedTime_ThenAccountShouldNotBeUpdated()
         {
-            Test(f => f.UpdatedWithFutureUpdate().CloneOriginalAccount(), f => f.Account.UpdateName(f.NewName, f.ActionDate), f =>
+            Test(f => f.UpdatedWithFutureUpdate().CloneOriginalAccount(), f => f.UpdateName(f.NewName), f =>
+            {
+                f.Account.Name.Should().Be(f.OriginalAccount.Name);
+                f.Account.Updated.Should().Be(f.OriginalAccount.Updated);
+            });
+        }
+        
+        [Test]
+        public void UpdateName_WhenAccountNotPreviouslyUpdatedAndNewNameIsSameAsOldName_ThenAccountShouldNotBeUpdated()
+        {
+            Test(f => f.CloneOriginalAccount(),f => f.UpdateName(f.Account.Name), f =>
+            {
+                f.Account.Name.Should().Be(f.OriginalAccount.Name);
+                f.Account.Updated.Should().Be(f.OriginalAccount.Updated);
+            });
+        }
+
+        [Test]
+        public void UpdateName_WhenAccountPreviouslyUpdatedAndUpdateNameHasLaterUpdatedTimeAndNewNameIsSameAsOldName_ThenAccountShouldNotBeUpdated()
+        {
+            Test(f => f.UpdatedPreviously().CloneOriginalAccount(), f => f.UpdateName(f.Account.Name), f =>
+            {
+                f.Account.Name.Should().Be(f.OriginalAccount.Name);
+                f.Account.Updated.Should().Be(f.OriginalAccount.Updated);
+            });
+        }
+        
+        [Test]
+        public void UpdateName_WhenAccountPreviouslyUpdatedAndUpdateNameHasEarlierUpdatedTimeAndNewNameIsSameAsOldName_ThenAccountShouldNotBeUpdated()
+        {
+            Test(f => f.UpdatedWithFutureUpdate().CloneOriginalAccount(), f => f.UpdateName(f.Account.Name), f =>
             {
                 f.Account.Name.Should().Be(f.OriginalAccount.Name);
                 f.Account.Updated.Should().Be(f.OriginalAccount.Updated);
@@ -59,6 +89,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
             NewName = Fixture.Create<string>();
         }
 
+        public void UpdateName(string name)
+        {
+            Account.UpdateName(name, ActionDate);
+        }
+        
         public AccountTestsFixture UpdatedPreviously()
         {
             Account.Updated = Fixture.Create<DateTime>();
