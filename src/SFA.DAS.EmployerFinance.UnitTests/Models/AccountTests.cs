@@ -12,6 +12,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
     [Parallelizable]
     public class AccountTests : FluentTest<AccountTestsFixture>
     {
+        #region UpdateName
+
         [Test]
         public void UpdateName_WhenAccountNotPreviouslyUpdated_ThenAccountShouldBeUpdated()
         {
@@ -50,6 +52,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
                 f => f.AssertNameAndUpdatedDateNotUpdated());
         }
 
+        #endregion UpdateName
+
+        #region AddPayeScheme
+        
         [Test]
         public void AddPayeScheme_WhenPayeSchemeIsNewToTheAccount_ThenPayeSchemeShouldBeAddedToTheAccount()
         {
@@ -67,6 +73,24 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         {
             TestException(f => f.AddPreExistingPayeScheme(), f => f.AddPayeScheme(), (f, r) => r.Should().Throw<InvalidOperationException>());
         }
+        
+        #endregion AddPayeScheme
+
+        #region RemovePayeScheme
+
+        [Test]
+        public void RemovePayeScheme_WhenPayeSchemeHasAlreadyBeenAddedToTheAccount_ThenPayeSchemeShouldBeSoftDeletedFromTheAccount()
+        {
+            Test(f => f.AddPreExistingPayeScheme(), f => f.RemovePayeScheme(), f => f.AssertPayeSchemeSoftDeleted());
+        }
+
+        [Test]
+        public void RemovePayeScheme_WhenPayeSchemeHasntAlreadyBeenAddedToTheAccount_ThenShouldThrowInvalidOperationException()
+        {
+            TestException(f => f.RemovePayeScheme(), (f, r) => r.Should().Throw<InvalidOperationException>());
+        }
+
+        #endregion RemovePayeScheme
     }
 
     public class AccountTestsFixture
@@ -76,6 +100,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         public const string NewName = "NewName";
         public const string EmployerReferenceNumber = "ABC/123456";
         public DateTime ActionDate { get; set; }
+        public AccountPayeScheme AccountPayeScheme { get; set; }
+        public AccountPayeScheme OriginalAccountPayeScheme { get; set; }
         private readonly Fixture _fixture;
         
         #region Arrange
@@ -85,6 +111,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
             _fixture = new Fixture();
             Account = _fixture.Create<Account>();
             ActionDate = _fixture.Create<DateTime>();
+            AccountPayeScheme = new AccountPayeScheme(Account.Id, EmployerReferenceNumber, ActionDate.AddMinutes(-1));
         }
         
         public AccountTestsFixture UpdatedPreviously()
@@ -108,9 +135,17 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
             return this;
         }
 
+        public AccountTestsFixture CloneOriginalAccountPayeScheme()
+        {
+            //doesn't work for some reason
+            //OriginalAccountPayeScheme = JsonConvert.DeserializeObject<AccountPayeScheme>(JsonConvert.SerializeObject(AccountPayeScheme));
+            OriginalAccountPayeScheme = new AccountPayeScheme(AccountPayeScheme.AccountId, AccountPayeScheme.EmployerReferenceNumber, AccountPayeScheme.Created);
+            return this;
+        }
+        
         public AccountTestsFixture AddPreExistingPayeScheme()
         {
-            Account._accountPayeSchemes.Add(new AccountPayeScheme(Account.Id, EmployerReferenceNumber, DateTime.UtcNow));
+            Account._accountPayeSchemes.Add(AccountPayeScheme);
             return this;
         }
         
@@ -128,6 +163,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         {
             CloneOriginalAccount();
             return Account.AddPayeScheme(employerReferenceNumber, ActionDate);
+        }
+
+        public void RemovePayeScheme()
+        {
+            CloneOriginalAccount();
+            CloneOriginalAccountPayeScheme();
+            Account.RemovePayeScheme(AccountPayeScheme, ActionDate);
         }
         
         #endregion Act
@@ -158,6 +200,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         {
             result.Should().NotBeNull();
             Account.AccountPayeSchemes.Should().BeEquivalentTo(new AccountPayeScheme(OriginalAccount.Id, EmployerReferenceNumber, ActionDate));
+            return this;
+        }
+
+        public AccountTestsFixture AssertPayeSchemeSoftDeleted()
+        {
+            OriginalAccountPayeScheme.Deleted = ActionDate;
+            Account.AccountPayeSchemes.Should().ContainEquivalentOf(OriginalAccountPayeScheme);
             return this;
         }
         

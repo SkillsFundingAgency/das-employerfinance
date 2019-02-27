@@ -4,12 +4,12 @@ namespace SFA.DAS.EmployerFinance.Models
 {
     public class AccountPayeScheme
     {
-        public long Id { get; private set; }
-        public Account Account { get; private set; }
-        public long AccountId { get; private set; }
-        public string EmployerReferenceNumber { get; private set; }
-        public DateTime Created { get; private set; }
-        public DateTime? Deleted { get; private set; }
+        public long Id { get; internal set; }
+        public Account Account { get; internal set; }
+        public long AccountId { get; internal set; }
+        public string EmployerReferenceNumber { get; internal set; }
+        public DateTime Created { get; internal set; }
+        public DateTime? Deleted { get; internal set; }
         
         internal AccountPayeScheme(long accountId, string employerReferenceNumber, DateTime created)
         {
