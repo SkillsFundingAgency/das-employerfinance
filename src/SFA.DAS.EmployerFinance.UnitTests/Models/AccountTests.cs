@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.Testing;
-using Fix = SFA.DAS.EmployerFinance.UnitTests.Models.AccountTestsFixture;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Models
 {
@@ -28,36 +27,33 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         [Test]
         public void UpdateName_WhenAccountPreviouslyUpdatedAndUpdateNameHasEarlierUpdatedTime_ThenAccountShouldNotBeUpdated()
         {
-            Test(f => f.UpdatedWithFutureUpdate().CloneOriginalAccount(), f => f.UpdateName(),
-                f => f.AssertNameAndUpdatedDateNotUpdated());
+            Test(f => f.UpdatedWithFutureUpdate(), f => f.UpdateName(), f => f.AssertNameAndUpdatedDateNotUpdated());
         }
         
         [Test]
         public void UpdateName_WhenAccountNotPreviouslyUpdatedAndNewNameIsSameAsOldName_ThenAccountShouldNotBeUpdated()
         {
-            Test(f => f.CloneOriginalAccount(),f => f.UpdateName(f.Account.Name),
-                f => f.AssertNameAndUpdatedDateNotUpdated());
+            Test(f => f.UpdateName(f.Account.Name), f => f.AssertNameAndUpdatedDateNotUpdated());
         }
 
         [Test]
         public void UpdateName_WhenAccountPreviouslyUpdatedAndUpdateNameHasLaterUpdatedTimeAndNewNameIsSameAsOldName_ThenAccountShouldNotBeUpdated()
         {
-            Test(f => f.UpdatedPreviously().CloneOriginalAccount(), f => f.UpdateName(f.Account.Name),
+            Test(f => f.UpdatedPreviously(), f => f.UpdateName(f.Account.Name),
                 f => f.AssertNameAndUpdatedDateNotUpdated());
         }
         
         [Test]
         public void UpdateName_WhenAccountPreviouslyUpdatedAndUpdateNameHasEarlierUpdatedTimeAndNewNameIsSameAsOldName_ThenAccountShouldNotBeUpdated()
         {
-            Test(f => f.UpdatedWithFutureUpdate().CloneOriginalAccount(), f => f.UpdateName(f.Account.Name),
+            Test(f => f.UpdatedWithFutureUpdate(), f => f.UpdateName(f.Account.Name),
                 f => f.AssertNameAndUpdatedDateNotUpdated());
         }
 
-        //todo: always clone before act?
         [Test]
         public void AddPayeScheme_WhenPayeSchemeIsNewToTheAccount_ThenPayeSchemeShouldBeAddedToTheAccount()
         {
-            Test(f => f.CloneOriginalAccount(), f => f.AddPayeScheme(), f => f.AssertPayeSchemeAdded());
+            Test(f => f.AddPayeScheme(), f => f.AssertPayeSchemeAdded());
         }
         
 //        [Test]
@@ -118,11 +114,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         
         public void UpdateName(string name = NewName)
         {
+            CloneOriginalAccount();
             Account.UpdateName(name, ActionDate);
         }
 
         public void AddPayeScheme(string employerReferenceNumber = EmployerReferenceNumber)
         {
+            CloneOriginalAccount();
             Account.AddPayeScheme(employerReferenceNumber, ActionDate);
         }
         
