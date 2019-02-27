@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 })
                 .AddCookie(o =>
                 {
-                    o.AccessDeniedPath = "/Error/403"; // TODO: once in same branch as error handling, point to forbidden error page
+                    o.AccessDeniedPath = "/403.html";
                     o.Cookie.Name = CookieNames.Authentication;
                     //todo: see if this fixes auth on Safari
                     o.Cookie.SameSite = SameSiteMode.None;
@@ -41,10 +41,10 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 .AddOpenIdConnect(o =>
                 {
                     o.Authority = oidcConfiguration.Authority;
-                    o.MetadataAddress = oidcConfiguration.MetadataAddress;
-                    o.ResponseType = "code";
                     o.ClientId = oidcConfiguration.ClientId;
                     o.ClientSecret = oidcConfiguration.ClientSecret;
+                    o.MetadataAddress = oidcConfiguration.MetadataAddress;
+                    o.ResponseType = "code";
     
                     o.ClaimActions.MapUniqueJsonKey("sub", "id");
                     
