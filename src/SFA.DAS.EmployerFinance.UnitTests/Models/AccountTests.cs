@@ -1,6 +1,7 @@
 using System;
 using AutoFixture;
 using FluentAssertions;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.Testing;
@@ -24,10 +25,20 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         [Test]
         public void UpdateName_WhenAccountPreviouslyUpdatedAndUpdateNameHasLaterUpdatedTime_ThenAccountShouldBeUpdated()
         {
-            Test(f => f.PreviousUpdate(), f => f.Account.UpdateName(f.NewName, f.ActionDate), f =>
+            Test(f => f.UpdatedPreviously(), f => f.Account.UpdateName(f.NewName, f.ActionDate), f =>
             {
                 f.Account.Name.Should().Be(f.NewName);
                 f.Account.Updated.Should().Be(f.ActionDate);
+            });
+        }
+        
+        [Test]
+        public void UpdateName_WhenAccountPreviouslyUpdatedAndUpdateNameHasEarlierUpdatedTime_ThenAccountShouldNotBeUpdated()
+        {
+            Test(f => f.UpdatedWithFutureUpdate().CloneOriginalAccount(), f => f.Account.UpdateName(f.NewName, f.ActionDate), f =>
+            {
+                f.Account.Name.Should().Be(f.OriginalAccount.Name);
+                f.Account.Updated.Should().Be(f.OriginalAccount.Updated);
             });
         }
     }
@@ -35,6 +46,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
     public class AccountTestsFixture
     {
         public Account Account { get; set; }
+        public Account OriginalAccount { get; set; }
         public string NewName { get; set; }
         public DateTime ActionDate { get; set; }
         public Fixture Fixture { get; set; }
@@ -47,10 +59,25 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
             NewName = Fixture.Create<string>();
         }
 
-        public void PreviousUpdate()
+        public AccountTestsFixture UpdatedPreviously()
         {
             Account.Updated = Fixture.Create<DateTime>();
             ActionDate = Account.Updated.Value.AddMinutes(1);
+            return this;
+        }
+
+        public AccountTestsFixture UpdatedWithFutureUpdate()
+        {
+            Account.Updated = Fixture.Create<DateTime>();
+            ActionDate = Account.Updated.Value.AddMinutes(-1);
+            return this;
+        }
+
+        public AccountTestsFixture CloneOriginalAccount()
+        {
+            OriginalAccount = JsonConvert.DeserializeObject<Account>(JsonConvert.SerializeObject(Account));
+            OriginalAccount.Updated = Account.Updated;
+            return this;
         }
     }
 }
