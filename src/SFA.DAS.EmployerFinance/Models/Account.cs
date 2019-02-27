@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerFinance.Models
         public DateTime? Updated { get; internal set; }
         public IEnumerable<AccountPayeScheme> AccountPayeSchemes => _accountPayeSchemes;
         
-        private readonly List<AccountPayeScheme> _accountPayeSchemes = new List<AccountPayeScheme>();
+        internal readonly List<AccountPayeScheme> _accountPayeSchemes = new List<AccountPayeScheme>();
 
         public Account(long id, string hashedId, string publicHashedId, string name, DateTime created)
         {

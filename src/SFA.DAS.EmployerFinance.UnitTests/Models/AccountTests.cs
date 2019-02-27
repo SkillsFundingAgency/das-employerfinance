@@ -61,6 +61,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         {
             Test(f => f.AddPayeScheme(), (f, r) => f.AssertPayeSchemeIsReturnedAndSameAsPayeSchemeAdded(r));
         }
+        
+        [Test]
+        public void AddPayeScheme_WhenPayeSchemeHasAlreadyBeenAddedToTheAccount_ThenShouldThrowInvalidOperationException()
+        {
+            TestException(f => f.AddPreExistingPayeScheme(), f => f.AddPayeScheme(), (f, r) => r.Should().Throw<InvalidOperationException>());
+        }
     }
 
     public class AccountTestsFixture
@@ -102,6 +108,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
             return this;
         }
 
+        public AccountTestsFixture AddPreExistingPayeScheme()
+        {
+            Account._accountPayeSchemes.Add(new AccountPayeScheme(Account.Id, EmployerReferenceNumber, DateTime.UtcNow));
+            return this;
+        }
+        
         #endregion Arrange
 
         #region Act
