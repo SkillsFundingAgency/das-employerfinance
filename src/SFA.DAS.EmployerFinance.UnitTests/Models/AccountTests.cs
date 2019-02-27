@@ -12,12 +12,22 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
     public class AccountTests : FluentTest<AccountTestsFixture>
     {
         [Test]
-        public void UpdateName_WhenAccountPreviouslyUpdatedAndUpdateNameHasLaterUpdatedTime_ThenAccountShouldBeUpdated()
+        public void UpdateName_WhenAccountNotPreviouslyUpdated_ThenAccountShouldBeUpdated()
         {
-            Test(f => f.PreviousUpdate(), f => f.Account.UpdateName(f.NewName, f.ActionDateAfterLastUpdate), f =>
+            Test(f => f.Account.UpdateName(f.NewName, f.ActionDate), f =>
             {
                 f.Account.Name.Should().Be(f.NewName);
-                f.Account.Updated.Should().Be(f.ActionDateAfterLastUpdate);
+                f.Account.Updated.Should().Be(f.ActionDate);
+            });
+        }
+
+        [Test]
+        public void UpdateName_WhenAccountPreviouslyUpdatedAndUpdateNameHasLaterUpdatedTime_ThenAccountShouldBeUpdated()
+        {
+            Test(f => f.PreviousUpdate(), f => f.Account.UpdateName(f.NewName, f.ActionDate), f =>
+            {
+                f.Account.Name.Should().Be(f.NewName);
+                f.Account.Updated.Should().Be(f.ActionDate);
             });
         }
     }
@@ -26,20 +36,21 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
     {
         public Account Account { get; set; }
         public string NewName { get; set; }
-        public DateTime ActionDateAfterLastUpdate { get; set; }
+        public DateTime ActionDate { get; set; }
         public Fixture Fixture { get; set; }
         
         public AccountTestsFixture()
         {
             Fixture = new Fixture();
             Account = Fixture.Create<Account>();
+            ActionDate = Fixture.Create<DateTime>();
             NewName = Fixture.Create<string>();
         }
 
         public void PreviousUpdate()
         {
             Account.Updated = Fixture.Create<DateTime>();
-            ActionDateAfterLastUpdate = Account.Updated.Value.AddMinutes(1);
+            ActionDate = Account.Updated.Value.AddMinutes(1);
         }
     }
 }
