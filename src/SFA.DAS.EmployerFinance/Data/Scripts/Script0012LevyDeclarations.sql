@@ -34,3 +34,24 @@ CREATE TABLE [employer_financial].[LevyDeclaration]
   [NoPaymentForPeriod] BIT DEFAULT 0
 )
 */
+
+/*
+ namespace HMRC.ESFA.Levy.Api.Types
+{
+  public class Declaration
+  {
+    public string Id { get; set; }
+    public long SubmissionId { get; set; }
+    public DateTime? DateCeased { get; set; }
+    public DateTime? InactiveFrom { get; set; }
+    public DateTime? InactiveTo { get; set; }
+    public bool NoPaymentForPeriod { get; set; }
+    public DateTime SubmissionTime { get; set; }
+    public PayrollPeriod PayrollPeriod { get; set; }
+    [JsonProperty("levyDueYTD")]
+    public Decimal LevyDueYearToDate { get; set; }
+    public Decimal LevyAllowanceForFullYear { get; set; }
+    public LevyDeclarationSubmissionStatus LevyDeclarationSubmissionStatus { get; set; }
+  }
+}
+ */
