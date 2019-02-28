@@ -1,3 +1,11 @@
 CREATE TABLE [dbo].[Transactions]
 (
+  [Id] BIGINT NOT NULL IDENTITY,
+  [Type] TINYINT NOT NULL,
+  [SubType] TINYINT NOT NULL,
+  [Period] DATE NOT NULL,
+  [Amount] MONEY,
+  [Balance] MONEY,
+  [JobId] UNIQUEIDENTIFIER,
+  CONSTRAINT [PK_Transactions] PRIMARY KEY CLUSTERED ([Id] ASC)
 )
