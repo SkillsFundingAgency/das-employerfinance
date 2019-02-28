@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using DbUp;
 using Microsoft.Extensions.Logging;
@@ -20,13 +21,14 @@ namespace SFA.DAS.EmployerFinance.Database
                 
                 logger.LogInformation("Started deploying database");
             
-                EnsureDatabase.For.SqlDatabase(databaseConnectionString);
+                EnsureDatabase.For.SqlDatabase(databaseConnectionString, 120);
         
                 var upgradeEngine = DeployChanges.To
                     .SqlDatabase(databaseConnectionString)
                     .WithScriptsEmbeddedInAssembly(Assembly.GetAssembly(typeof(EmployerFinanceConfiguration)))
                     .WithTransaction()
                     .LogToAutodetectedLog()
+                    .WithExecutionTimeout(TimeSpan.FromMinutes(10))
                     .Build();
 
                 var result = upgradeEngine.PerformUpgrade();

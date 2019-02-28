@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[Accounts]
-(                                           
+(
     [Id] BIGINT NOT NULL,
     [HashedId] CHAR(6) NOT NULL,
     [PublicHashedId] CHAR(6) NOT NULL,

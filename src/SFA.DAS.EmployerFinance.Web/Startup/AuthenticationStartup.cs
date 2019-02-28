@@ -32,6 +32,8 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 {
                     o.AccessDeniedPath = "/403.html";
                     o.Cookie.Name = CookieNames.Authentication;
+                    //todo: see if this fixes auth on Safari
+                    o.Cookie.SameSite = SameSiteMode.None;
                     o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     o.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                     o.SlidingExpiration = true;
