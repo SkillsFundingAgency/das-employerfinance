@@ -1,11 +1,27 @@
 CREATE TABLE [dbo].[LevyDeclarations]
 (
+  --todo: add some of these comment to PR?
+
   [Id] BIGINT NOT NULL IDENTITY,
-  [TransactionId] BIGINT NOT NULL,
-  [HmrcSubmissionId] BIGINT NOT NULL,
-  [SubmissionDate] DATETIME2 NOT NULL,
-  [EmployerReferenceNumber] VARCHAR(16) NOT NULL,
-  [LevyDueYearToDate] MONEY NOT NULL, -- use decimal to reduce space requirements?
+  -- nullable: suggest we add LevyDeclarations row for every levy dec received from hmrc,
+  -- but only add a transaction row if the id supplied by hmrc ends in 2 (when a valid payrollPeriod and levyDueYTD should be supplied)
+  -- (from hmrc id doc: Taking this identifier modulo 10 gives the type of entry: 0, no entry; 1, inactive; 2, levy declaration; 3, ceased.)
+  [TransactionId] BIGINT NULL,
+  -- optional A unique identifier for the declaration. This will remain consistent from one call to the API to the next so that the client can identify declarations they’ve already retrieved. It is the identifier assigned by the RTI system to the EPS return, so it is possible to cross-reference with HMRC if needed. Dividing this identifier by 10 (ignoring the remainder) gives the identifier assigned by the RTI system to the EPS return, so it is possible to cross-reference with HMRC if needed. Taking this identifier modulo 10 gives the type of entry: 0, no entry; 1, inactive; 2, levy declaration; 3, ceased.
+  -- our options: store it as we receive it
+  -- split it into 2, EPS return id + Entry Type
+  -- store it as we receive it + Entry Type
+  --[HmrcId] BIGINT NOT NULL,
+  [EpsSubmissionId] INT NULL, -- docs don't say if INT/BIGINT
+  -- 0, no entry; 1, inactive; 2, levy declaration; 3, ceased
+  [Type] TINYINT NULL,
+  --[HmrcSubmissionId] BIGINT NOT NULL,
+  -- The time at which the EPS submission that this declaration relates to was received by HMRC. If the backend systems return a bad date that can not be handled this will be set to 1970-01-01T01:00:00.000
+  -- we could set this to null if 1970-01-01T01:00:00.000 is supplied. +ve no need for special check against magic value, -ve can't distinguish from db whether we didn't receive this value, or the magic date
+  -- q: do we want to see exactly what came from hmrc by looking in the db, or do we use log and/or audit facility for that?
+  [SubmissionTime] DATETIME2 NULL,                  
+  [EmployerReferenceNumber] VARCHAR(16) NULL,
+  [LevyDueYearToDate] MONEY NULL, -- use decimal to reduce space requirements?
   CONSTRAINT [PK_LevyDeclarations] PRIMARY KEY CLUSTERED ([Id] ASC),
   CONSTRAINT [FK_LevyDeclarations_Transactions_Id] FOREIGN KEY ([TransactionId]) REFERENCES [Transactions] ([Id]),
   CONSTRAINT [UK_LevyDeclarations_HmrcSubmissionId] UNIQUE ([HmrcSubmissionId] ASC)
