@@ -1,6 +1,10 @@
 CREATE TABLE [dbo].[LevyDeclarations]
 (
   --todo: add some of these comment to PR?
+  -- general q: do we want to use this table to see exactly what came from hmrc, or should we use logs and/or audit for that?
+  -- what we decides depends on e.g. do we store date fields as strings, or as datetime2 fields?
+  -- also, do we convert magic dates to null, rather than storing the magic values?
+  -- probably best to store date type converted and slightly cleaned up values here, and have separate mechanism for logging/audit
 
   [Id] BIGINT NOT NULL IDENTITY,
   -- nullable: suggest we add LevyDeclarations row for every levy dec received from hmrc,
@@ -13,12 +17,13 @@ CREATE TABLE [dbo].[LevyDeclarations]
   -- store it as we receive it + Entry Type
   --[HmrcId] BIGINT NOT NULL,
   [EpsSubmissionId] INT NULL, -- docs don't say if INT/BIGINT
-  -- 0, no entry; 1, inactive; 2, levy declaration; 3, ceased
+  -- 0, no entry; 1, inactive; 2, levy declaration; 3, ceased (do we need lookup table? probably not)
   [Type] TINYINT NULL,
   --[HmrcSubmissionId] BIGINT NOT NULL,
   -- The time at which the EPS submission that this declaration relates to was received by HMRC. If the backend systems return a bad date that can not be handled this will be set to 1970-01-01T01:00:00.000
   -- we could set this to null if 1970-01-01T01:00:00.000 is supplied. +ve no need for special check against magic value, -ve can't distinguish from db whether we didn't receive this value, or the magic date
   -- q: do we want to see exactly what came from hmrc by looking in the db, or do we use log and/or audit facility for that?
+  -- suggestion: null if not supplied, or supplied as 1970-01-01T01:00:00.000
   [SubmissionTime] DATETIME2 NULL,                  
   [EmployerReferenceNumber] VARCHAR(16) NULL,
   [LevyDueYearToDate] MONEY NULL, -- use decimal to reduce space requirements?
