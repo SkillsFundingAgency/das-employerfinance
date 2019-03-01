@@ -5,6 +5,9 @@ CREATE TABLE [dbo].[LevyDeclarations]
   -- what we decides depends on e.g. do we store date fields as strings, or as datetime2 fields?
   -- also, do we convert magic dates to null, rather than storing the magic values?
   -- probably best to store date type converted and slightly cleaned up values here, and have separate mechanism for logging/audit
+  -- general q: some options need to balance storage, speed & safety requirements vs visibility for support purposes
+  -- we could introduce a *support only* view, which would allow us to concentrate on the 3S's
+  -- e.g. how we store the payrollyear & which derived fields we store (i suggest we store cross-row derived fields (such as valid/superseded/late status), but not row derived fields (e.g. 1 column multiplied by another))
 
   [Id] BIGINT NOT NULL IDENTITY,
   -- 0, no entry; 1, inactive; 2, levy declaration; 3, ceased (do we need lookup table? probably not)
@@ -32,6 +35,10 @@ CREATE TABLE [dbo].[LevyDeclarations]
   [PayrollPeriodYear] CHAR(4) NULL,
   [PayrollPeriodMonth] TINYINT NULL, -- note transaction table will contain a DATE version of payroll period year/month
   [LevyDueYearToDate] MONEY NULL, -- use decimal to reduce space requirements?
+  [InactiveFrom] DATE NULL, --  Indicates the the payroll scheme will be inactive starting from this date. Should always be the 6th of the month of the first inactive payroll period.
+  [InactiveTo] DATE NULL, --  The date after which the payroll scheme will be active again. Should always be the 5th of the month of the last inactive payroll period.
+  [NoPaymentForPeriod] BIT NULL,  -- If present, will always have the value true and indicates that no declaration was necessary for this period. This can be interpreted to mean that the YTD levy balance is unchanged from the previous submitted value.
+  [Allowance] MONEY NULL, -- The annual amount of apprenticeship levy allowance that has been allocated to this payroll scheme. If absent then the value can be taken as 0. The maximum value in the 2017/18 will be 15,000.
   CONSTRAINT [PK_LevyDeclarations] PRIMARY KEY CLUSTERED ([Id] ASC),
   CONSTRAINT [FK_LevyDeclarations_Transactions_Id] FOREIGN KEY ([TransactionId]) REFERENCES [Transactions] ([Id]),
   CONSTRAINT [UK_LevyDeclarations_HmrcSubmissionId] UNIQUE ([HmrcSubmissionId] ASC)
