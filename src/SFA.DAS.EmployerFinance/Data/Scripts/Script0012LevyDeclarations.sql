@@ -39,10 +39,38 @@ CREATE TABLE [dbo].[LevyDeclarations]
   [InactiveTo] DATE NULL, --  The date after which the payroll scheme will be active again. Should always be the 5th of the month of the last inactive payroll period.
   [NoPaymentForPeriod] BIT NULL,  -- If present, will always have the value true and indicates that no declaration was necessary for this period. This can be interpreted to mean that the YTD levy balance is unchanged from the previous submitted value.
   [Allowance] MONEY NULL, -- The annual amount of apprenticeship levy allowance that has been allocated to this payroll scheme. If absent then the value can be taken as 0. The maximum value in the 2017/18 will be 15,000.
+
+  -- each levy dec run that adds a valid levy dec for a paye scheme, we can call the fractions api for the scheme and store the fraction for the appropriate date (presumably submission date?)
+  -- existing system calcs english fraction using payroll month and year. is that correct? calc seems strange!
+  -- calc (CalculateSubmissionCutoffDate) is latest fraction change date before (year, month+4, 20)
+  --storing with each dec will simplify vs current system (see GetLevyDeclaration)
+  -- todo: as an optimisation, we'll only want to get recent fractions, so we probably want a fractions table with paye/last fraction date, i.e. 1 row per paye scheme only, rather than storing all english fractions for each paye)
+  -- hmrc doesn't commit to any schedule for calculating english fractions ("HMRC will calculate the English Fraction values for all PAYE schemes on a regular, but infrequent, basis, most likely quarterly"),
+  -- so we should make our system work whenever EF are calculated e.g. daily, ad-hoc, quarterly, yearly etc.
+  -- after discussion with Gerard, we should use the english fraction in effect on the last day of the payroll year and month (i.e. payroll month +1month -1 day)
+  [EnglishFraction] DECIMAL(6,5) NULL,
+
+--generated from here: do we want these in this table? have separate table linked to from this table? in table: +ve simple access, -ve probably have to update table after creation
+  [AcceptanceStatus] TINYINT NULL,  -- Whether a submission is Accepted / Superseded / Late
+  [IsEndOfYearAdjustment] BIT NULL, -- can we reuse the (negative) amount in transaction for the adjustment amount?
+  [CreatedDate] DATETIME2 NOT NULL, -- not from hmrc, when we created the record
   CONSTRAINT [PK_LevyDeclarations] PRIMARY KEY CLUSTERED ([Id] ASC),
   CONSTRAINT [FK_LevyDeclarations_Transactions_Id] FOREIGN KEY ([TransactionId]) REFERENCES [Transactions] ([Id]),
   CONSTRAINT [UK_LevyDeclarations_HmrcSubmissionId] UNIQUE ([HmrcSubmissionId] ASC)
 )
+
+-- english fraction
+-- do we store all changes and look up using that history
+-- or get english fraction at time of each valid (other) dec and store in with levy dec? <- would simplify access
+-- note: future levy decs might come to us, but we only process them when their time has come
+-- ^^ this makes me think that it might be best to store calculated fields in a joined table
+-- e.g. in month 1, we get levy decs for months 1-12
+-- we only process month 1 in levy dec run for month 1 (e.g. add english fraction, calc acceptance status)
+-- in month 2 we process levy dec 2
+-- splitting pros and cons:
+-- +ve don't waste space storing nulls for future decs
+--     we could make the calculated fields NOT NULL
+-- -ve extra join/more complicated model
 
 --existing..
 /*
