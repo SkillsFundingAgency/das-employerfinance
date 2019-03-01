@@ -7,25 +7,30 @@ CREATE TABLE [dbo].[LevyDeclarations]
   -- probably best to store date type converted and slightly cleaned up values here, and have separate mechanism for logging/audit
 
   [Id] BIGINT NOT NULL IDENTITY,
-  -- nullable: suggest we add LevyDeclarations row for every levy dec received from hmrc,
-  -- but only add a transaction row if the id supplied by hmrc ends in 2 (when a valid payrollPeriod and levyDueYTD should be supplied)
-  -- (from hmrc id doc: Taking this identifier modulo 10 gives the type of entry: 0, no entry; 1, inactive; 2, levy declaration; 3, ceased.)
-  [TransactionId] BIGINT NULL,
+  -- 0, no entry; 1, inactive; 2, levy declaration; 3, ceased (do we need lookup table? probably not)
+  [EmployerReferenceNumber] VARCHAR(16) NULL,
+  [Type] TINYINT NULL,
   -- optional A unique identifier for the declaration. This will remain consistent from one call to the API to the next so that the client can identify declarations they’ve already retrieved. It is the identifier assigned by the RTI system to the EPS return, so it is possible to cross-reference with HMRC if needed. Dividing this identifier by 10 (ignoring the remainder) gives the identifier assigned by the RTI system to the EPS return, so it is possible to cross-reference with HMRC if needed. Taking this identifier modulo 10 gives the type of entry: 0, no entry; 1, inactive; 2, levy declaration; 3, ceased.
   -- our options: store it as we receive it
   -- split it into 2, EPS return id + Entry Type
   -- store it as we receive it + Entry Type
   --[HmrcId] BIGINT NOT NULL,
   [EpsSubmissionId] INT NULL, -- docs don't say if INT/BIGINT
-  -- 0, no entry; 1, inactive; 2, levy declaration; 3, ceased (do we need lookup table? probably not)
-  [Type] TINYINT NULL,
   --[HmrcSubmissionId] BIGINT NOT NULL,
   -- The time at which the EPS submission that this declaration relates to was received by HMRC. If the backend systems return a bad date that can not be handled this will be set to 1970-01-01T01:00:00.000
   -- we could set this to null if 1970-01-01T01:00:00.000 is supplied. +ve no need for special check against magic value, -ve can't distinguish from db whether we didn't receive this value, or the magic date
   -- q: do we want to see exactly what came from hmrc by looking in the db, or do we use log and/or audit facility for that?
   -- suggestion: null if not supplied, or supplied as 1970-01-01T01:00:00.000
-  [SubmissionTime] DATETIME2 NULL,                  
-  [EmployerReferenceNumber] VARCHAR(16) NULL,
+  [SubmissionTime] DATETIME2 NULL,
+  -- nullable: suggest we add LevyDeclarations row for every levy dec received from hmrc,
+  -- but only add a transaction row if the id supplied by hmrc ends in 2 (when a valid payrollPeriod and levyDueYTD should be supplied)
+  -- (from hmrc id doc: Taking this identifier modulo 10 gives the type of entry: 0, no entry; 1, inactive; 2, levy declaration; 3, ceased.)
+  [TransactionId] BIGINT NULL,
+  --  The tax year of the payroll period against which the declaration was made, e.g. 15-16     
+  -- (we'll strip out the hyphen)
+  -- alternatively we could store SMALLINT (2 bytes) lookup to year, i.e. 0 = 15-16, 1 = 16-17 etc. (+ve less storage space, more 'type safe' e.g. couldn't store "CRUD": -ve not so obvious which year at a glance, we can pre-filter anyway (if separate audit) )
+  [PayrollPeriodYear] CHAR(4) NULL,
+  [PayrollPeriodMonth] TINYINT NULL, -- note transaction table will contain a DATE version of payroll period year/month
   [LevyDueYearToDate] MONEY NULL, -- use decimal to reduce space requirements?
   CONSTRAINT [PK_LevyDeclarations] PRIMARY KEY CLUSTERED ([Id] ASC),
   CONSTRAINT [FK_LevyDeclarations_Transactions_Id] FOREIGN KEY ([TransactionId]) REFERENCES [Transactions] ([Id]),
