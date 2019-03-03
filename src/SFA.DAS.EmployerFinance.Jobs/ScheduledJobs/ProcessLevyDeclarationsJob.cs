@@ -12,16 +12,14 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
     {
         private readonly IMessageSession _messageSession;
         private readonly IDateTimeService _dateTimeService;
-        private readonly ILogger _logger;
 
-        public ProcessLevyDeclarationsJob(IMessageSession messageSession, IDateTimeService dateTimeService, ILogger logger)
+        public ProcessLevyDeclarationsJob(IMessageSession messageSession, IDateTimeService dateTimeService)
         {
             _messageSession = messageSession;
             _dateTimeService = dateTimeService;
-            _logger = logger;
         }
 
-        public Task Run([TimerTrigger("0 0 15 20 * *")] TimerInfo timer)
+        public Task Run([TimerTrigger("0 0 15 20 * *")] TimerInfo timer, ILogger logger)
         {
             var now = _dateTimeService.UtcNow;
             var today = now.Date;
@@ -30,7 +28,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
             var command = new ProcessLevyDeclarationsCommand(payrollPeriod);
             var task = _messageSession.Send(command);
 
-            _logger.LogInformation($"Sent '{nameof(ProcessLevyDeclarationsCommand)}' with '{nameof(ProcessLevyDeclarationsCommand.PayrollPeriod)}' value '{command.PayrollPeriod:MM yyyy}'");
+            logger.LogInformation($"Sent '{nameof(ProcessLevyDeclarationsCommand)}' with '{nameof(ProcessLevyDeclarationsCommand.PayrollPeriod)}' value '{command.PayrollPeriod:MM yyyy}'");
             
             return task;
         }

@@ -52,12 +52,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Jobs.ScheduledJobs
 
             DateTimeService.Setup(s => s.UtcNow).Returns(Now);
             
-            Job = new ProcessLevyDeclarationsJob(MessageSession, DateTimeService.Object, Logger.Object);
+            Job = new ProcessLevyDeclarationsJob(MessageSession, DateTimeService.Object);
         }
 
         public Task Run()
         {
-            return Job.Run(null);
+            return Job.Run(null, Logger.Object);
         }
     }
 }
