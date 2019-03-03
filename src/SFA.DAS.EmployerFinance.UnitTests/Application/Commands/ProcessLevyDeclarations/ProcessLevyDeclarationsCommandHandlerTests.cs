@@ -7,12 +7,8 @@ using AutoFixture;
 using FluentAssertions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Moq;
-using NServiceBus;
-using NServiceBus.UniformSession;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Application.Commands.ProcessLevyDeclarations;
-using SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationSagaProgress;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.EmployerFinance.Models;
@@ -56,15 +52,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
                         e.Started == saga.Created);
             });
         }
-        
-        [Test]
-        public Task Handle_WhenHandlingCommand_ThenShouldSendProcessTimeoutCommand()
-        {
-            return TestAsync(f => f.Handle(), f => f.UniformSession.Verify(s => s.Send(
-                It.Is<UpdateLevyDeclarationSagaProgressCommand>(c =>
-                    c.SagaId == f.Db.LevyDeclarationSagas.Select(j => j.Id).Single()),
-                It.IsAny<SendOptions>())));
-        }
     }
 
     public class ProcessLevyDeclarationsCommandHandlerTestsFixture
@@ -74,7 +61,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
         public IUnitOfWorkContext UnitOfWorkContext { get; set; }
         public ProcessLevyDeclarationsCommand Command { get; set; }
         public EmployerFinanceDbContext Db { get; set; }
-        public Mock<IUniformSession> UniformSession { get; set; }
         public IRequestHandler<ProcessLevyDeclarationsCommand> Handler { get; set; }
         public List<string> EmployerReferenceNumbers { get; set; }
         public List<Account> Accounts { get; set; }
@@ -108,12 +94,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
             
             Command = new ProcessLevyDeclarationsCommand(Now);
             Db = new EmployerFinanceDbContext(new DbContextOptionsBuilder<EmployerFinanceDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
-            UniformSession = new Mock<IUniformSession>();
             
             Db.AccountPayeSchemes.AddRange(AccountPayeSchemes);
             Db.SaveChanges();
             
-            Handler = new ProcessLevyDeclarationsCommandHandler(Db, UniformSession.Object);
+            Handler = new ProcessLevyDeclarationsCommandHandler(Db);
         }
 
         public async Task Handle()

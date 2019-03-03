@@ -6,6 +6,7 @@ using Moq;
 using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Application.Commands.ImportLevyDeclarations;
+using SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationSagaProgress;
 using SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.EmployerFinance;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.Testing;
@@ -17,10 +18,18 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
     public class StartedProcessingLevyDeclarationsAdHocEventHandlerTests : FluentTest<StartedProcessingLevyDeclarationsAdHocEventHandlerTestsFixture>
     {
         [Test]
-        public Task Handle_WhenHandlingEvent_ThenShouldSendCommand()
+        public Task Handle_WhenHandlingEvent_ThenShouldSendImportLevyDeclarationsCommand()
         {
             return TestAsync(f => f.Handle(),f => f.Mediator.Verify(m => m.Send(
                 It.Is<ImportLevyDeclarationsCommand>(c => c.SagaId == f.Event.SagaId),
+                CancellationToken.None), Times.Once));
+        }
+        
+        [Test]
+        public Task Handle_WhenHandlingEvent_ThenShouldSendUpdateLevyDeclarationSagaProgressCommand()
+        {
+            return TestAsync(f => f.Handle(),f => f.Mediator.Verify(m => m.Send(
+                It.Is<UpdateLevyDeclarationSagaProgressCommand>(c => c.SagaId == f.Event.SagaId),
                 CancellationToken.None), Times.Once));
         }
     }
