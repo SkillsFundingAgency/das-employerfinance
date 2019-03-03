@@ -1,3 +1,4 @@
+using System;
 using System.Data.SqlClient;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +36,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
                         TablesToIgnoreCommaDelimited = "ClientOutboxData,OutboxData,SchemaVersions,Users"
                     };
                     
-                    config.IgnoreTheseErrors("EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Column 'Users', column name. Found = Id");
+                    config.IgnoreTheseErrors(
+                        "EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Column 'Users', column name. Found = Id" + Environment.NewLine +
+                        "EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Index 'LevyDeclarationSagas', index constraint name. Found = UK_LevyDeclarationSagas_PayrollPeriod" + Environment.NewLine +
+                        "EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Index 'LevyDeclarationSagas', index constraint name. Found = UK_LevyDeclarationSagas_PayrollPeriod_HighWaterMarkId");
                     
                     var comparer = new CompareEfSql(config);
                     var hasErrors = comparer.CompareEfWithDb(context);

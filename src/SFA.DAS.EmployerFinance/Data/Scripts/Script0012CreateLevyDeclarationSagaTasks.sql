@@ -8,7 +8,7 @@
     [Started] DATETIME2 NOT NULL,
     [Finished] DATETIME2 NOT NULL,
     CONSTRAINT [PK_LevyDeclarationSagaTasks] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_LevyDeclarationSagaTasks_LevyDeclarationSagas_SagaId] FOREIGN KEY ([SagaId]) REFERENCES [LevyDeclarationsSagas] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_LevyDeclarationSagaTasks_LevyDeclarationSagas_SagaId] FOREIGN KEY ([SagaId]) REFERENCES [LevyDeclarationSagas] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_LevyDeclarationSagaTasks_AccountPayeSchemes_AccountPayeSchemeId] FOREIGN KEY ([AccountPayeSchemeId]) REFERENCES [AccountPayeSchemes] ([Id]),
     CONSTRAINT [FK_LevyDeclarationSagaTasks_Accounts_AccountId] FOREIGN KEY ([AccountId]) REFERENCES [Accounts] ([Id]),
     CONSTRAINT [UK_LevyDeclarationSagaTasks_SagaId] UNIQUE ([SagaId] ASC, [Type] ASC, [AccountPayeSchemeId] ASC, [AccountId] ASC),

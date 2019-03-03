@@ -8,7 +8,6 @@ namespace SFA.DAS.EmployerFinance.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<LevyDeclarationSaga> builder)
         {
-            builder.Property(j => j.Id).ValueGeneratedNever();
             builder.Property(j => j.Updated).IsConcurrencyToken();
         }
     }
