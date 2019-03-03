@@ -8,23 +8,23 @@ using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Models;
 
-namespace SFA.DAS.EmployerFinance.Application.Commands.ProcessLevyDeclarations
+namespace SFA.DAS.EmployerFinance.Application.Commands.ProcessLevyDeclarationsAdHoc
 {
-    public class ProcessLevyDeclarationsCommandHandler : AsyncRequestHandler<ProcessLevyDeclarationsCommand>
+    public class ProcessLevyDeclarationsAdHocCommandHandler : AsyncRequestHandler<ProcessLevyDeclarationsAdHocCommand>
     {
         private readonly EmployerFinanceDbContext _db;
         private readonly IUniformSession _uniformSession;
 
-        public ProcessLevyDeclarationsCommandHandler(EmployerFinanceDbContext db, IUniformSession uniformSession)
+        public ProcessLevyDeclarationsAdHocCommandHandler(EmployerFinanceDbContext db, IUniformSession uniformSession)
         {
             _db = db;
             _uniformSession = uniformSession;
         }
         
-        protected override async Task Handle(ProcessLevyDeclarationsCommand request, CancellationToken cancellationToken)
+        protected override async Task Handle(ProcessLevyDeclarationsAdHocCommand request, CancellationToken cancellationToken)
         {
-            var accountPayeSchemes = await _db.AccountPayeSchemes.AsNoTracking().ToListAsync(cancellationToken);
-            var saga = new LevyDeclarationSaga(request.PayrollPeriod, accountPayeSchemes);
+            var accountPayeScheme = await _db.AccountPayeSchemes.AsNoTracking().SingleAsync(aps => aps.Id == request.AccountPayeSchemeId, cancellationToken);
+            var saga = new LevyDeclarationSaga(request.PayrollPeriod, accountPayeScheme);
 
             _db.LevyDeclarationSagas.Add(saga);
             

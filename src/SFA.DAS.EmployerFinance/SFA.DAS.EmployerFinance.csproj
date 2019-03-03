@@ -16,8 +16,8 @@
         <EmbeddedResource Remove="Startup\**" />
         <EmbeddedResource Remove="Application\Queries\**" />
         <EmbeddedResource Include="Data\Scripts\Script0008CreateAccountPayeSchemes.sql" />
-        <EmbeddedResource Include="Data\Scripts\Script0011CreateProcessLevyDeclarationsJobs.sql" />
-        <EmbeddedResource Include="Data\Scripts\Script0012CreateProcessLevyDeclarationsJobTasks.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0011CreateLevyDeclarationSagas.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0012CreateLevyDeclarationSagaTasks.sql" />
     </ItemGroup>
 
     <ItemGroup>
@@ -38,8 +38,8 @@
         <PackageReference Include="NLog.Extensions.Logging" Version="1.4.0" />
         <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.0" />
         <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.1" />
-        <PackageReference Include="SFA.DAS.NServiceBus" Version="9.0.1" />
-        <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="9.0.1" />
+        <PackageReference Include="SFA.DAS.NServiceBus" Version="9.0.8" />
+        <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="9.0.8" />
         <PackageReference Include="SFA.DAS.UnitOfWork" Version="5.0.4" />
         <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="5.0.4" />
         <PackageReference Include="StructureMap" Version="4.7.0" />
