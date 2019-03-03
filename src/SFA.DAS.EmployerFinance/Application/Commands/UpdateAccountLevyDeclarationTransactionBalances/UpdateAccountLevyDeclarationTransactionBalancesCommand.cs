@@ -1,4 +1,6 @@
-namespace SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountTransactionBalances
+using SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountTransactionBalances;
+
+namespace SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountLevyDeclarationTransactionBalances
 {
     public class UpdateAccountLevyDeclarationTransactionBalancesCommand : UpdateAccountTransactionBalancesCommand
     {

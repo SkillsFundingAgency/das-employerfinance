@@ -10,6 +10,7 @@ using Moq;
 using NServiceBus;
 using NServiceBus.UniformSession;
 using NUnit.Framework;
+using SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountLevyDeclarationTransactionBalances;
 using SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountTransactionBalances;
 using SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationTransactionBalances;
 using SFA.DAS.EmployerFinance.Data;

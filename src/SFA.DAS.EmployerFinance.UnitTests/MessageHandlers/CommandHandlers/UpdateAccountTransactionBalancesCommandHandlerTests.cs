@@ -4,6 +4,7 @@ using MediatR;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
+using SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountLevyDeclarationTransactionBalances;
 using SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountTransactionBalances;
 using SFA.DAS.Testing;
 using UpdateAccountTransactionBalancesCommandHandler = SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers.UpdateAccountTransactionBalancesCommandHandler;
