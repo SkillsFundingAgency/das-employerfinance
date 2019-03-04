@@ -22,8 +22,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
         public Task Run([TimerTrigger("0 0 15 20 * *")] TimerInfo timer, ILogger logger)
         {
             var now = _dateTimeService.UtcNow;
-            var today = now.Date;
-            var month = new DateTime(today.Year, today.Month, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            var month = new DateTime(now.Year, now.Month, 6, 0, 0, 0, 0, DateTimeKind.Utc);
             var payrollPeriod = month.AddMonths(-1);
             var command = new ProcessLevyDeclarationsCommand(payrollPeriod);
             var task = _messageSession.Send(command);
