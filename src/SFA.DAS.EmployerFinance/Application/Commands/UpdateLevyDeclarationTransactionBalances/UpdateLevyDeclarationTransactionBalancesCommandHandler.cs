@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NServiceBus.UniformSession;
 using SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountLevyDeclarationTransactionBalances;
-using SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountTransactionBalances;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models;
 

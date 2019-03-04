@@ -10,7 +10,6 @@ using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Application.Commands.ImportPayeSchemeLevyDeclarations;
 using SFA.DAS.EmployerFinance.Application.Commands.RunLevyDeclarationSagaTask;
 using SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountLevyDeclarationTransactionBalances;
-using SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountTransactionBalances;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.Testing;
