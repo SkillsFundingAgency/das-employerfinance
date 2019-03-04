@@ -1,3 +1,4 @@
+using System.Data.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +9,7 @@ using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
+using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
 using StructureMap;
 
@@ -33,6 +35,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.Startup
                         .UseMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
+                        .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                         .UseStructureMapBuilder(container)
                         .UseSendOnly();
                     
