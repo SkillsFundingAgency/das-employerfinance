@@ -48,11 +48,16 @@ CREATE TABLE [dbo].[LevyDeclarations]
   -- hmrc doesn't commit to any schedule for calculating english fractions ("HMRC will calculate the English Fraction values for all PAYE schemes on a regular, but infrequent, basis, most likely quarterly"),
   -- so we should make our system work whenever EF are calculated e.g. daily, ad-hoc, quarterly, yearly etc.
   -- after discussion with Gerard, we should use the english fraction in effect on the last day of the payroll year and month (i.e. payroll month +1month -1 day)
+  --^ ask gerard to update/create an acceptance criteria with this (AC4 https://skillsfundingagency.atlassian.net/browse/AML-3293)
   [EnglishFraction] DECIMAL(6,5) NULL,
 
 --generated from here: do we want these in this table? have separate table linked to from this table? in table: +ve simple access, -ve probably have to update table after creation
+--generated properties that are more complicated than e.g. simple multiple col1 * col2, i.e. calculated from multiple rows etc.
   [AcceptanceStatus] TINYINT NULL,  -- Whether a submission is Accepted / Superseded / Late
   [IsEndOfYearAdjustment] BIT NULL, -- can we reuse the (negative) amount in transaction for the adjustment amount?
+  
+--do we want to link to another table with simple row-only computed properties (for support), or have a simple support only view, or neither?
+  
   [CreatedDate] DATETIME2 NOT NULL, -- not from hmrc, when we created the record
   CONSTRAINT [PK_LevyDeclarations] PRIMARY KEY CLUSTERED ([Id] ASC),
   CONSTRAINT [FK_LevyDeclarations_Transactions_Id] FOREIGN KEY ([TransactionId]) REFERENCES [Transactions] ([Id]),
@@ -71,6 +76,8 @@ CREATE TABLE [dbo].[LevyDeclarations]
 -- +ve don't waste space storing nulls for future decs
 --     we could make the calculated fields NOT NULL
 -- -ve extra join/more complicated model
+
+--todo: topup / english fraction override
 
 --existing..
 /*
