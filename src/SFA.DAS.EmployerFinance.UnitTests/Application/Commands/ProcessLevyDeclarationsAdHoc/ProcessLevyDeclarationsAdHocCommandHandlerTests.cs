@@ -56,15 +56,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
                         e.Started == saga.Created);
             });
         }
-        
-        [Test]
-        public Task Handle_WhenHandlingCommand_ThenShouldSendProcessTimeoutCommand()
-        {
-            return TestAsync(f => f.Handle(), f => f.UniformSession.Verify(s => s.Send(
-                It.Is<UpdateLevyDeclarationSagaProgressCommand>(c =>
-                    c.SagaId == f.Db.LevyDeclarationSagas.Select(j => j.Id).Single()),
-                It.IsAny<SendOptions>())));
-        }
     }
 
     public class ProcessLevyDeclarationsAdHocCommandHandlerTestsFixture
@@ -74,7 +65,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
         public IUnitOfWorkContext UnitOfWorkContext { get; set; }
         public ProcessLevyDeclarationsAdHocCommand Command { get; set; }
         public EmployerFinanceDbContext Db { get; set; }
-        public Mock<IUniformSession> UniformSession { get; set; }
         public IRequestHandler<ProcessLevyDeclarationsAdHocCommand> Handler { get; set; }
         public AccountPayeScheme AccountPayeScheme { get; set; }
 
@@ -86,12 +76,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
             AccountPayeScheme = Fixture.Create<AccountPayeScheme>().Set(aps => aps.Id, 1);
             Command = new ProcessLevyDeclarationsAdHocCommand(Now, AccountPayeScheme.Id);
             Db = new EmployerFinanceDbContext(new DbContextOptionsBuilder<EmployerFinanceDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
-            UniformSession = new Mock<IUniformSession>();
             
             Db.AccountPayeSchemes.Add(AccountPayeScheme);
             Db.SaveChanges();
             
-            Handler = new ProcessLevyDeclarationsAdHocCommandHandler(Db, UniformSession.Object);
+            Handler = new ProcessLevyDeclarationsAdHocCommandHandler(Db);
         }
 
         public async Task Handle()
