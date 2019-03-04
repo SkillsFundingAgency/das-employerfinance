@@ -7,8 +7,8 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Api.Client;
-using SFA.DAS.EmployerFinance.Api.Client.Http;
 using SFA.DAS.EmployerFinance.Web.HealthChecks;
+using SFA.DAS.Http;
 using SFA.DAS.Testing;
 using Xunit.Extensions.AssertExtensions;
 

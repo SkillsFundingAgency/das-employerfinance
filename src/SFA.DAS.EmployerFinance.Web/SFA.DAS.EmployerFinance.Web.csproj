@@ -23,7 +23,8 @@
         <PackageReference Include="NLog.Schema" Version="4.5.11" />
         <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="3.0.1" />
         <PackageReference Include="SFA.DAS.Authorization.Mvc" Version="3.0.1" />
-	<PackageReference Include="NServiceBus.Callbacks" Version="3.0.0" />
+	    <PackageReference Include="NServiceBus.Callbacks" Version="3.0.0" />
+	    <PackageReference Include="SFA.DAS.Http" Version="3.0.5" />
         <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
         <PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="5.0.4" />
         <PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="5.0.4" />

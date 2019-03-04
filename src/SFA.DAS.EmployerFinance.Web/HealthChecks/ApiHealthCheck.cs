@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerFinance.Api.Client;
-using SFA.DAS.EmployerFinance.Api.Client.Http;
 using SFA.DAS.EmployerFinance.Web.Extensions;
+using SFA.DAS.Http;
 
 namespace SFA.DAS.EmployerFinance.Web.HealthChecks
 {

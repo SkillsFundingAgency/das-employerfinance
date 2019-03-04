@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Startup;
-using SFA.DAS.EmployerFinance.Web.Authentication;
 using SFA.DAS.EmployerFinance.Web.DependencyResolution;
 using SFA.DAS.UnitOfWork.Mvc;
 using StructureMap;
@@ -26,8 +25,9 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             services.AddDasCookiePolicy()
                 .AddDasMvc()
                 .AddDasNServiceBus()
-                .AddDasOidcAuthentication(_oidcConfiguration);
+                .AddDasOidcAuthentication(_oidcConfiguration)
                 .AddWebHealthChecks(_employerFinanceConfiguration.DatabaseConnectionString);
+            
         }
 
         public void ConfigureContainer(Registry registry)
