@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Jobs.ScheduledJobs
         {
             Now = DateTime.UtcNow;
             Today = Now.Date;
-            Month = new DateTime(Today.Year, Today.Month, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            Month = new DateTime(Today.Year, Today.Month, 6, 0, 0, 0, 0, DateTimeKind.Utc);
             PayrollPeriod = Month.AddMonths(-1);
             MessageSession = new TestableMessageSession();
             DateTimeService = new Mock<IDateTimeService>();
