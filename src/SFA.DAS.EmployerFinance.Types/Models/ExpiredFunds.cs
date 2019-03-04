@@ -41,47 +41,49 @@ namespace SFA.DAS.EmployerFinance.Types.Models
             
             CalculateAndApplyExpiredFundsToFundsOut(fundsOut, expired);
             
-            CalculateAndApplyAdjustmentsToFundsIn(fundsIn, expiryPeriod);
+            CalculateAndApplyAdjustmentsToTotals(fundsOut);
+
+            CalculateAndApplyAdjustmentsToTotals(fundsIn);
             
             var expiredFunds = CalculatedExpiredFunds(fundsIn, fundsOut, expired, expiryPeriod);
 
             return expiredFunds;
         }
         
-        private static void CalculateAndApplyAdjustmentsToFundsIn(IDictionary<CalendarPeriod, decimal> fundsIn, int expiryPeriod)
+        private static void CalculateAndApplyAdjustmentsToTotals(IDictionary<CalendarPeriod, decimal> calendarFunds)
         {
-            if (!fundsIn.Any(c => c.Value < 0))
+            if (!calendarFunds.Any(c => c.Value < 0))
             {
                 return;
             }
             
-            var adjustmentsIn = fundsIn.Where(c => c.Value < 0)
+            var adjustments = calendarFunds.Where(c => c.Value < 0)
                                        .ToDictionary(key => key.Key, value => value.Value);
 
-            foreach (var adjustment in adjustmentsIn.OrderBy(c => c.Key))
+            foreach (var adjustment in adjustments.OrderBy(c => c.Key))
             {
                 var adjustmentAmount = adjustment.Value * -1;
 
-                var orderFundsIn = fundsIn.Where(c => c.Value > 0)
+                var orderedAdjustments = calendarFunds.Where(c => c.Value > 0)
                                           .Where(c=>c.Key <=adjustment.Key)
                                           .ToDictionary(c => c.Key, c => c.Value)
                                           .OrderByDescending(c => c.Key);
 
-                foreach (var fundsInValue in orderFundsIn)
+                foreach (var orderedAdjustment in orderedAdjustments)
                 {
-                    if (fundsInValue.Value >= adjustmentAmount)
+                    if (orderedAdjustment.Value >= adjustmentAmount)
                     {
-                        fundsIn[fundsInValue.Key] = fundsInValue.Value - adjustmentAmount;
+                        calendarFunds[orderedAdjustment.Key] = orderedAdjustment.Value - adjustmentAmount;
                         break;
                     }
 
-                    if (fundsInValue.Value >= adjustmentAmount)
+                    if (orderedAdjustment.Value >= adjustmentAmount)
                     {
                         continue;
                     }
 
-                    fundsIn[fundsInValue.Key] = 0;
-                    adjustmentAmount = adjustmentAmount - fundsInValue.Value;
+                    calendarFunds[orderedAdjustment.Key] = 0;
+                    adjustmentAmount = adjustmentAmount - orderedAdjustment.Value;
                 }
             }
         }

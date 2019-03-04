@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using SFA.DAS.EmployerFinance.Api.Client.Http;
+using SFA.DAS.Http;
 
 namespace SFA.DAS.EmployerFinance.Api.Client
 {

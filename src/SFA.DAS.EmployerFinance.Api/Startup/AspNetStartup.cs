@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Api.DependencyResolution;
 using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Startup;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api.Startup
@@ -28,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Api.Startup
             IoC.Initialize(registry);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseDasCultureInfo()
                 .UseDasHsts()

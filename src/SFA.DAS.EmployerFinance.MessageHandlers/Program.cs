@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;
 using SFA.DAS.EmployerFinance.MessageHandlers.Startup;
 using SFA.DAS.EmployerFinance.Startup;
@@ -11,9 +10,11 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
     {
         public static void Main(string[] args)
         {
-            ServicePointManager.DefaultConnectionLimit = 50;
-            
-            var host = new HostBuilder()
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        private static IHostBuilder CreateHostBuilder(string[] args) => 
+            new HostBuilder()
                 .ConfigureDasWebJobs()
                 .ConfigureDasAppConfiguration(args)
                 .ConfigureDasLogging()
@@ -21,13 +22,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
                 .UseStructureMap()
                 .UseConsoleLifetime()
                 .ConfigureServices(s => s.AddDasNServiceBus())
-                .ConfigureContainer<Registry>(IoC.Initialize)
-                .Build();
-
-            using (host)
-            {
-                host.Run();
-            }
-        }
+                .ConfigureContainer<Registry>(IoC.Initialize);
     }
 }

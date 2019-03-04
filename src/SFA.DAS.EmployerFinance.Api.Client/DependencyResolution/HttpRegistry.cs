@@ -1,5 +1,7 @@
 using System.Net.Http;
-using SFA.DAS.EmployerFinance.Api.Client.Http;
+using SFA.DAS.EmployerFinance.Api.Client.Configuration;
+using SFA.DAS.Http;
+using SFA.DAS.Http.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api.Client.DependencyResolution
@@ -8,10 +10,8 @@ namespace SFA.DAS.EmployerFinance.Api.Client.DependencyResolution
     {
         public HttpRegistry()
         {
-            For<HttpClient>().Add(c => c.GetInstance<IHttpClientFactory>().CreateHttpClient()).Named(GetType().FullName).Singleton();
-            For<IHttpClientFactory>().Use<Http.HttpClientFactory>();
-            For<IRestHttpClient>().Use<RestHttpClient>().Ctor<HttpClient>().IsNamedInstance(GetType().FullName);
-            For<IEmployerFinanceApiClient>().Use<EmployerFinanceApiClient>();
+            For<IEmployerFinanceApiClient>().Use(c => c.GetInstance<IEmployerFinanceApiClientFactory>().CreateClient()).Singleton();
+            For<IEmployerFinanceApiClientFactory>().Use<EmployerFinanceApiClientFactory>();
         }
     }
 }

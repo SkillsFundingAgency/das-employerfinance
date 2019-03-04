@@ -108,7 +108,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
             //Assert
             Assert.IsNotNull(actual);
             Assert.AreEqual(4, actual.Count);
-            Assert.AreEqual(0, actual.First().Value);
+            Assert.AreEqual(5, actual.First().Value);
             Assert.AreEqual(9, actual.Skip(1).First().Value);
             Assert.AreEqual(8, actual.Skip(2).First().Value);
             Assert.AreEqual(5, actual.Last().Value);
@@ -134,7 +134,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
             //Assert
             Assert.IsNotNull(actual);
             Assert.AreEqual(4, actual.Count);
-            Assert.AreEqual(0, actual.First().Value);
+            Assert.AreEqual(7, actual.First().Value);
             Assert.AreEqual(9, actual.Skip(1).First().Value);
             Assert.AreEqual(8, actual.Skip(2).First().Value);
             Assert.AreEqual(5, actual.Last().Value);
@@ -556,7 +556,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
             Assert.AreEqual(6, actual.Count);
             Assert.AreEqual(10, actual.First().Value);
             Assert.AreEqual(9, actual.Skip(1).First().Value);
-            Assert.AreEqual(0, actual.Skip(2).First().Value);
+            Assert.AreEqual(1, actual.Skip(2).First().Value);
             Assert.AreEqual(0, actual.Skip(3).First().Value);
             Assert.AreEqual(1, actual.Skip(4).First().Value);
             Assert.AreEqual(0, actual.Last().Value);
@@ -569,47 +569,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
             var expiryPeriod = 24;
             _fundsIn = new Dictionary<CalendarPeriod, decimal>
             {
-                {new CalendarPeriod(2017, 5), 57045.01m},
-                {new CalendarPeriod(2017, 6), 141693.02m},
-                {new CalendarPeriod(2017, 7), 57906.64m},
-                {new CalendarPeriod(2017, 8), 58082.55m},
-                {new CalendarPeriod(2017, 9), 62633.29m},
-                {new CalendarPeriod(2017, 10), 53622.49m},
-                {new CalendarPeriod(2017, 11), 65128.54m},
-                {new CalendarPeriod(2017, 12), 68635.01m},
-                {new CalendarPeriod(2018, 1), 60536.31m},
-                {new CalendarPeriod(2018, 2), 64024.08m},
-                {new CalendarPeriod(2018, 3), 1265069.16m},
-                {new CalendarPeriod(2018, 4), -1056207.55m},
-                {new CalendarPeriod(2018, 5), 5665.63m},
-                {new CalendarPeriod(2018, 6), 5230.66m}
+                {new CalendarPeriod(2017, 5), 13263.8916m},
+                {new CalendarPeriod(2017, 6), 11007.99m},
+                {new CalendarPeriod(2017, 7), 11554.93m}
             };
             var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
-            //    {new CalendarPeriod(2017, 9), 300}, 
-            //    {new CalendarPeriod(2017, 10), 300},
-            //    {new CalendarPeriod(2017, 11), 300},
-            //    {new CalendarPeriod(2017, 12), 300},
-            //    {new CalendarPeriod(2018, 1), 300}, 
-            //    {new CalendarPeriod(2018, 2), 300}, 
-            //    {new CalendarPeriod(2018, 3), 300}, 
-            //    {new CalendarPeriod(2018, 4), 300}, 
-            //    {new CalendarPeriod(2018, 5), 300}, 
-            //    {new CalendarPeriod(2018, 6), 300}, 
-            //    {new CalendarPeriod(2018, 7), 300}, 
-            //    {new CalendarPeriod(2018, 8), 300}, 
-            //    {new CalendarPeriod(2018, 9), 300}, 
-            //    {new CalendarPeriod(2018, 10), 300},
-            //    {new CalendarPeriod(2018, 11), 300},
-            //    {new CalendarPeriod(2018, 12), 300},
-            //    {new CalendarPeriod(2019, 1), 300}, 
-            //    {new CalendarPeriod(2019, 2), 300}, 
-            //    {new CalendarPeriod(2019, 3), 300}, 
-            //    {new CalendarPeriod(2019, 4), 300}, 
-            //    {new CalendarPeriod(2019, 5), 300},
-            //    {new CalendarPeriod(2019, 6), 300} ,
-            //    {new CalendarPeriod(2019, 7), 500}, 
-            //    {new CalendarPeriod(2019, 8), 500}
+                {new CalendarPeriod(2017, 10), 1142.85715m},
             };
             var expired = new Dictionary<CalendarPeriod, decimal>
             {
@@ -622,8 +588,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
             var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, expired, expiryPeriod);
 
             //Assert
-            Assert.AreEqual(208861.61, actual.Skip(10).First().Value);
-            Assert.AreEqual(0, actual.Skip(11).First().Value);
+            Assert.AreEqual(11554.93m, actual.Skip(2).First().Value);
         }
 
         [Test]
