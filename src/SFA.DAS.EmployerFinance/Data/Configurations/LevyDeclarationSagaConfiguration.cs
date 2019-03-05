@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerFinance.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<LevyDeclarationSaga> builder)
         {
-            builder.Property(j => j.Updated).IsConcurrencyToken();
+            builder.Property(s => s.Updated).IsConcurrencyToken();
         }
     }
 }

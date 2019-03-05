@@ -14,7 +14,9 @@
     [IsComplete] BIT NOT NULL,
     CONSTRAINT [PK_LevyDeclarationSagas] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_LevyDeclarationSagas_AccountPayeSchemes_AccountPayeSchemeHighWaterMarkId] FOREIGN KEY ([AccountPayeSchemeHighWaterMarkId]) REFERENCES [AccountPayeSchemes] ([Id]),
-    CONSTRAINT [FK_LevyDeclarationSagas_AccountPayeSchemes_AccountPayeSchemeId] FOREIGN KEY ([AccountPayeSchemeId]) REFERENCES [AccountPayeSchemes] ([Id])
+    CONSTRAINT [FK_LevyDeclarationSagas_AccountPayeSchemes_AccountPayeSchemeId] FOREIGN KEY ([AccountPayeSchemeId]) REFERENCES [AccountPayeSchemes] ([Id]),
+    INDEX [IX_LevyDeclarationSagas_AccountPayeSchemeHighWaterMarkId] NONCLUSTERED ([AccountPayeSchemeHighWaterMarkId] ASC),
+    INDEX [IX_LevyDeclarationSagas_AccountPayeSchemeId] NONCLUSTERED ([AccountPayeSchemeId] ASC)
 )
 GO
 

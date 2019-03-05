@@ -32,6 +32,7 @@ namespace SFA.DAS.EmployerFinance.Data
             modelBuilder.ApplyConfiguration(new AccountPayeSchemeConfiguration());
             modelBuilder.ApplyConfiguration(new HealthCheckConfiguration());
             modelBuilder.ApplyConfiguration(new LevyDeclarationSagaConfiguration());
+            modelBuilder.ApplyConfiguration(new LevyDeclarationSagaTaskConfiguration());
         }
     }
 }

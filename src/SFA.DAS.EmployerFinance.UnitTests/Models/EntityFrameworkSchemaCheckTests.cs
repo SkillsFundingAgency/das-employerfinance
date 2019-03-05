@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
                     config.IgnoreTheseErrors(
                         "EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Column 'Users', column name. Found = Id" + Environment.NewLine +
                         "EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Index 'LevyDeclarationSagas', index constraint name. Found = UK_LevyDeclarationSagas_PayrollPeriod" + Environment.NewLine +
-                        "EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Index 'LevyDeclarationSagas', index constraint name. Found = UK_LevyDeclarationSagas_PayrollPeriod_HighWaterMarkId");
+                        "EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Index 'LevyDeclarationSagas', index constraint name. Found = UK_LevyDeclarationSagas_PayrollPeriod_AccountPayeSchemeId");
                     
                     var comparer = new CompareEfSql(config);
                     var hasErrors = comparer.CompareEfWithDb(context);
