@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.Models
             Type = LevyDeclarationSagaType.All;
             PayrollPeriod = payrollPeriod;
             Created = DateTime.UtcNow;
-            HighWaterMarkId = accountPayeSchemes.OrderByDescending(aps => aps.Id).Select(aps => aps.Id).First();
+            HighWaterMarkId = accountPayeSchemes.Max(aps => aps.Id);
             ImportPayeSchemeLevyDeclarationsTasksCount = accountPayeSchemes.Select(aps => aps.EmployerReferenceNumber).Distinct().Count();
             UpdateAccountTransactionBalancesTasksCount = accountPayeSchemes.Select(aps => aps.AccountId).Distinct().Count();
             
