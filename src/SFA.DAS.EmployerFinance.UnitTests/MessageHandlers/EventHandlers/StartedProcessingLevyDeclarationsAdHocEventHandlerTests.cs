@@ -5,7 +5,7 @@ using MediatR;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
-using SFA.DAS.EmployerFinance.Application.Commands.ImportLevyDeclarations;
+using SFA.DAS.EmployerFinance.Application.Commands.ImportPayeSchemeLevyDeclarations;
 using SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationSagaProgress;
 using SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.EmployerFinance;
 using SFA.DAS.EmployerFinance.Messages.Events;
@@ -21,7 +21,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
         public Task Handle_WhenHandlingEvent_ThenShouldSendImportLevyDeclarationsCommand()
         {
             return TestAsync(f => f.Handle(),f => f.Mediator.Verify(m => m.Send(
-                It.Is<ImportLevyDeclarationsCommand>(c => c.SagaId == f.Event.SagaId),
+                It.Is<ImportPayeSchemeLevyDeclarationsCommand>(c => 
+                    c.SagaId == f.Event.SagaId &&
+                    c.PayrollPeriod == f.Event.PayrollPeriod &&
+                    c.AccountPayeSchemeId == f.Event.AccountPayeSchemeId),
                 CancellationToken.None), Times.Once));
         }
         
@@ -42,7 +45,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
 
         public StartedProcessingLevyDeclarationsAdHocEventHandlerTestsFixture()
         {
-            Event = new StartedProcessingLevyDeclarationsAdHocEvent(1, DateTime.UtcNow, 123, DateTime.UtcNow);
+            Event = new StartedProcessingLevyDeclarationsAdHocEvent(1, DateTime.UtcNow.AddMonths(-1), 123, DateTime.UtcNow);
             Mediator = new Mock<IMediator>();
             Handler = new StartedProcessingLevyDeclarationsAdHocEventHandler(Mediator.Object);
         }

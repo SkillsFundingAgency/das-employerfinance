@@ -28,11 +28,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
             return TestAsync(f => f.Handle(), f => f.Db.LevyDeclarationSagas.SingleOrDefault().Should().NotBeNull()
                 .And.Match<LevyDeclarationSaga>(j =>
                     j.PayrollPeriod == f.Command.PayrollPeriod &&
-                    j.HighWaterMarkId == f.AccountPayeSchemes.OrderByDescending(aps => aps.Id).Select(aps => aps.Id).First() &&
+                    j.AccountPayeSchemeHighWaterMarkId == f.AccountPayeSchemes.Max(aps => aps.Id) &&
+                    j.AccountPayeSchemeId == null &&
                     j.ImportPayeSchemeLevyDeclarationsTasksCount == f.EmployerReferenceNumbers.Count &&
                     j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == 0 &&
+                    !j.IsStage1Complete &&
                     j.UpdateAccountTransactionBalancesTasksCount == f.Accounts.Count &&
                     j.UpdateAccountTransactionBalancesTasksCompleteCount == 0 &&
+                    !j.IsStage2Complete &&
                     j.Created >= f.Now &&
                     j.Updated == null &&
                     !j.IsComplete));

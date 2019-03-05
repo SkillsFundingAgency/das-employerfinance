@@ -10,25 +10,28 @@ namespace SFA.DAS.EmployerFinance.Models
         public int Id { get; private set; }
         public LevyDeclarationSagaType Type { get; private set; }
         public DateTime PayrollPeriod { get; private set; }
-        public long HighWaterMarkId { get; private set; }
+        public AccountPayeScheme AccountPayeSchemeHighWaterMark { get; private set; }
+        public long? AccountPayeSchemeHighWaterMarkId { get; private set; }
+        public AccountPayeScheme AccountPayeScheme { get; private set; }
+        public long? AccountPayeSchemeId { get; private set; }
         public DateTime Created { get; private set; }
         public DateTime? Updated { get; private set; }
         public int ImportPayeSchemeLevyDeclarationsTasksCount { get; private set; }
         public int ImportPayeSchemeLevyDeclarationsTasksCompleteCount { get; private set; }
-        public DateTime? ImportPayeSchemeLevyDeclarationsTasksFinished { get; private set; }
+        public bool IsStage1Complete => ImportPayeSchemeLevyDeclarationsTasksCompleteCount == ImportPayeSchemeLevyDeclarationsTasksCount;
         public int UpdateAccountTransactionBalancesTasksCount { get; private set; }
         public int UpdateAccountTransactionBalancesTasksCompleteCount { get; private set; }
-        public DateTime? UpdateAccountTransactionBalancesTasksFinished { get; private set; }
+        public bool IsStage2Complete => UpdateAccountTransactionBalancesTasksCompleteCount == UpdateAccountTransactionBalancesTasksCount;
         public bool IsComplete { get; private set; }
         public TimeSpan Timeout => TimeSpan.FromMinutes(2);
 
         public LevyDeclarationSaga(DateTime payrollPeriod, IReadOnlyCollection<AccountPayeScheme> accountPayeSchemes)
         {
-            Type = LevyDeclarationSagaType.All;
+            Type = LevyDeclarationSagaType.Scheduled;
             PayrollPeriod = payrollPeriod;
             Created = DateTime.UtcNow;
-            HighWaterMarkId = accountPayeSchemes.Max(aps => aps.Id);
-            ImportPayeSchemeLevyDeclarationsTasksCount = accountPayeSchemes.Select(aps => aps.EmployerReferenceNumber).Distinct().Count();
+            AccountPayeSchemeHighWaterMarkId = accountPayeSchemes.Max(aps => aps.Id);
+            ImportPayeSchemeLevyDeclarationsTasksCount = accountPayeSchemes.Select(aps => aps.EmployerReferenceNumber).Count();
             UpdateAccountTransactionBalancesTasksCount = accountPayeSchemes.Select(aps => aps.AccountId).Distinct().Count();
             
             Publish(() => new StartedProcessingLevyDeclarationsEvent(Id, PayrollPeriod, Created));
@@ -39,25 +42,25 @@ namespace SFA.DAS.EmployerFinance.Models
             Type = LevyDeclarationSagaType.AdHoc;
             PayrollPeriod = payrollPeriod;
             Created = DateTime.UtcNow;
-            HighWaterMarkId = accountPayeScheme.Id;
+            AccountPayeSchemeId = accountPayeScheme.Id;
             ImportPayeSchemeLevyDeclarationsTasksCount = 1;
             UpdateAccountTransactionBalancesTasksCount = 1;
             
-            Publish(() => new StartedProcessingLevyDeclarationsAdHocEvent(Id, PayrollPeriod, HighWaterMarkId, Created));
+            Publish(() => new StartedProcessingLevyDeclarationsAdHocEvent(Id, PayrollPeriod, AccountPayeSchemeId.Value, Created));
         }
 
         private LevyDeclarationSaga()
         {
         }
         
-        public void UpdateProgress(IEnumerable<LevyDeclarationSagaTask> tasks)
+        public void UpdateProgress(IReadOnlyCollection<LevyDeclarationSagaTask> tasks)
         {
             if (IsComplete)
             {
                 return;
             }
 
-            if (ImportPayeSchemeLevyDeclarationsTasksCompleteCount < ImportPayeSchemeLevyDeclarationsTasksCount)
+            if (!IsStage1Complete)
             {
                 UpdateStage1Progress(tasks);
             }
@@ -72,10 +75,8 @@ namespace SFA.DAS.EmployerFinance.Models
             ImportPayeSchemeLevyDeclarationsTasksCompleteCount = tasks.Count(t => t.Type == LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations);
             Updated = DateTime.UtcNow;
 
-            if (ImportPayeSchemeLevyDeclarationsTasksCompleteCount == ImportPayeSchemeLevyDeclarationsTasksCount)
+            if (IsStage1Complete)
             {
-                ImportPayeSchemeLevyDeclarationsTasksFinished = Updated;
-                        
                 Publish(() => new UpdatedLevyDeclarationSagaProgressEvent(Id));
             }
 
@@ -87,18 +88,17 @@ namespace SFA.DAS.EmployerFinance.Models
             UpdateAccountTransactionBalancesTasksCompleteCount = tasks.Count(t => t.Type == LevyDeclarationSagaTaskType.UpdateAccountTransactionBalances);
             Updated = DateTime.UtcNow;
 
-            if (UpdateAccountTransactionBalancesTasksCompleteCount == UpdateAccountTransactionBalancesTasksCount)
+            if (IsStage2Complete)
             {
-                UpdateAccountTransactionBalancesTasksFinished = Updated;
                 IsComplete = true;
 
                 switch (Type)
                 {
-                    case LevyDeclarationSagaType.All:
+                    case LevyDeclarationSagaType.Scheduled:
                         Publish(() => new FinishedProcessingLevyDeclarationsEvent(Id, PayrollPeriod, Updated.Value));
                         break;
                     case LevyDeclarationSagaType.AdHoc:
-                        Publish(() => new FinishedProcessingLevyDeclarationsAdHocEvent(Id, PayrollPeriod, HighWaterMarkId, Updated.Value));
+                        Publish(() => new FinishedProcessingLevyDeclarationsAdHocEvent(Id, PayrollPeriod, AccountPayeSchemeId.Value, Updated.Value));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

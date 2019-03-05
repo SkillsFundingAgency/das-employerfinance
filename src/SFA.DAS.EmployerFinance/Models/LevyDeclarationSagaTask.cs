@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerFinance.Models
         public Account Account { get; private set; }
         public long? AccountId { get; private set; }
         public DateTime Started { get; private set; }
-        public DateTime Finished { get; private set; }
+        public DateTime? Finished { get; private set; }
 
         public static LevyDeclarationSagaTask CreateImportPayeSchemeLevyDeclarationsTask(int sagaId, long accountPayeSchemeId)
         {

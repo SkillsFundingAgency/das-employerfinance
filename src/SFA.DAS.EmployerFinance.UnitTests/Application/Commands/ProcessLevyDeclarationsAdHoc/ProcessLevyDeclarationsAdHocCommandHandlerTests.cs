@@ -27,11 +27,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
             return TestAsync(f => f.Handle(), f => f.Db.LevyDeclarationSagas.SingleOrDefault().Should().NotBeNull()
                 .And.Match<LevyDeclarationSaga>(j =>
                     j.PayrollPeriod == f.Command.PayrollPeriod &&
-                    j.HighWaterMarkId == f.AccountPayeScheme.Id &&
+                    j.AccountPayeSchemeHighWaterMarkId == null &&
+                    j.AccountPayeSchemeId == f.AccountPayeScheme.Id &&
                     j.ImportPayeSchemeLevyDeclarationsTasksCount == 1 &&
                     j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == 0 &&
+                    !j.IsStage1Complete &&
                     j.UpdateAccountTransactionBalancesTasksCount == 1 &&
                     j.UpdateAccountTransactionBalancesTasksCompleteCount == 0 &&
+                    !j.IsStage2Complete &&
                     j.Created >= f.Now &&
                     j.Updated == null &&
                     !j.IsComplete));
@@ -48,7 +51,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
                     .And.Match<StartedProcessingLevyDeclarationsAdHocEvent>(e =>
                         e.SagaId == saga.Id &&
                         e.PayrollPeriod == saga.PayrollPeriod &&
-                        e.AccountPayeSchemeId == saga.HighWaterMarkId &&
+                        e.AccountPayeSchemeId == saga.AccountPayeSchemeId &&
                         e.Started == saga.Created);
             });
         }

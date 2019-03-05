@@ -3,23 +3,23 @@
     [Id] INT NOT NULL IDENTITY,
     [Type] SMALLINT NOT NULL,
     [PayrollPeriod] DATETIME2 NOT NULL,
-    [HighWaterMarkId] BIGINT NOT NULL,
+    [AccountPayeSchemeHighWaterMarkId] BIGINT NULL,
+    [AccountPayeSchemeId] BIGINT NULL,
     [Created] DATETIME2 NOT NULL,
     [Updated] DATETIME2 NULL,
     [ImportPayeSchemeLevyDeclarationsTasksCount] INT NOT NULL,
     [ImportPayeSchemeLevyDeclarationsTasksCompleteCount] INT NOT NULL,
-    [ImportPayeSchemeLevyDeclarationsTasksFinished] DATETIME2 NULL,
     [UpdateAccountTransactionBalancesTasksCount] INT NOT NULL,
     [UpdateAccountTransactionBalancesTasksCompleteCount] INT NOT NULL,
-    [UpdateAccountTransactionBalancesTasksFinished] DATETIME2 NULL,
     [IsComplete] BIT NOT NULL,
     CONSTRAINT [PK_LevyDeclarationSagas] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_LevyDeclarationSagas_AccountPayeSchemes_HighWaterMarkId] FOREIGN KEY ([HighWaterMarkId]) REFERENCES [AccountPayeSchemes] ([Id])
+    CONSTRAINT [FK_LevyDeclarationSagas_AccountPayeSchemes_AccountPayeSchemeHighWaterMarkId] FOREIGN KEY ([AccountPayeSchemeHighWaterMarkId]) REFERENCES [AccountPayeSchemes] ([Id]),
+    CONSTRAINT [FK_LevyDeclarationSagas_AccountPayeSchemes_AccountPayeSchemeId] FOREIGN KEY ([AccountPayeSchemeId]) REFERENCES [AccountPayeSchemes] ([Id])
 )
 GO
 
 CREATE UNIQUE INDEX [UK_LevyDeclarationSagas_PayrollPeriod] ON [dbo].[LevyDeclarationSagas] ([PayrollPeriod] ASC) WHERE [Type] = 0
 GO
 
-CREATE UNIQUE INDEX [UK_LevyDeclarationSagas_PayrollPeriod_HighWaterMarkId] ON [dbo].[LevyDeclarationSagas] ([PayrollPeriod] ASC, [HighWaterMarkId] ASC) WHERE [Type] = 1
+CREATE UNIQUE INDEX [UK_LevyDeclarationSagas_PayrollPeriod_AccountPayeSchemeId] ON [dbo].[LevyDeclarationSagas] ([PayrollPeriod] ASC, [AccountPayeSchemeId] ASC) WHERE [Type] = 1
 GO

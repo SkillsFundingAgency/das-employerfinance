@@ -28,139 +28,227 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
         [Test]
         public Task Handle_WhenSomeImportPayeSchemeLevyDeclarationsTasksCompleted_ThenShouldUpdateSagaProgress()
         {
-            return TestAsync(f => f.SetSomeImportLevyDeclarationTasksCompleted(), f => f.Handle(), f => f.Saga.Should().Match<LevyDeclarationSaga>(j =>
-                j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == f.Tasks.Count &&
-                j.UpdateAccountTransactionBalancesTasksCompleteCount == 0 &&
-                !j.IsComplete &&
-                j.Updated >= f.Now));
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetSomeImportLevyDeclarationTasksCompleted(),
+                f => f.Handle(),
+                f => f.Saga.Should().Match<LevyDeclarationSaga>(s =>
+                    s.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == f.Tasks.Count &&
+                    !s.IsStage1Complete &&
+                    s.UpdateAccountTransactionBalancesTasksCompleteCount == 0 &&
+                    !s.IsStage2Complete &&
+                    !s.IsComplete &&
+                    s.Updated >= f.Now));
         }
         
         [Test]
         public Task Handle_WhenSomeImportPayeSchemeLevyDeclarationsTasksCompleted_ThenShouldNotPublishEvent()
         {
-            return TestAsync(f => f.SetSomeImportLevyDeclarationTasksCompleted(),f => f.Handle(), f => f.UnitOfWorkContext.GetEvents().Should().BeEmpty());
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetSomeImportLevyDeclarationTasksCompleted(),
+                f => f.Handle(), 
+                f => f.UnitOfWorkContext.GetEvents().Should().BeEmpty());
         }
         
         [Test]
         public Task Handle_WhenSomeImportPayeSchemeLevyDeclarationsTasksCompleted_ThenShouldSendProcessTimeoutCommand()
         {
-            return TestAsync(f => f.SetSomeImportLevyDeclarationTasksCompleted(), f => f.Handle(), f => f.UniformSession
-                .Verify(s => s .Send(It.Is<UpdateLevyDeclarationSagaProgressCommand>(c => c.SagaId == f.Saga.Id), It.IsAny<SendOptions>()), Times.Once));
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetSomeImportLevyDeclarationTasksCompleted(),
+                f => f.Handle(), 
+                f => f.UniformSession.Verify(s => s
+                    .Send(
+                        It.Is<UpdateLevyDeclarationSagaProgressCommand>(c => c.SagaId == f.Saga.Id),
+                        It.IsAny<SendOptions>()),
+                    Times.Once));
         }
         
         [Test]
         public Task Handle_WhenAllImportPayeSchemeLevyDeclarationsTasksCompleted_ThenShouldUpdateSagaProgress()
         {
-            return TestAsync(f => f.SetAllImportLevyDeclarationTasksCompleted(), f => f.Handle(), f => f.Saga.Should().Match<LevyDeclarationSaga>(j =>
-                j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == f.Tasks.Count &&
-                j.UpdateAccountTransactionBalancesTasksCompleteCount == 0 &&
-                !j.IsComplete &&
-                j.Updated >= f.Now));
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetAllImportLevyDeclarationTasksCompleted(),
+                f => f.Handle(),
+                f => f.Saga.Should().Match<LevyDeclarationSaga>(s =>
+                    s.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == f.Tasks.Count &&
+                    s.IsStage1Complete &&
+                    s.UpdateAccountTransactionBalancesTasksCompleteCount == 0 &&
+                    !s.IsStage2Complete &&
+                    !s.IsComplete &&
+                    s.Updated >= f.Now));
         }
         
         [Test]
         public Task Handle_WhenAllImportPayeSchemeLevyDeclarationsTasksCompleted_ThenShouldPublishEvent()
         {
-            return TestAsync(f => f.SetAllImportLevyDeclarationTasksCompleted(), f => f.Handle(), f => f.UnitOfWorkContext.GetEvents().SingleOrDefault().Should().NotBeNull()
-                .And.Match<UpdatedLevyDeclarationSagaProgressEvent>(e => e.SagaId == f.Saga.Id));
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetAllImportLevyDeclarationTasksCompleted(),
+                f => f.Handle(),
+                f => f.UnitOfWorkContext.GetEvents().SingleOrDefault().Should().NotBeNull()
+                    .And.Match<UpdatedLevyDeclarationSagaProgressEvent>(e => e.SagaId == f.Saga.Id));
         }
         
         [Test]
         public Task Handle_WhenSomeUpdateAccountTransactionBalancesTasksCompleted_ThenShouldUpdateSagaProgress()
         {
-            return TestAsync(f => f.SetSomeUpdateAccountTransactionBalancesTasksCompleted(), f => f.Handle(), f => f.Saga.Should().Match<LevyDeclarationSaga>(j =>
-                j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == f.AccountPayeSchemes.Count &&
-                j.UpdateAccountTransactionBalancesTasksCompleteCount == f.Tasks.Count &&
-                !j.IsComplete &&
-                j.Updated >= f.Now));
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetSomeUpdateAccountTransactionBalancesTasksCompleted(),
+                f => f.Handle(),
+                f => f.Saga.Should().Match<LevyDeclarationSaga>(s =>
+                    s.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == f.AccountPayeSchemes.Count &&
+                    s.IsStage1Complete &&
+                    s.UpdateAccountTransactionBalancesTasksCompleteCount == f.Tasks.Count &&
+                    !s.IsStage2Complete &&
+                    !s.IsComplete &&
+                    s.Updated >= f.Now));
         }
         
         [Test]
         public Task Handle_WhenSomeUpdateAccountTransactionBalancesTasksCompleted_ThenShouldNotPublishEvent()
         {
-            return TestAsync(f => f.SetSomeUpdateAccountTransactionBalancesTasksCompleted(), f => f.Handle(), f => f.UnitOfWorkContext.GetEvents().OfType<FinishedProcessingLevyDeclarationsEvent>().Should().BeEmpty());
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetSomeUpdateAccountTransactionBalancesTasksCompleted(),
+                f => f.Handle(),
+                f => f.UnitOfWorkContext.GetEvents().OfType<FinishedProcessingLevyDeclarationsEvent>().Should().BeEmpty());
         }
         
         [Test]
         public Task Handle_WhenSomeUpdateAccountTransactionBalancesTasksCompleted_ThenShouldSendProcessTimeoutCommand()
         {
-            return TestAsync(f => f.SetSomeUpdateAccountTransactionBalancesTasksCompleted(), f => f.Handle(), f => f.UniformSession
-                .Verify(s => s .Send(It.Is<UpdateLevyDeclarationSagaProgressCommand>(c => c.SagaId == f.Saga.Id), It.IsAny<SendOptions>()), Times.Once));
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetSomeUpdateAccountTransactionBalancesTasksCompleted(),
+                f => f.Handle(),
+                f => f.UniformSession.Verify(s => s
+                    .Send(
+                        It.Is<UpdateLevyDeclarationSagaProgressCommand>(c => c.SagaId == f.Saga.Id),
+                        It.IsAny<SendOptions>()),
+                    Times.Once));
         }
         
         [Test]
-        public Task Handle_WhenAllUpdateAccountTransactionBalancesTasksCompleted_ThenShouldUpdateSagaProgress()
+        public Task Handle_WhenAllUpdateAccountTransactionBalancesTasksCompletedAndSagaTypeIsScheduled_ThenShouldUpdateSagaProgress()
         {
-            return TestAsync(f => f.SetAllUpdateAccountTransactionBalancesTasksCompleted(), f => f.Handle(), f => f.Saga.Should().Match<LevyDeclarationSaga>(j =>
-                j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == f.AccountPayeSchemes.Count &&
-                j.UpdateAccountTransactionBalancesTasksCompleteCount == f.Tasks.Count &&
-                j.IsComplete &&
-                j.Updated >= f.Now));
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetAllUpdateAccountTransactionBalancesTasksCompleted(),
+                f => f.Handle(),
+                f => f.Saga.Should().Match<LevyDeclarationSaga>(s =>
+                    s.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == f.AccountPayeSchemes.Count &&
+                    s.IsStage1Complete &&
+                    s.UpdateAccountTransactionBalancesTasksCompleteCount == f.Tasks.Count &&
+                    s.IsStage2Complete &&
+                    s.IsComplete &&
+                    s.Updated >= f.Now));
         }
         
         [Test]
-        public Task Handle_WhenAllUpdateAccountTransactionBalancesTasksCompleted_ThenShouldPublishEvent()
+        public Task Handle_WhenAllUpdateAccountTransactionBalancesTasksCompletedAndSagaTypeIsScheduled_ThenShouldPublishEvent()
         {
-            return TestAsync(f => f.SetAllUpdateAccountTransactionBalancesTasksCompleted(), f => f.Handle(), f => f.UnitOfWorkContext.GetEvents().SingleOrDefault().Should().NotBeNull()
-                .And.Match<FinishedProcessingLevyDeclarationsEvent>(e => 
-                    e.SagaId == f.Saga.Id &&
-                    e.PayrollPeriod == f.Saga.PayrollPeriod &&
-                    e.Finished == f.Saga.Updated.Value));
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetAllUpdateAccountTransactionBalancesTasksCompleted(),
+                f => f.Handle(),
+                f => f.UnitOfWorkContext.GetEvents().SingleOrDefault().Should().NotBeNull()
+                    .And.Match<FinishedProcessingLevyDeclarationsEvent>(e => 
+                        e.SagaId == f.Saga.Id &&
+                        e.PayrollPeriod == f.Saga.PayrollPeriod &&
+                        e.Finished == f.Saga.Updated.Value));
+        }
+        
+        [Test]
+        public Task Handle_WhenAllUpdateAccountTransactionBalancesTasksCompletedAndSagaTypeIsAdHoc_ThenShouldUpdateSagaProgress()
+        {
+            return TestAsync(
+                f => f.SetAdHocSagaType().SetAllUpdateAccountTransactionBalancesTasksCompleted(),
+                f => f.Handle(),
+                f => f.Saga.Should().Match<LevyDeclarationSaga>(s =>
+                    s.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == 1 &&
+                    s.IsStage1Complete &&
+                    s.UpdateAccountTransactionBalancesTasksCompleteCount == 1 &&
+                    s.IsStage2Complete &&
+                    s.IsComplete &&
+                    s.Updated >= f.Now));
         }
         
         [Test]
         public Task Handle_WhenAllUpdateAccountTransactionBalancesTasksCompletedAndSagaTypeIsAdHoc_ThenShouldPublishEvent()
         {
-            return TestAsync(f => f.SetAdHocSagaType().SetAllUpdateAccountTransactionBalancesTasksCompleted(), f => f.Handle(), f => f.UnitOfWorkContext.GetEvents().SingleOrDefault().Should().NotBeNull()
-                .And.Match<FinishedProcessingLevyDeclarationsAdHocEvent>(e => 
-                    e.SagaId == f.Saga.Id &&
-                    e.PayrollPeriod == f.Saga.PayrollPeriod &&
-                    e.AccountPayeSchemeId == f.Saga.HighWaterMarkId &&
-                    e.Finished == f.Saga.Updated.Value));
+            return TestAsync(
+                f => f.SetAdHocSagaType().SetAllUpdateAccountTransactionBalancesTasksCompleted(),
+                f => f.Handle(),
+                f => f.UnitOfWorkContext.GetEvents().SingleOrDefault().Should().NotBeNull()
+                    .And.Match<FinishedProcessingLevyDeclarationsAdHocEvent>(e => 
+                        e.SagaId == f.Saga.Id &&
+                        e.PayrollPeriod == f.Saga.PayrollPeriod &&
+                        e.AccountPayeSchemeId == f.Saga.AccountPayeSchemeId &&
+                        e.Finished == f.Saga.Updated.Value));
         }
         
         [Test]
         public Task Handle_WhenAllUpdateAccountTransactionBalancesTasksCompleted_ThenShouldNotSendProcessTimeoutCommand()
         {
-            return TestAsync(f => f.SetAllUpdateAccountTransactionBalancesTasksCompleted(), f => f.Handle(), f => f.UniformSession
-                .Verify(s => s .Send(It.IsAny<UpdateLevyDeclarationSagaProgressCommand>(), It.IsAny<SendOptions>()), Times.Never));
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetAllUpdateAccountTransactionBalancesTasksCompleted(),
+                f => f.Handle(),
+                f => f.UniformSession.Verify(s => s
+                    .Send(
+                        It.IsAny<UpdateLevyDeclarationSagaProgressCommand>(),
+                        It.IsAny<SendOptions>()),
+                    Times.Never));
         }
         
         [Test]
         public Task Handle_WhenAllTasksCompleted_ThenShouldNotUpdateSagaProgress()
         {
-            return TestAsync(f => f.SetAllTasksCompleted(), f => f.Handle(), f => f.Saga.Should().Match<LevyDeclarationSaga>(j =>
-                j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == f.AccountPayeSchemes.Count &&
-                j.UpdateAccountTransactionBalancesTasksCompleteCount == f.Accounts.Count &&
-                j.IsComplete &&
-                j.Updated == f.Now));
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetAllTasksCompleted(),
+                f => f.Handle(),
+                f => f.Saga.Should().Match<LevyDeclarationSaga>(s =>
+                    s.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == f.AccountPayeSchemes.Count &&
+                    s.IsStage1Complete &&
+                    s.UpdateAccountTransactionBalancesTasksCompleteCount == f.Accounts.Count &&
+                    s.IsStage2Complete &&
+                    s.IsComplete &&
+                    s.Updated == f.Now));
         }
         
         [Test]
         public Task Handle_WhenAllTasksCompleted_ThenShouldNotPublishEvent()
         {
-            return TestAsync(f => f.SetAllTasksCompleted(),f => f.Handle(), f => f.UnitOfWorkContext.GetEvents().Should().BeEmpty());
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetAllTasksCompleted(),
+                f => f.Handle(),
+                f => f.UnitOfWorkContext.GetEvents().Should().BeEmpty());
         }
         
         [Test]
         public Task Handle_WhenAllTasksCompleted_ThenShouldNotSendProcessTimeoutCommand()
         {
-            return TestAsync(f => f.SetAllTasksCompleted(), f => f.Handle(), f => f.UniformSession
-                .Verify(s => s .Send(It.IsAny<UpdateLevyDeclarationSagaProgressCommand>(), It.IsAny<SendOptions>()), Times.Never));
+            return TestAsync(
+                f => f.SetScheduledSagaType().SetAllTasksCompleted(),
+                f => f.Handle(),
+                f => f.UniformSession.Verify(s => s
+                    .Send(
+                        It.IsAny<UpdateLevyDeclarationSagaProgressCommand>(),
+                        It.IsAny<SendOptions>()), 
+                    Times.Never));
         }
 
         [Test]
         public Task Handle_WhenImportPayeSchemeLevyDeclarationsTaskCountsDoNotBalance_ThenShouldThrowException()
         {
-            return TestExceptionAsync(f => f.SetTooManyImportLevyDeclarationsTasksCompleted(), f => f.Handle(), (f, r) => r.Should().Throw<InvalidOperationException>()
-                .WithMessage($"Requires {nameof(LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations)} task counts balance"));
+            return TestExceptionAsync(
+                f => f.SetScheduledSagaType().SetTooManyImportLevyDeclarationsTasksCompleted(),
+                f => f.Handle(),
+                (f, r) => r.Should().Throw<InvalidOperationException>()
+                    .WithMessage($"Requires {nameof(LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations)} task counts balance"));
         }
 
         [Test]
         public Task Handle_WhenUpdateAccountTransactionBalancesTaskCountsDoNotBalance_ThenShouldThrowException()
         {
-            return TestExceptionAsync(f => f.SetTooManyUpdateAccountTransactionBalancesTasksCompleted(), f => f.Handle(), (f, r) => r.Should().Throw<InvalidOperationException>()
-                .WithMessage($"Requires {nameof(LevyDeclarationSagaTaskType.UpdateAccountTransactionBalances)} task counts balance"));
+            return TestExceptionAsync(
+                f => f.SetScheduledSagaType().SetTooManyUpdateAccountTransactionBalancesTasksCompleted(),
+                f => f.Handle(),
+                (f, r) => r.Should().Throw<InvalidOperationException>()
+                    .WithMessage($"Requires {nameof(LevyDeclarationSagaTaskType.UpdateAccountTransactionBalances)} task counts balance"));
         }
     }
 
@@ -204,21 +292,18 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
                 new AccountPayeScheme(Accounts[0], PayeSchemeRefs[1]).Set(aps => aps.Id, 2),
                 new AccountPayeScheme(Accounts[1], PayeSchemeRefs[2]).Set(aps => aps.Id, 3)
             };
-
+            
             Saga = ObjectActivator.CreateInstance<LevyDeclarationSaga>()
                 .Set(s => s.Id, 4)
-                .Set(s => s.Type, LevyDeclarationSagaType.All)
-                .Set(s => s.PayrollPeriod, Now)
-                .Set(s => s.HighWaterMarkId, AccountPayeSchemes.OrderByDescending(aps => aps.Id).Select(aps => aps.Id).First())
-                .Set(s => s.ImportPayeSchemeLevyDeclarationsTasksCount, AccountPayeSchemes.Select(aps => aps.EmployerReferenceNumber).Distinct().Count())
-                .Set(s => s.UpdateAccountTransactionBalancesTasksCount, AccountPayeSchemes.Select(aps => aps.AccountId).Distinct().Count());
+                .Set(s => s.PayrollPeriod, Now);
             
             Command = new UpdateLevyDeclarationSagaProgressCommand(Saga.Id);
+            
             Db = new EmployerFinanceDbContext(new DbContextOptionsBuilder<EmployerFinanceDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
             UniformSession = new Mock<IUniformSession>();
 
             Db.AccountPayeSchemes.AddRange(AccountPayeSchemes);
-            Db.LevyDeclarationSagas.AddRange(Saga);
+            Db.LevyDeclarationSagas.Add(Saga);
             Db.SaveChanges();
             
             Handler = new UpdateLevyDeclarationSagaProgressCommandHandler(Db, UniformSession.Object);
@@ -230,9 +315,26 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
             await Db.SaveChangesAsync();
         }
 
+        public UpdateProcessLevyDeclarationsSagaProgressCommandHandlerTestsFixture SetScheduledSagaType()
+        {
+            Saga.Set(s => s.Type, LevyDeclarationSagaType.Scheduled)
+                .Set(s => s.AccountPayeSchemeHighWaterMarkId, AccountPayeSchemes.Max(aps => aps.Id))
+                .Set(s => s.ImportPayeSchemeLevyDeclarationsTasksCount, AccountPayeSchemes.Select(aps => aps.EmployerReferenceNumber).Count())
+                .Set(s => s.UpdateAccountTransactionBalancesTasksCount, AccountPayeSchemes.Select(aps => aps.AccountId).Distinct().Count());
+            
+            Db.SaveChanges();
+            
+            return this;
+        }
+
         public UpdateProcessLevyDeclarationsSagaProgressCommandHandlerTestsFixture SetAdHocSagaType()
         {
-            Saga.Set(s => s.Type, LevyDeclarationSagaType.AdHoc);
+            Saga.Set(s => s.Type, LevyDeclarationSagaType.AdHoc)
+                .Set(s => s.AccountPayeSchemeId, AccountPayeSchemes[0].Id)
+                .Set(s => s.ImportPayeSchemeLevyDeclarationsTasksCount, 1)
+                .Set(s => s.UpdateAccountTransactionBalancesTasksCount, 1);
+            
+            Db.SaveChanges();
             
             return this;
         }
@@ -242,7 +344,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
             Tasks = new List<LevyDeclarationSagaTask>
             {
                 LevyDeclarationSagaTask.CreateImportPayeSchemeLevyDeclarationsTask(Saga.Id, AccountPayeSchemes[0].Id),
-                LevyDeclarationSagaTask.CreateImportPayeSchemeLevyDeclarationsTask(Saga.Id, AccountPayeSchemes[2].Id)
+                LevyDeclarationSagaTask.CreateImportPayeSchemeLevyDeclarationsTask(Saga.Id, AccountPayeSchemes[1].Id)
             };
             
             Db.LevyDeclarationSagaTasks.AddRange(Tasks);
@@ -253,7 +355,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
 
         public UpdateProcessLevyDeclarationsSagaProgressCommandHandlerTestsFixture SetAllImportLevyDeclarationTasksCompleted()
         {
-            Tasks = AccountPayeSchemes.Select(aps => LevyDeclarationSagaTask.CreateImportPayeSchemeLevyDeclarationsTask(Saga.Id, aps.Id)).ToList();
+            Tasks = AccountPayeSchemes
+                .Take(Saga.ImportPayeSchemeLevyDeclarationsTasksCount)
+                .Select(aps => LevyDeclarationSagaTask.CreateImportPayeSchemeLevyDeclarationsTask(Saga.Id, aps.Id))
+                .ToList();
             
             Db.LevyDeclarationSagaTasks.AddRange(Tasks);
             Db.SaveChanges();
@@ -263,7 +368,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
 
         public UpdateProcessLevyDeclarationsSagaProgressCommandHandlerTestsFixture SetSomeUpdateAccountTransactionBalancesTasksCompleted()
         {
-            Saga.Set(j => j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount, AccountPayeSchemes.Count);
+            Saga.Set(s => s.ImportPayeSchemeLevyDeclarationsTasksCompleteCount, AccountPayeSchemes.Count);
             
             Tasks = new List<LevyDeclarationSagaTask>
             {
@@ -278,9 +383,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
 
         public UpdateProcessLevyDeclarationsSagaProgressCommandHandlerTestsFixture SetAllUpdateAccountTransactionBalancesTasksCompleted()
         {
-            Saga.Set(j => j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount, AccountPayeSchemes.Count);
+            Saga.Set(s => s.ImportPayeSchemeLevyDeclarationsTasksCompleteCount, Saga.ImportPayeSchemeLevyDeclarationsTasksCount);
             
-            Tasks = Accounts.Select(a => LevyDeclarationSagaTask.CreateUpdateAccountTransactionBalancesTask(Saga.Id, a.Id)).ToList();
+            Tasks = Accounts
+                .Take(Saga.UpdateAccountTransactionBalancesTasksCount)
+                .Select(a => LevyDeclarationSagaTask.CreateUpdateAccountTransactionBalancesTask(Saga.Id, a.Id))
+                .ToList();
             
             Db.LevyDeclarationSagaTasks.AddRange(Tasks);
             Db.SaveChanges();
@@ -290,13 +398,18 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
 
         public UpdateProcessLevyDeclarationsSagaProgressCommandHandlerTestsFixture SetAllTasksCompleted()
         {
-            Saga.Set(j => j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount, AccountPayeSchemes.Count);
-            Saga.Set(j => j.UpdateAccountTransactionBalancesTasksCompleteCount, Accounts.Count);
-            Saga.Set(j => j.IsComplete, true);
-            Saga.Set(j => j.Updated, Now);
+            Saga.Set(s => s.ImportPayeSchemeLevyDeclarationsTasksCompleteCount, Saga.ImportPayeSchemeLevyDeclarationsTasksCount)
+                .Set(s => s.UpdateAccountTransactionBalancesTasksCompleteCount, Saga.UpdateAccountTransactionBalancesTasksCount)
+                .Set(s => s.IsComplete, true)
+                .Set(s => s.Updated, Now);
             
-            var importPayeSchemeLevyDeclarationsTasks = AccountPayeSchemes.Select(aps => LevyDeclarationSagaTask.CreateImportPayeSchemeLevyDeclarationsTask(Saga.Id, aps.Id));
-            var updateAccountTransactionBalancesTasks = Accounts.Select(a => LevyDeclarationSagaTask.CreateUpdateAccountTransactionBalancesTask(Saga.Id, a.Id));
+            var importPayeSchemeLevyDeclarationsTasks = AccountPayeSchemes
+                .Take(Saga.ImportPayeSchemeLevyDeclarationsTasksCount)
+                .Select(aps => LevyDeclarationSagaTask.CreateImportPayeSchemeLevyDeclarationsTask(Saga.Id, aps.Id));
+            
+            var updateAccountTransactionBalancesTasks = Accounts
+                .Take(Saga.UpdateAccountTransactionBalancesTasksCount)
+                .Select(a => LevyDeclarationSagaTask.CreateUpdateAccountTransactionBalancesTask(Saga.Id, a.Id));
 
             Tasks = importPayeSchemeLevyDeclarationsTasks.Concat(updateAccountTransactionBalancesTasks).ToList();
             
@@ -321,7 +434,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
 
         public UpdateProcessLevyDeclarationsSagaProgressCommandHandlerTestsFixture SetTooManyUpdateAccountTransactionBalancesTasksCompleted()
         {
-            Saga.Set(j => j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount, AccountPayeSchemes.Count);
+            Saga.Set(s => s.ImportPayeSchemeLevyDeclarationsTasksCompleteCount, AccountPayeSchemes.Count);
             
             Tasks = Accounts
                 .Select(a => LevyDeclarationSagaTask.CreateUpdateAccountTransactionBalancesTask(Saga.Id, a.Id))
