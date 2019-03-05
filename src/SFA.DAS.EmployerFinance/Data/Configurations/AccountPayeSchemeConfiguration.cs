@@ -10,6 +10,7 @@ namespace SFA.DAS.EmployerFinance.Data.Configurations
         {
             builder.Property(aps => aps.EmployerReferenceNumber).IsRequired().HasColumnType("varchar(16)");
             builder.HasOne(aps => aps.Account).WithMany(a => a.AccountPayeSchemes).Metadata.DeleteBehavior = DeleteBehavior.Restrict;
+            builder.HasQueryFilter(aps => aps.Deleted == null);
         }
     }
 }
