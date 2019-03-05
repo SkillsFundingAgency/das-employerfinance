@@ -52,41 +52,43 @@ namespace SFA.DAS.EmployerFinance.Models
         
         public void UpdateProgress(IReadOnlyCollection<LevyDeclarationSagaTask> tasks)
         {
-            if (!IsComplete)
+            if (IsComplete)
             {
-                if (ImportPayeSchemeLevyDeclarationsTasksCompleteCount < ImportPayeSchemeLevyDeclarationsTasksCount)
-                {
-                    ImportPayeSchemeLevyDeclarationsTasksCompleteCount = tasks.Count(t => t.Type == LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations);
-                    Updated = DateTime.UtcNow;
+                return;
+            }
+            
+            if (ImportPayeSchemeLevyDeclarationsTasksCompleteCount < ImportPayeSchemeLevyDeclarationsTasksCount)
+            {
+                ImportPayeSchemeLevyDeclarationsTasksCompleteCount = tasks.Count(t => t.Type == LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations);
+                Updated = DateTime.UtcNow;
 
-                    if (ImportPayeSchemeLevyDeclarationsTasksCompleteCount == ImportPayeSchemeLevyDeclarationsTasksCount)
-                    {
-                        ImportPayeSchemeLevyDeclarationsTasksFinished = Updated;
+                if (ImportPayeSchemeLevyDeclarationsTasksCompleteCount == ImportPayeSchemeLevyDeclarationsTasksCount)
+                {
+                    ImportPayeSchemeLevyDeclarationsTasksFinished = Updated;
                         
-                        Publish(() => new UpdatedLevyDeclarationSagaProgressEvent(Id));
-                    }
+                    Publish(() => new UpdatedLevyDeclarationSagaProgressEvent(Id));
                 }
-                else
+            }
+            else
+            {
+                UpdateAccountTransactionBalancesTasksCompleteCount = tasks.Count(t => t.Type == LevyDeclarationSagaTaskType.UpdateAccountTransactionBalances);
+                Updated = DateTime.UtcNow;
+
+                if (UpdateAccountTransactionBalancesTasksCompleteCount == UpdateAccountTransactionBalancesTasksCount)
                 {
-                    UpdateAccountTransactionBalancesTasksCompleteCount = tasks.Count(t => t.Type == LevyDeclarationSagaTaskType.UpdateAccountTransactionBalances);
-                    Updated = DateTime.UtcNow;
+                    UpdateAccountTransactionBalancesTasksFinished = Updated;
+                    IsComplete = true;
 
-                    if (UpdateAccountTransactionBalancesTasksCompleteCount == UpdateAccountTransactionBalancesTasksCount)
+                    switch (Type)
                     {
-                        UpdateAccountTransactionBalancesTasksFinished = Updated;
-                        IsComplete = true;
-
-                        switch (Type)
-                        {
-                            case LevyDeclarationSagaType.All:
-                                Publish(() => new FinishedProcessingLevyDeclarationsEvent(Id, PayrollPeriod, Updated.Value));
-                                break;
-                            case LevyDeclarationSagaType.AdHoc:
-                                Publish(() => new FinishedProcessingLevyDeclarationsAdHocEvent(Id, PayrollPeriod, HighWaterMarkId, Updated.Value));
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
+                        case LevyDeclarationSagaType.All:
+                            Publish(() => new FinishedProcessingLevyDeclarationsEvent(Id, PayrollPeriod, Updated.Value));
+                            break;
+                        case LevyDeclarationSagaType.AdHoc:
+                            Publish(() => new FinishedProcessingLevyDeclarationsAdHocEvent(Id, PayrollPeriod, HighWaterMarkId, Updated.Value));
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                 }
             }
