@@ -50,46 +50,56 @@ namespace SFA.DAS.EmployerFinance.Models
         {
         }
         
-        public void UpdateProgress(IReadOnlyCollection<LevyDeclarationSagaTask> tasks)
+        public void UpdateProgress(IEnumerable<LevyDeclarationSagaTask> tasks)
         {
             if (IsComplete)
             {
                 return;
             }
-            
+
             if (ImportPayeSchemeLevyDeclarationsTasksCompleteCount < ImportPayeSchemeLevyDeclarationsTasksCount)
             {
-                ImportPayeSchemeLevyDeclarationsTasksCompleteCount = tasks.Count(t => t.Type == LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations);
-                Updated = DateTime.UtcNow;
-
-                if (ImportPayeSchemeLevyDeclarationsTasksCompleteCount == ImportPayeSchemeLevyDeclarationsTasksCount)
-                {
-                    ImportPayeSchemeLevyDeclarationsTasksFinished = Updated;
-                        
-                    Publish(() => new UpdatedLevyDeclarationSagaProgressEvent(Id));
-                }
+                UpdateStage1Progress(tasks);
             }
             else
             {
-                UpdateAccountTransactionBalancesTasksCompleteCount = tasks.Count(t => t.Type == LevyDeclarationSagaTaskType.UpdateAccountTransactionBalances);
-                Updated = DateTime.UtcNow;
+                UpdateStage2Progress(tasks);
+            }
+        }
 
-                if (UpdateAccountTransactionBalancesTasksCompleteCount == UpdateAccountTransactionBalancesTasksCount)
+        private void UpdateStage1Progress(IEnumerable<LevyDeclarationSagaTask> tasks)
+        {
+            ImportPayeSchemeLevyDeclarationsTasksCompleteCount = tasks.Count(t => t.Type == LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations);
+            Updated = DateTime.UtcNow;
+
+            if (ImportPayeSchemeLevyDeclarationsTasksCompleteCount == ImportPayeSchemeLevyDeclarationsTasksCount)
+            {
+                ImportPayeSchemeLevyDeclarationsTasksFinished = Updated;
+                        
+                Publish(() => new UpdatedLevyDeclarationSagaProgressEvent(Id));
+            }
+        }
+
+        private void UpdateStage2Progress(IEnumerable<LevyDeclarationSagaTask> tasks)
+        {
+            UpdateAccountTransactionBalancesTasksCompleteCount = tasks.Count(t => t.Type == LevyDeclarationSagaTaskType.UpdateAccountTransactionBalances);
+            Updated = DateTime.UtcNow;
+
+            if (UpdateAccountTransactionBalancesTasksCompleteCount == UpdateAccountTransactionBalancesTasksCount)
+            {
+                UpdateAccountTransactionBalancesTasksFinished = Updated;
+                IsComplete = true;
+
+                switch (Type)
                 {
-                    UpdateAccountTransactionBalancesTasksFinished = Updated;
-                    IsComplete = true;
-
-                    switch (Type)
-                    {
-                        case LevyDeclarationSagaType.All:
-                            Publish(() => new FinishedProcessingLevyDeclarationsEvent(Id, PayrollPeriod, Updated.Value));
-                            break;
-                        case LevyDeclarationSagaType.AdHoc:
-                            Publish(() => new FinishedProcessingLevyDeclarationsAdHocEvent(Id, PayrollPeriod, HighWaterMarkId, Updated.Value));
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    case LevyDeclarationSagaType.All:
+                        Publish(() => new FinishedProcessingLevyDeclarationsEvent(Id, PayrollPeriod, Updated.Value));
+                        break;
+                    case LevyDeclarationSagaType.AdHoc:
+                        Publish(() => new FinishedProcessingLevyDeclarationsAdHocEvent(Id, PayrollPeriod, HighWaterMarkId, Updated.Value));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }
