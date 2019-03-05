@@ -148,6 +148,20 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
             return TestAsync(f => f.SetAllTasksCompleted(), f => f.Handle(), f => f.UniformSession
                 .Verify(s => s .Send(It.IsAny<UpdateLevyDeclarationSagaProgressCommand>(), It.IsAny<SendOptions>()), Times.Never));
         }
+
+        [Test]
+        public Task Handle_WhenImportPayeSchemeLevyDeclarationsTaskCountsDoNotBalance_ThenShouldThrowException()
+        {
+            return TestExceptionAsync(f => f.SetTooManyImportLevyDeclarationsTasksCompleted(), f => f.Handle(), (f, r) => r.Should().Throw<InvalidOperationException>()
+                .WithMessage($"Requires {nameof(LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations)} task counts balance"));
+        }
+
+        [Test]
+        public Task Handle_WhenUpdateAccountTransactionBalancesTaskCountsDoNotBalance_ThenShouldThrowException()
+        {
+            return TestExceptionAsync(f => f.SetTooManyUpdateAccountTransactionBalancesTasksCompleted(), f => f.Handle(), (f, r) => r.Should().Throw<InvalidOperationException>()
+                .WithMessage($"Requires {nameof(LevyDeclarationSagaTaskType.UpdateAccountTransactionBalances)} task counts balance"));
+        }
     }
 
     public class UpdateProcessLevyDeclarationsSagaProgressCommandHandlerTestsFixture
@@ -266,7 +280,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
         {
             Saga.Set(j => j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount, AccountPayeSchemes.Count);
             
-            Tasks = Accounts.Select(a => LevyDeclarationSagaTask.CreateUpdateAccountTransactionBalancesTask(Saga.Id, a.Id)).ToList();;
+            Tasks = Accounts.Select(a => LevyDeclarationSagaTask.CreateUpdateAccountTransactionBalancesTask(Saga.Id, a.Id)).ToList();
             
             Db.LevyDeclarationSagaTasks.AddRange(Tasks);
             Db.SaveChanges();
@@ -285,6 +299,34 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
             var updateAccountTransactionBalancesTasks = Accounts.Select(a => LevyDeclarationSagaTask.CreateUpdateAccountTransactionBalancesTask(Saga.Id, a.Id));
 
             Tasks = importPayeSchemeLevyDeclarationsTasks.Concat(updateAccountTransactionBalancesTasks).ToList();
+            
+            Db.LevyDeclarationSagaTasks.AddRange(Tasks);
+            Db.SaveChanges();
+            
+            return this;
+        }
+
+        public UpdateProcessLevyDeclarationsSagaProgressCommandHandlerTestsFixture SetTooManyImportLevyDeclarationsTasksCompleted()
+        {
+            Tasks = AccountPayeSchemes
+                .Select(aps => LevyDeclarationSagaTask.CreateImportPayeSchemeLevyDeclarationsTask(Saga.Id, aps.Id))
+                .Append(LevyDeclarationSagaTask.CreateImportPayeSchemeLevyDeclarationsTask(Saga.Id, AccountPayeSchemes[0].Id))
+                .ToList();
+            
+            Db.LevyDeclarationSagaTasks.AddRange(Tasks);
+            Db.SaveChanges();
+            
+            return this;
+        }
+
+        public UpdateProcessLevyDeclarationsSagaProgressCommandHandlerTestsFixture SetTooManyUpdateAccountTransactionBalancesTasksCompleted()
+        {
+            Saga.Set(j => j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount, AccountPayeSchemes.Count);
+            
+            Tasks = Accounts
+                .Select(a => LevyDeclarationSagaTask.CreateUpdateAccountTransactionBalancesTask(Saga.Id, a.Id))
+                .Append(LevyDeclarationSagaTask.CreateUpdateAccountTransactionBalancesTask(Saga.Id, Accounts[0].Id))
+                .ToList();
             
             Db.LevyDeclarationSagaTasks.AddRange(Tasks);
             Db.SaveChanges();

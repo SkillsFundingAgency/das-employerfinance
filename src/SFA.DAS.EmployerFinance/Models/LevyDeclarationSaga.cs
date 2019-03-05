@@ -78,6 +78,8 @@ namespace SFA.DAS.EmployerFinance.Models
                         
                 Publish(() => new UpdatedLevyDeclarationSagaProgressEvent(Id));
             }
+
+            EnsureImportPayeSchemeLevyDeclarationsTaskCountsBalance();
         }
 
         private void UpdateStage2Progress(IEnumerable<LevyDeclarationSagaTask> tasks)
@@ -101,6 +103,24 @@ namespace SFA.DAS.EmployerFinance.Models
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+            }
+
+            EnsureUpdateAccountTransactionBalancesTaskCountsBalance();
+        }
+
+        private void EnsureImportPayeSchemeLevyDeclarationsTaskCountsBalance()
+        {
+            if (ImportPayeSchemeLevyDeclarationsTasksCompleteCount > ImportPayeSchemeLevyDeclarationsTasksCount)
+            {
+                throw new InvalidOperationException($"Requires {nameof(LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations)} task counts balance");
+            }
+        }
+
+        private void EnsureUpdateAccountTransactionBalancesTaskCountsBalance()
+        {
+            if (UpdateAccountTransactionBalancesTasksCompleteCount > UpdateAccountTransactionBalancesTasksCount)
+            {
+                throw new InvalidOperationException($"Requires {nameof(LevyDeclarationSagaTaskType.UpdateAccountTransactionBalances)} task counts balance");
             }
         }
     }
