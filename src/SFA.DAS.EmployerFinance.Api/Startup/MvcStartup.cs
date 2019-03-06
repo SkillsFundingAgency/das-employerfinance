@@ -14,12 +14,5 @@ namespace SFA.DAS.EmployerFinance.Api.Startup
 
             return services;
         }
-        
-        public static IServiceCollection AddApiHealthChecks(this IServiceCollection services, string databaseConnectionString)
-        {
-            services.AddHealthChecks().AddSqlServer(databaseConnectionString);
-
-            return services;
-        }
     }
 }

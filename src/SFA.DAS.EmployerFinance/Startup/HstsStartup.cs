@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SFA.DAS.EmployerFinance.HealthChecks;
 
 namespace SFA.DAS.EmployerFinance.Startup
 {
@@ -16,21 +14,6 @@ namespace SFA.DAS.EmployerFinance.Startup
             {
                 app.UseHsts();
             }
-
-            return app;
-        }
-        
-        public static IApplicationBuilder UseHealthChecks(this IApplicationBuilder app)
-        {
-            app.UseHealthChecks("/health", new HealthCheckOptions
-            {
-                ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
-            });
-            
-            app.UseHealthChecks("/ping", new HealthCheckOptions
-            {
-                Predicate = (_) => false
-            });
 
             return app;
         }

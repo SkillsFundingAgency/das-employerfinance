@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -10,7 +11,6 @@ using SFA.DAS.EmployerFinance.Api.Client;
 using SFA.DAS.EmployerFinance.Web.HealthChecks;
 using SFA.DAS.Http;
 using SFA.DAS.Testing;
-using Xunit.Extensions.AssertExtensions;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
 {
@@ -19,63 +19,73 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
     public class ApiHealthCheckTests : FluentTest<ApiHealthCheckTestsFixture>
     {
         [Test]
-        public Task WhenPingingApi_ShouldGetHealthyStatusIfNoIssuesOccur()
+        public Task CheckHealthAsync_WhenPingSucceeds_ThenShouldReturnHealthyStatus()
         {
-            return TestAsync(f => f.PingApiSuccessfully(), 
-                f => f.HealthCheckResult.Status.ShouldEqual(HealthStatus.Healthy));
+            return TestAsync(
+                f => f.SetPingSuccess(),
+                f => f.CheckHealthAsync(),
+                (f, r) => r.Status.Should().Be(HealthStatus.Healthy));
         }
         
         [Test]
-        public Task WhenPingingApi_ShouldGetFailureStatusIfIssuesOccur()
+        public Task CheckHealthAsync_WhenPingFails_ThenShouldReturnUnhealthyStatus()
         {
-            return TestAsync(f => f.PingApiFailure(), 
-                f => f.HealthCheckResult.Status.ShouldEqual(HealthStatus.Unhealthy));
+            return TestAsync(
+                f => f.SetPingFailure(),
+                f => f.CheckHealthAsync(),
+                (f, r) => r.Status.Should().Be(HealthStatus.Unhealthy));
         }
         
         [Test]
-        public Task WhenPingingApi_ShouldGetExceptionDetailsIfIssuesOccur()
+        public Task CheckHealthAsync_WhenPingFails_ThenShouldReturnException()
         {
-            return TestAsync(f => f.PingApiFailure(), 
-                f => f.HealthCheckResult.Exception.ShouldEqual(f.RestException));
+            return TestAsync(
+                f => f.SetPingFailure(),
+                f => f.CheckHealthAsync(),
+                (f, r) => r.Exception.Should().Be(f.Exception));
         }
     }
 
     public class ApiHealthCheckTestsFixture
     {
-        public Mock<IEmployerFinanceApiClient> Client { get; }
-        public Mock<ILogger<ApiHealthCheck>> Logger { get; }
-        public ApiHealthCheck ApiHealthCheck { get; }
-
-        public HealthCheckResult HealthCheckResult { get; private set; }
-
-        public RestHttpClientException RestException { get; }
+        public Mock<IEmployerFinanceApiClient> ApiClient { get; set; }
+        public Mock<ILogger<ApiHealthCheck>> Logger { get; set; }
+        public ApiHealthCheck ApiHealthCheck { get; set; }
+        public HttpResponseMessage HttpResponseMessage { get; set; }
+        public RestHttpClientException Exception { get; set; }
 
         public ApiHealthCheckTestsFixture()
         {
-            Client = new Mock<IEmployerFinanceApiClient>();
+            ApiClient = new Mock<IEmployerFinanceApiClient>();
             Logger = new Mock<ILogger<ApiHealthCheck>>();
-            
-            ApiHealthCheck = new ApiHealthCheck(Client.Object, Logger.Object);
+            ApiHealthCheck = new ApiHealthCheck(ApiClient.Object, Logger.Object);
 
-            var httpException = new HttpResponseMessage(HttpStatusCode.NotFound)
+            HttpResponseMessage = new HttpResponseMessage(HttpStatusCode.NotFound)
             {
                 RequestMessage = new HttpRequestMessage(),
                 ReasonPhrase = "Url not found"
             };
             
-            RestException = new RestHttpClientException(httpException, "Url not found");
+            Exception = new RestHttpClientException(HttpResponseMessage, "Url not found");
         }
 
-        public async Task PingApiSuccessfully()
+        public Task<HealthCheckResult> CheckHealthAsync()
         {
-            Client.Setup(c => c.Ping()).ReturnsAsync("Healthy");
-            HealthCheckResult = await ApiHealthCheck.CheckHealthAsync(new HealthCheckContext(), new CancellationToken());
+            return ApiHealthCheck.CheckHealthAsync(new HealthCheckContext(), CancellationToken.None);
         }
-        
-        public async Task PingApiFailure()
+
+        public ApiHealthCheckTestsFixture SetPingSuccess()
         {
-            Client.Setup(c => c.Ping()).ThrowsAsync(RestException);
-            HealthCheckResult = await ApiHealthCheck.CheckHealthAsync(new HealthCheckContext(), new CancellationToken());
+            ApiClient.Setup(c => c.Ping()).Returns(Task.CompletedTask);
+            
+            return this;
+        }
+
+        public ApiHealthCheckTestsFixture SetPingFailure()
+        {
+            ApiClient.Setup(c => c.Ping()).ThrowsAsync(Exception);
+            
+            return this;
         }
     }
 }

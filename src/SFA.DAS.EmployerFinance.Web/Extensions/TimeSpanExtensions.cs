@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
         {
             if (timeSpan.TotalSeconds <= 1)
             {
-                return $"{timeSpan:fff} ms";
+                return $"{timeSpan:%fff} ms";
             }
             
             if (timeSpan.TotalMinutes <= 1)

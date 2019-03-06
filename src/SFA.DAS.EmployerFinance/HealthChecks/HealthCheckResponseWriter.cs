@@ -13,16 +13,18 @@ namespace SFA.DAS.EmployerFinance.HealthChecks
         {
             httpContext.Response.ContentType = "application/json";
 
-            var json = new JObject(
+            var jObject = new JObject(
                 new JProperty("status", result.Status.ToString()),
-                new JProperty("results", new JObject(result.Entries.Select(pair =>
-                    new JProperty(pair.Key, new JObject(
-                        new JProperty("status", pair.Value.Status.ToString()),
-                        new JProperty("description", pair.Value.Description),
-                        new JProperty("data", new JObject(pair.Value.Data.Select(
-                            p => new JProperty(p.Key, p.Value))))))))));
-            return httpContext.Response.WriteAsync(
-                json.ToString(Formatting.Indented));
+                new JProperty("results", new JObject(result.Entries.Select(e =>
+                    new JProperty(e.Key, new JObject(
+                        new JProperty("status", e.Value.Status.ToString()),
+                        new JProperty("description", e.Value.Description),
+                        new JProperty("data", new JObject(e.Value.Data.Select(d => 
+                            new JProperty(d.Key, d.Value))))))))));
+
+            var json = jObject.ToString(Formatting.Indented);
+            
+            return httpContext.Response.WriteAsync(json);
         }
     }
 }

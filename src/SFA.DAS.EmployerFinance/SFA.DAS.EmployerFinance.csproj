@@ -13,7 +13,7 @@
         <EmbeddedResource Include="Data\Scripts\Script0001CreateOutboxData.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0004CreateUsers.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0006DropHealthChecksUserRef.sql" />
-        <EmbeddedResource Include="Data\Scripts\Script0007DropHealthChecksTable.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0013DropHealthChecks.sql" />
 	<EmbeddedResource Remove="Startup\**" />
     </ItemGroup>
 
@@ -39,6 +39,7 @@
         <PackageReference Include="SFA.DAS.NServiceBus" Version="9.0.1" />
         <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="9.0.1" />
         <PackageReference Include="SFA.DAS.UnitOfWork" Version="5.0.4" />
+        <PackageReference Include="StackExchange.Redis" Version="2.0.519" />
         <PackageReference Include="StructureMap" Version="4.7.0" />
         <PackageReference Include="StructureMap.Microsoft.DependencyInjection" Version="2.0.0" />
         <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />

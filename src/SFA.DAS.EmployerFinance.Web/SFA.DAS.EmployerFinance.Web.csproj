@@ -19,30 +19,19 @@
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="2.2.0" />
-        <PackageReference Include="NLog" Version="4.5.11" />
         <PackageReference Include="NLog.Schema" Version="4.5.11" />
         <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="3.0.1" />
         <PackageReference Include="SFA.DAS.Authorization.Mvc" Version="3.0.1" />
-	    <PackageReference Include="NServiceBus.Callbacks" Version="3.0.0" />
-	    <PackageReference Include="SFA.DAS.Http" Version="3.0.5" />
         <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
         <PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="5.0.4" />
         <PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="5.0.4" />
         <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="5.0.4" />
-        <PackageReference Include="StructureMap" Version="4.7.0" />
         <PackageReference Include="StructureMap.AspNetCore" Version="2.0.0" />
         <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="Views\HealthCheck\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Shared\Errors\403.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Shared\Errors\404.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Shared\Errors\Error.cshtml" />
     </ItemGroup>
 
 </Project>

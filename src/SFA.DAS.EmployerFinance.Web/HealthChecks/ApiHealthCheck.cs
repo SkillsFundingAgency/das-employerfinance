@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -12,8 +13,6 @@ namespace SFA.DAS.EmployerFinance.Web.HealthChecks
 {
     public class ApiHealthCheck : IHealthCheck
     {
-        private const string HealthCheckResultDescription = "Employer Finance Api check";
-        
         private readonly IEmployerFinanceApiClient _apiClient;
         private readonly ILogger<ApiHealthCheck> _logger;
 
@@ -25,25 +24,33 @@ namespace SFA.DAS.EmployerFinance.Web.HealthChecks
         
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Pinging Employer Finance API");
-            
+            _logger.LogInformation($"Started '{context.Registration.Name}'");
+
             try
             {
-                var timer = Stopwatch.StartNew();
-                await _apiClient.Ping();
-                timer.Stop();
+                var stopwatch = Stopwatch.StartNew();
 
-                var durationString = timer.Elapsed.ToHumanReadableString();
-                
-                _logger.LogInformation($"Employer Finance API ping successful and took {durationString}");
-                
-                return HealthCheckResult.Healthy(HealthCheckResultDescription, 
-                    new Dictionary<string, object>(){{"Duration", durationString}});
+                await _apiClient.Ping();
+
+                stopwatch.Stop();
+
+                var elapsed = stopwatch.Elapsed.ToHumanReadableString();
+
+                _logger.LogInformation($"Finished '{context.Registration.Name}' in '{elapsed}'");
+
+                return HealthCheckResult.Healthy(null, new Dictionary<string, object> { { "elapsed", elapsed } });
             }
-            catch (RestHttpClientException e)
+            catch (RestHttpClientException ex)
             {
-                _logger.LogWarning($"Employer Finance API ping failed : [Code: {e.StatusCode}] - {e.ReasonPhrase}");
-                return HealthCheckResult.Unhealthy(HealthCheckResultDescription, e);
+                _logger.LogError($"Failed '{context.Registration.Name}': {nameof(ex.StatusCode)}='{ex.StatusCode}', {nameof(ex.ReasonPhrase)}='{ex.ReasonPhrase}'");
+
+                return HealthCheckResult.Unhealthy(null, ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed '{context.Registration.Name}'", ex);
+
+                return HealthCheckResult.Unhealthy(null, ex);
             }
         }
     }

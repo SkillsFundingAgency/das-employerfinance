@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerFinance.Api.DependencyResolution;
@@ -20,8 +19,8 @@ namespace SFA.DAS.EmployerFinance.Api.Startup
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDasMvc()
-                    .AddApiHealthChecks(_employerFinanceConfiguration.DatabaseConnectionString);
+            services.AddDasHealthChecks(_employerFinanceConfiguration.DatabaseConnectionString)
+                .AddDasMvc();
         }
 
         public void ConfigureContainer(Registry registry)
@@ -34,8 +33,8 @@ namespace SFA.DAS.EmployerFinance.Api.Startup
             app.UseDasCultureInfo()
                 .UseDasHsts()
                 .UseHttpsRedirection()
-                .UseMvc()
-                .UseHealthChecks();
+                .UseDasHealthChecks()
+                .UseMvc();
         }
     }
 }

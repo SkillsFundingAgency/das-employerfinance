@@ -4,6 +4,6 @@ namespace SFA.DAS.EmployerFinance.Api.Client
 {
     public interface IEmployerFinanceApiClient
     {
-        Task<string> Ping();
+        Task Ping();
     }
 }
