@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationTran
                 .Distinct()
                 .ToListAsync(cancellationToken);
             
-            var commands = accountIds.Select(i => new UpdateAccountLevyDeclarationTransactionBalancesCommand(request.SagaId, i));
+            var commands = accountIds.Select(i => new UpdateAccountLevyDeclarationTransactionBalancesCommand(saga.Id, i));
             var tasks = commands.Select(_uniformSession.SendLocal);
 
             await Task.WhenAll(tasks);
