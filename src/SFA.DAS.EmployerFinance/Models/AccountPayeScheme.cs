@@ -2,7 +2,7 @@ using System;
 
 namespace SFA.DAS.EmployerFinance.Models
 {
-    public class AccountPayeScheme
+    public class AccountPayeScheme : Entity
     {
         public long Id { get; internal set; }
         public Account Account { get; internal set; }
