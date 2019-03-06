@@ -12,6 +12,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
     /// Tests both Account & AccountPayeScheme models.
     /// Usually would have an AccountsTest with a mocked AccountPayeScheme, and a separate AccountPayeSchemeTest,
     /// but it is more convenient in this instance to test them together.
+    ///
+    /// The issue with testing the Account class individually, is that if we use a (Moq) mock AccountPayeScheme, you can't use SetupGet on the properties,
+    /// as they aren't virtual (and we don't use interfaces for our entities). We should be verifying that Delete() was called on a mocked AccountPayeScheme,
+    /// rather than white-boxing it and peeking inside a real AccountPayeScheme!
     /// </summary>
     [TestFixture]
     [Parallelizable]

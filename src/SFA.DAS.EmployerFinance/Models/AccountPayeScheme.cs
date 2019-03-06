@@ -29,6 +29,7 @@ namespace SFA.DAS.EmployerFinance.Models
             Deleted = deleted;
         }
 
+        //we could make deletion idempotent, so if a soft deleted entity is deleted, it's a no-op. or is it better to explicitly check and throw??
         private void EnsureHasNotBeenDeleted()
         {
             if (Deleted != null)
