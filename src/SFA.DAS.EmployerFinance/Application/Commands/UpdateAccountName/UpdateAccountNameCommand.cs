@@ -1,15 +1,15 @@
 using System;
 using MediatR;
 
-namespace SFA.DAS.EmployerFinance.Application.Commands.UpdateAccount
+namespace SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountName
 {
-    public class UpdateAccountCommand : IRequest
+    public class UpdateAccountNameCommand : IRequest
     {
         internal readonly long AccountId;
         internal readonly string Name;
         internal readonly DateTime Updated;
 
-        public UpdateAccountCommand(long accountId, string name, DateTime updated)
+        public UpdateAccountNameCommand(long accountId, string name, DateTime updated)
         {
             AccountId = accountId;
             Name = name;
