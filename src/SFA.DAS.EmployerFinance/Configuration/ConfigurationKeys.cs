@@ -1,4 +1,4 @@
-namespace SFA.DAS.EmployerFinance.Types.Configuration
+namespace SFA.DAS.EmployerFinance.Configuration
 {
     public static class ConfigurationKeys
     {
