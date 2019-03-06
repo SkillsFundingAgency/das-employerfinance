@@ -5,7 +5,7 @@ using SFA.DAS.EmployerFinance.Application.Commands.AddAccount;
 using SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.EmployerAccounts;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EmployerAccounts
+namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers.EmployerAccounts
 {
     [TestFixture]
     [Parallelizable]

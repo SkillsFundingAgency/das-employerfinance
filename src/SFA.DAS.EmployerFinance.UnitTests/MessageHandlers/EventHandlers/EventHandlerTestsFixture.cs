@@ -6,7 +6,7 @@ using MediatR;
 using Moq;
 using NServiceBus;
 
-namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers
+namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
 {
     public class EventHandlerTestsFixture<TEvent, TEventHandler> where TEventHandler : IHandleMessages<TEvent>
     {
