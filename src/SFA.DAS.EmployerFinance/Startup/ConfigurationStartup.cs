@@ -15,9 +15,8 @@ namespace SFA.DAS.EmployerFinance.Startup
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{c.HostingEnvironment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables()
-                //todo: swap next 2, so can override table config?
-                .AddCommandLine(args)
-                .AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base, ConfigurationKeys.ApprenticeshipInfoService));
+                .AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base, ConfigurationKeys.ApprenticeshipInfoService)
+                .AddCommandLine(args));
         }
         
         public static IWebHostBuilder ConfigureDasAppConfiguration(this IWebHostBuilder hostBuilder)
