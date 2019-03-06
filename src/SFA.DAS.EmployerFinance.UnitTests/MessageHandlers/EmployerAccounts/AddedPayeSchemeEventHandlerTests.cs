@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EmployerAccounts
     public class AddedPayeSchemeEventHandlerTests : FluentTest<AddedPayeSchemeEventHandlerTestsFixture>
     {
         [Test]
-        public Task Handle_WhenHandlingCreatedAccountEventAddedPayeSchemeEvent_ThenShouldSendAddAccountPayeSchemeCommand()
+        public Task Handle_WhenHandlingAddedPayeSchemeEvent_ThenShouldSendAddAccountPayeSchemeCommand()
         {
             return TestAsync(f => f.Handle(), f => f.VerifySend<AddAccountPayeSchemeCommand>((c, m) => 
                 c.AccountId == m.AccountId &&
