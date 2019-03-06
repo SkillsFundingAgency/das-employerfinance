@@ -5,9 +5,9 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountName
 {
     public class UpdateAccountNameCommand : IRequest
     {
-        internal readonly long AccountId;
-        internal readonly string Name;
-        internal readonly DateTime Updated;
+        public long AccountId { get; }
+        public string Name { get; }
+        public DateTime Updated { get; }
 
         public UpdateAccountNameCommand(long accountId, string name, DateTime updated)
         {

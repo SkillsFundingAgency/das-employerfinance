@@ -5,11 +5,11 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.AddAccount
 {
     public class AddAccountCommand : IRequest
     {
-        internal readonly long Id;
-        internal readonly string HashedId;
-        internal readonly string PublicHashedId;
-        internal readonly string Name;
-        internal readonly DateTime Added;
+        public long Id { get; }
+        public string HashedId { get; }
+        public string PublicHashedId { get; }
+        public string Name { get; }
+        public DateTime Added { get; }
 
         public AddAccountCommand(long id, string hashedId, string publicHashedId, string name, DateTime added)
         {

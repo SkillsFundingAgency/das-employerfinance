@@ -5,9 +5,9 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.RemoveAccountPayeScheme
 {
     public class RemoveAccountPayeSchemeCommand : IRequest
     {
-        internal readonly long AccountId;
-        internal readonly string EmployerReferenceNumber;
-        internal readonly DateTime Removed;
+        public long AccountId { get; }
+        public string EmployerReferenceNumber { get; }
+        public DateTime Removed { get; }
 
         public RemoveAccountPayeSchemeCommand(long accountId, string employerReferenceNumber, DateTime removed)
         {

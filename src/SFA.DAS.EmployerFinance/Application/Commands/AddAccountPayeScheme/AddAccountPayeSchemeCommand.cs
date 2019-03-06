@@ -5,9 +5,9 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.AddAccountPayeScheme
 {
     public class AddAccountPayeSchemeCommand : IRequest
     {
-        internal readonly long AccountId;
-        internal readonly string EmployerReferenceNumber;
-        internal readonly DateTime Added;
+        public long AccountId { get; }
+        public string EmployerReferenceNumber { get; }
+        public DateTime Added { get; }
 
         public AddAccountPayeSchemeCommand(long accountId, string employerReferenceNumber, DateTime added)
         {
