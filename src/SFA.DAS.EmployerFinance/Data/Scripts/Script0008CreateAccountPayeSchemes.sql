@@ -7,6 +7,9 @@ CREATE TABLE [dbo].[AccountPayeSchemes]
   [Deleted] DATETIME2 NULL,
   CONSTRAINT [PK_AccountPayeSchemes] PRIMARY KEY CLUSTERED ([Id] ASC),
   CONSTRAINT [FK_AccountPayeSchemes_Accounts_AccountId] FOREIGN KEY ([AccountId]) REFERENCES [Accounts] ([Id]),
-  CONSTRAINT [UK_AccountPayeSchemes_AccountId_EmployerReferenceNumber] UNIQUE ([AccountId] ASC, [EmployerReferenceNumber] ASC),
   INDEX [IX_AccountPayeSchemes_AccountId] NONCLUSTERED ([AccountId] ASC)
 )
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [AK_AccountPayeSchemes_AccountId_EmployerReferenceNumber] ON [AccountPayeSchemes] ([AccountId] ASC, [EmployerReferenceNumber] ASC) WHERE [Deleted] IS NULL
+GO
