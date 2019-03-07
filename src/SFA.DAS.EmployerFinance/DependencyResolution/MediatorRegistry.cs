@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             Scan(s =>
             {
                 s.AssemblyContainingType<RunHealthCheckCommandHandler>();
+                s.ConnectImplementationsToTypesClosing(typeof(IPipelineBehavior<,>));
                 s.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
             });
         }

@@ -10,8 +10,8 @@ using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Application.Commands.ReceiveEmployerFinanceHealthCheckEvent;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models;
-using SFA.DAS.EmployerFinance.UnitTests.Builders;
 using SFA.DAS.Testing;
+using SFA.DAS.Testing.Builders;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands
 {
@@ -37,8 +37,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands
         {
             HealthChecks = new List<HealthCheck>
             {
-                EntityActivator.CreateInstance<HealthCheck>().Set(h => h.Id, 1),
-                EntityActivator.CreateInstance<HealthCheck>().Set(h => h.Id, 2)
+                ObjectActivator.CreateInstance<HealthCheck>().Set(h => h.Id, 1),
+                ObjectActivator.CreateInstance<HealthCheck>().Set(h => h.Id, 2)
             };
             
             Command = new ReceiveEmployerFinanceHealthCheckEventCommand(HealthChecks[1].Id);
