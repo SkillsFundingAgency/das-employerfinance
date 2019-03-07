@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerFinance.Web
             WebHost.CreateDefaultBuilder(args)
                 .ConfigureDasAppConfiguration()
                 .ConfigureDasLogging()
+                .UseApplicationInsights()
                 .UseDasEnvironment()
                 .UseKestrel(o => o.AddServerHeader = false)
                 .UseStructureMap()
