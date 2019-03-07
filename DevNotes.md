@@ -18,6 +18,7 @@ We might also want to bundle some or all of the GOV.UK / common DAS / site speci
 ^^ check fix
 * enabling debug logging in at revealed the following little gem. is it an issue?
 Execution plan of action filters (in the following order): Microsoft.AspNetCore.Mvc.Internal.ControllerActionFilter (Order: -2147483648), Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000), SFA.DAS.EmployerFinance.Web.Filters.UrlsViewBagFilter
+* response header contains `X-Powered-By: ASP.NET`, thought we'd blatted that already
 
 ## Useful Links
 
