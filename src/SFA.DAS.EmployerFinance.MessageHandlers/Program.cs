@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
             new HostBuilder()
                 .ConfigureDasAppConfiguration(args)
                 .ConfigureDasLogging()
+                .UseApplicationInsights()
                 .UseDasEnvironment()
                 .UseStructureMap()
                 .UseConsoleLifetime()
