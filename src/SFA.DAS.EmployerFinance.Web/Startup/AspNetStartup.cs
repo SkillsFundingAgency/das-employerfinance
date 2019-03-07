@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 .AddDasMvc()
                 .AddDasNServiceBus()
                 .AddDasOidcAuthentication(_oidcConfiguration)
-                .AddHttpsRedirection(o => o.HttpsPort = 443);
+                .AddHttpsRedirection(o => o.HttpsPort = 5001);
         }
 
         public void ConfigureContainer(Registry registry)
