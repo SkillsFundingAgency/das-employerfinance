@@ -24,7 +24,8 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
             services.AddDasCookiePolicy()
                 .AddDasMvc()
                 .AddDasNServiceBus()
-                .AddDasOidcAuthentication(_oidcConfiguration);
+                .AddDasOidcAuthentication(_oidcConfiguration)
+                .AddHttpsRedirection(o => o.HttpsPort = 443);
         }
 
         public void ConfigureContainer(Registry registry)
