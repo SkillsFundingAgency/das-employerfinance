@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerFinance.Models
         public int UpdateAccountTransactionBalancesTasksCompleteCount { get; private set; }
         public bool IsStage2Complete => UpdateAccountTransactionBalancesTasksCompleteCount == UpdateAccountTransactionBalancesTasksCount;
         public bool IsComplete { get; private set; }
-        public TimeSpan Timeout => TimeSpan.FromMinutes(2);
+        public static TimeSpan Timeout => TimeSpan.FromMinutes(2);
 
         public LevyDeclarationSaga(DateTime payrollPeriod, IReadOnlyCollection<AccountPayeScheme> accountPayeSchemes)
         {

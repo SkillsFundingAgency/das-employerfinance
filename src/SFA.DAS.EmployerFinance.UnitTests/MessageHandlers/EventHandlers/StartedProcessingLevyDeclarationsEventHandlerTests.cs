@@ -1,9 +1,12 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using MediatR;
 using Moq;
 using NServiceBus;
+using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Application.Commands.ImportLevyDeclarations;
 using SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationSagaProgress;
@@ -28,28 +31,30 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
         [Test]
         public Task Handle_WhenHandlingEvent_ThenShouldSendUpdateLevyDeclarationSagaProgressCommand()
         {
-            return TestAsync(f => f.Handle(),f => f.Mediator.Verify(m => m.Send(
-                It.Is<UpdateLevyDeclarationSagaProgressCommand>(c => c.SagaId == f.Event.SagaId),
-                CancellationToken.None), Times.Once));
+            return TestAsync(f => f.Handle(), f => f.Context.SentMessages.Select(m => m.Message).SingleOrDefault().Should().NotBeNull()
+                .And.Match<UpdateLevyDeclarationSagaProgressCommand>(c => c.SagaId == f.Event.SagaId));
         }
     }
 
     public class StartedProcessingLevyDeclarationsEventHandlerTestsFixture
     {
         public StartedProcessingLevyDeclarationsEvent Event { get; set; }
+
+        public TestableMessageHandlerContext Context { get; set; }
         public Mock<IMediator> Mediator { get; set; }
         public IHandleMessages<StartedProcessingLevyDeclarationsEvent> Handler { get; set; }
 
         public StartedProcessingLevyDeclarationsEventHandlerTestsFixture()
         {
             Event = new StartedProcessingLevyDeclarationsEvent(1, DateTime.UtcNow, DateTime.UtcNow);
+            Context = new TestableMessageHandlerContext();
             Mediator = new Mock<IMediator>();
             Handler = new StartedProcessingLevyDeclarationsEventHandler(Mediator.Object);
         }
 
         public Task Handle()
         {
-            return Handler.Handle(Event, null);
+            return Handler.Handle(Event, Context);
         }
     }
 }

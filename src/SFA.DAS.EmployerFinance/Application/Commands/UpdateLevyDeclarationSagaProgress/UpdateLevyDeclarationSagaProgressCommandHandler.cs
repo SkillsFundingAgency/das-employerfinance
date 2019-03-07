@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NServiceBus.UniformSession;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Extensions;
+using SFA.DAS.EmployerFinance.Models;
 
 namespace SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationSagaProgress
 {
@@ -29,7 +30,7 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationSaga
             
             if (!saga.IsComplete)
             {
-                await _uniformSession.SendLocal(new UpdateLevyDeclarationSagaProgressCommand(saga.Id), saga.Timeout);
+                await _uniformSession.SendLocal(new UpdateLevyDeclarationSagaProgressCommand(saga.Id), LevyDeclarationSaga.Timeout);
             }
         }
     }

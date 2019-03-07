@@ -3,7 +3,9 @@ using MediatR;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Application.Commands.ImportPayeSchemeLevyDeclarations;
 using SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationSagaProgress;
+using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Messages.Events;
+using SFA.DAS.EmployerFinance.Models;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.EmployerFinance
 {
@@ -20,7 +22,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.EmployerFinance
         {
             return Task.WhenAll(
                 _mediator.Send(new ImportPayeSchemeLevyDeclarationsCommand(message.SagaId, message.PayrollPeriod, message.AccountPayeSchemeId)),
-                _mediator.Send(new UpdateLevyDeclarationSagaProgressCommand(message.SagaId)));
+                context.SendLocal(new UpdateLevyDeclarationSagaProgressCommand(message.SagaId), LevyDeclarationSaga.Timeout));
         }
     }
 }
