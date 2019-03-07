@@ -10,6 +10,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
             registry.IncludeRegistry<ConfigurationRegistry>();
             registry.IncludeRegistry<ApprenticeshipInfoServiceApiRegistry>();
             registry.IncludeRegistry<DataRegistry>();
+            registry.IncludeRegistry<DateTimeRegistry>();
             registry.IncludeRegistry<DefaultRegistry>();
         }
     }

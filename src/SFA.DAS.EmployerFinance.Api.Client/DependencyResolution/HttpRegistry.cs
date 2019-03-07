@@ -1,7 +1,3 @@
-using System.Net.Http;
-using SFA.DAS.EmployerFinance.Api.Client.Configuration;
-using SFA.DAS.Http;
-using SFA.DAS.Http.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api.Client.DependencyResolution

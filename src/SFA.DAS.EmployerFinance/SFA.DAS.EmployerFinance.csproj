@@ -18,7 +18,10 @@
         <EmbeddedResource Include="Data\Scripts\Script0008CreateAccountPayeSchemes.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0009CreateProvidersType.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0010CreateImportProviders.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0011CreateLevyDeclarationSagas.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0012CreateLevyDeclarationSagaTasks.sql" />
         <EmbeddedResource Remove="Startup\**" />
+        <EmbeddedResource Remove="Application\Queries\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -41,21 +44,13 @@
         <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.0" />
         <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.1" />
         <PackageReference Include="SFA.DAS.NServiceBus" Version="9.0.8" />
-        <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="9.0.1" />
+        <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="9.0.8" />
         <PackageReference Include="SFA.DAS.UnitOfWork" Version="5.0.4" />
+        <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="5.0.4" />
         <PackageReference Include="StructureMap" Version="4.7.0" />
         <PackageReference Include="StructureMap.Microsoft.DependencyInjection" Version="2.0.0" />
         <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
         <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>SFA.DAS.EmployerFinance.UnitTests</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
-        </AssemblyAttribute>
     </ItemGroup>
 
     <ItemGroup>

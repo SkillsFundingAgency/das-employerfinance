@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 		..\tools\docker-compose.yml = ..\tools\docker-compose.yml
 		..\tools\DevInstall.ps1 = ..\tools\DevInstall.ps1
+		..\LevyDeclarationSaga.png = ..\LevyDeclarationSaga.png
+		..\LevyDeclarationSaga.xml = ..\LevyDeclarationSaga.xml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.Messages", "SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj", "{E56A6D55-881E-4635-956B-9FB7A8487C35}"

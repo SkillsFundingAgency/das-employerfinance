@@ -1,4 +1,4 @@
-CREATE TABLE [dbo].[AccountPayeSchemes]
+﻿CREATE TABLE [dbo].[AccountPayeSchemes]
 (
   [Id] BIGINT NOT NULL IDENTITY,
   [AccountId] BIGINT NOT NULL,
@@ -12,4 +12,21 @@ CREATE TABLE [dbo].[AccountPayeSchemes]
 GO
 
 CREATE UNIQUE NONCLUSTERED INDEX [AK_AccountPayeSchemes_AccountId_EmployerReferenceNumber] ON [AccountPayeSchemes] ([AccountId] ASC, [EmployerReferenceNumber] ASC) WHERE [Deleted] IS NULL
+GO
+
+IF (
+    @@servername NOT LIKE '%-at-%' AND
+    @@servername NOT LIKE '%-test-%' AND
+    @@servername NOT LIKE '%-test2-%' AND
+    @@servername NOT LIKE '%-pp-%' AND
+    @@servername NOT LIKE '%-prd-%' AND
+    @@servername NOT LIKE '%-mo-%' AND
+    @@servername NOT LIKE '%-demo-%' AND
+    NOT EXISTS (SELECT 1 FROM [dbo].[AccountPayeSchemes] WHERE Id = 1)
+)
+BEGIN
+    SET IDENTITY_INSERT [dbo].[AccountPayeSchemes] ON
+    INSERT INTO [dbo].[AccountPayeSchemes] ([Id], [AccountId], [EmployerReferenceNumber], [Created]) VALUES (1, 1, '222/ZZ00002', GETUTCDATE())
+    SET IDENTITY_INSERT [dbo].[AccountPayeSchemes] OFF
+END
 GO

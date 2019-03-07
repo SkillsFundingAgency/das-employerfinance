@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
     public class AccountPayeSchemeTestsFixture
     {
         public AccountPayeScheme AccountPayeScheme { get; set; }
-        public const long AccountId = 2017;
+        public Account Account { get; set; }
         public const string EmployerReferenceNumber = "ABC/123456";
         public DateTime ActionDate { get; set; }
 
@@ -33,8 +33,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         {
             var fixture = new Fixture();
             ActionDate = fixture.Create<DateTime>();
-
-            AccountPayeScheme = new AccountPayeScheme(AccountId, EmployerReferenceNumber, ActionDate);
+            Account = new Account(2017, "123456", "123456", "name", fixture.Create<DateTime>());
+            
+            AccountPayeScheme = new AccountPayeScheme(Account, EmployerReferenceNumber, ActionDate);
         }
 
         public void Delete()

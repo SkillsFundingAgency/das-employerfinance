@@ -14,6 +14,9 @@ namespace SFA.DAS.EmployerFinance.Jobs.Startup
 #pragma warning disable 618
             builder.ConfigureServices(s => s.AddSingleton<IWebHookProvider>(p => null));
 #pragma warning restore 618
+            
+            builder.ConfigureServices(s => s.AddSingleton<ProcessClientOutboxMessagesJob>());
+            builder.ConfigureServices(s => s.AddSingleton<ProcessLevyDeclarationsJob>());
 
             builder.ConfigureServices(s => s.AddSingleton<ImportProvidersJob>());
 

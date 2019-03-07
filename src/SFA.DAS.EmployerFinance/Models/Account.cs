@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerFinance.Models
         {
             EnsurePayeSchemeHasNotAlreadyBeenAdded(employerReferenceNumber);
             
-            var accountPayeScheme = new AccountPayeScheme(Id, employerReferenceNumber, created);
+            var accountPayeScheme = new AccountPayeScheme(this, employerReferenceNumber, created);
             
             _accountPayeSchemes.Add(accountPayeScheme);
 

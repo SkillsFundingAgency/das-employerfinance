@@ -13,8 +13,8 @@ using SFA.DAS.EmployerFinance.Application.Queries.GetHealthCheck;
 using SFA.DAS.EmployerFinance.Application.Queries.GetHealthCheck.Dtos;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models;
-using SFA.DAS.EmployerFinance.UnitTests.Builders;
 using SFA.DAS.Testing;
+using SFA.DAS.Testing.Builders;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Application.Queries
 {
@@ -49,8 +49,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Queries
 
             HealthChecks = new List<HealthCheck>
             {
-                EntityActivator.CreateInstance<HealthCheck>().Set(h => h.Id, 1),
-                EntityActivator.CreateInstance<HealthCheck>().Set(h => h.Id, 2)
+                ObjectActivator.CreateInstance<HealthCheck>().Set(h => h.Id, 1),
+                ObjectActivator.CreateInstance<HealthCheck>().Set(h => h.Id, 2)
             };
             
             Db.HealthChecks.AddRange(HealthChecks);

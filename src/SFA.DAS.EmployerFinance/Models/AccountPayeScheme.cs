@@ -11,9 +11,10 @@ namespace SFA.DAS.EmployerFinance.Models
         public DateTime Created { get; internal set; }
         public DateTime? Deleted { get; internal set; }
         
-        internal AccountPayeScheme(long accountId, string employerReferenceNumber, DateTime created)
+        internal AccountPayeScheme(Account account, string employerReferenceNumber, DateTime created)
         {
-            AccountId = accountId;
+            Account = account;
+            AccountId = account.Id;
             EmployerReferenceNumber = employerReferenceNumber;
             Created = created;
         }
