@@ -1,3 +1,4 @@
+using System;
 using System.Data.SqlClient;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         [Ignore("To be run adhoc (but could live in an integration test)")]
         public void CheckDatabaseSchemaAgainstEntityFrameworkExpectedSchema()
         {
+            const string databaseName = "SFA.DAS.EmployerFinanceV2.Database";
+            
             var configuration = new ConfigurationBuilder().AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base).Build();
             var employerFinanceConfiguration = configuration.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
             
@@ -36,7 +39,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
                     };
 
                     config.IgnoreTheseErrors(
-                        "EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Column 'Users', column name. Found = Id");
+                        $"EXTRA IN DATABASE: {databaseName}->Column 'Users', column name. Found = Id{Environment.NewLine}" +
+                        $"EXTRA IN DATABASE: {databaseName}->Index 'AccountPayeSchemes', index constraint name. Found = AK_AccountPayeSchemes_AccountId_EmployerReferenceNumber");
                     
                     var comparer = new CompareEfSql(config);
                     var hasErrors = comparer.CompareEfWithDb(context);
