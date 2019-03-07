@@ -10,9 +10,10 @@
         <PackageLicenseUrl>https://github.com/SkillsFundingAgency/das-employerfinance/blob/master/LICENSE</PackageLicenseUrl>
         <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-employerfinance</PackageProjectUrl>
 
-        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
         <EmbedUntrackedSources>false</EmbedUntrackedSources>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup>
