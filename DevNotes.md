@@ -15,6 +15,8 @@ We might also want to bundle some or all of the GOV.UK / common DAS / site speci
 * Move npm & gulp configuration to the project root?
 * For federated sign-out, looks like we might be able to play with the cookie domain, path etc. and have 1 cookie, so any sub-site auto signs out of main site! see https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-2.2
 * authentication: ios on safari and same-site cookies, see https://brockallen.com/2019/01/11/same-site-cookies-asp-net-core-and-external-authentication-providers/
+^^ check fix
+* update sourcelink, remove pdbs from package and generate symbols package instead
 
 ## Useful Links
 
