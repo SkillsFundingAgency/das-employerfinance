@@ -149,6 +149,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
                     .And.Match<FinishedProcessingLevyDeclarationsEvent>(e => 
                         e.SagaId == f.Saga.Id &&
                         e.PayrollPeriod == f.Saga.PayrollPeriod &&
+                        e.AccountPayeSchemeHighWaterMarkId == f.Saga.AccountPayeSchemeHighWaterMarkId.Value &&
                         e.Finished == f.Saga.Updated.Value));
         }
         
@@ -317,7 +318,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
 
         public UpdateProcessLevyDeclarationsSagaProgressCommandHandlerTestsFixture SetScheduledSagaType()
         {
-            Saga.Set(s => s.Type, LevyDeclarationSagaType.Scheduled)
+            Saga.Set(s => s.Type, LevyDeclarationSagaType.Planned)
                 .Set(s => s.AccountPayeSchemeHighWaterMarkId, AccountPayeSchemes.Max(aps => aps.Id))
                 .Set(s => s.ImportPayeSchemeLevyDeclarationsTasksCount, AccountPayeSchemes.Select(aps => aps.EmployerReferenceNumber).Count())
                 .Set(s => s.UpdateAccountTransactionBalancesTasksCount, AccountPayeSchemes.Select(aps => aps.AccountId).Distinct().Count());

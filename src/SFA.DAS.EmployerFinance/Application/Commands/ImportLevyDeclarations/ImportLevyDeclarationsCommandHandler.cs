@@ -22,14 +22,12 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.ImportLevyDeclarations
 
         protected override async Task Handle(ImportLevyDeclarationsCommand request, CancellationToken cancellationToken)
         {
-            var saga = await _db.LevyDeclarationSagas.SingleAsync(s => s.Id == request.SagaId, cancellationToken);
-            
             var accountPayeSchemeIds = await _db.AccountPayeSchemes
-                .Where(aps => aps.Id <= saga.AccountPayeSchemeHighWaterMarkId.Value)
+                .Where(aps => aps.Id <= request.AccountPayeSchemeHighWaterMarkId)
                 .Select(aps => aps.Id)
                 .ToListAsync(cancellationToken);
-                    
-            var commands = accountPayeSchemeIds.Select(i => new ImportPayeSchemeLevyDeclarationsCommand(saga.Id, saga.PayrollPeriod, i));
+            
+            var commands = accountPayeSchemeIds.Select(i => new ImportPayeSchemeLevyDeclarationsCommand(request.SagaId, request.PayrollPeriod, i));
             var tasks = commands.Select(_uniformSession.SendLocal);
             
             await Task.WhenAll(tasks);

@@ -52,6 +52,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
                     .And.Match<StartedProcessingLevyDeclarationsEvent>(e =>
                         e.SagaId == saga.Id &&
                         e.PayrollPeriod == saga.PayrollPeriod &&
+                        e.AccountPayeSchemeHighWaterMarkId == saga.AccountPayeSchemeHighWaterMarkId.Value &&
                         e.Started == saga.Created);
             });
         }

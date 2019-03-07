@@ -27,14 +27,14 @@ namespace SFA.DAS.EmployerFinance.Models
 
         public LevyDeclarationSaga(DateTime payrollPeriod, IReadOnlyCollection<AccountPayeScheme> accountPayeSchemes)
         {
-            Type = LevyDeclarationSagaType.Scheduled;
+            Type = LevyDeclarationSagaType.Planned;
             PayrollPeriod = payrollPeriod;
             Created = DateTime.UtcNow;
             AccountPayeSchemeHighWaterMarkId = accountPayeSchemes.Max(aps => aps.Id);
             ImportPayeSchemeLevyDeclarationsTasksCount = accountPayeSchemes.Select(aps => aps.EmployerReferenceNumber).Count();
             UpdateAccountTransactionBalancesTasksCount = accountPayeSchemes.Select(aps => aps.AccountId).Distinct().Count();
             
-            Publish(() => new StartedProcessingLevyDeclarationsEvent(Id, PayrollPeriod, Created));
+            Publish(() => new StartedProcessingLevyDeclarationsEvent(Id, PayrollPeriod, AccountPayeSchemeHighWaterMarkId.Value,Created));
         }
 
         public LevyDeclarationSaga(DateTime payrollPeriod, AccountPayeScheme accountPayeScheme)
@@ -94,8 +94,8 @@ namespace SFA.DAS.EmployerFinance.Models
 
                 switch (Type)
                 {
-                    case LevyDeclarationSagaType.Scheduled:
-                        Publish(() => new FinishedProcessingLevyDeclarationsEvent(Id, PayrollPeriod, Updated.Value));
+                    case LevyDeclarationSagaType.Planned:
+                        Publish(() => new FinishedProcessingLevyDeclarationsEvent(Id, PayrollPeriod, AccountPayeSchemeHighWaterMarkId.Value, Updated.Value));
                         break;
                     case LevyDeclarationSagaType.AdHoc:
                         Publish(() => new FinishedProcessingLevyDeclarationsAdHocEvent(Id, PayrollPeriod, AccountPayeSchemeId.Value, Updated.Value));

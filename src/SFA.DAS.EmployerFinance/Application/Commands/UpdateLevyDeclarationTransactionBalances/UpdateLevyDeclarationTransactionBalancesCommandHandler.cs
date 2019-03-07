@@ -23,15 +23,13 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationTran
 
         protected override async Task Handle(UpdateLevyDeclarationTransactionBalancesCommand request, CancellationToken cancellationToken)
         {
-            var saga = await _db.LevyDeclarationSagas.SingleAsync(s => s.Id == request.SagaId, cancellationToken);
-            
             var accountIds = await _db.LevyDeclarationSagaTasks
-                .Where(t => t.SagaId == saga.Id && t.Type == LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations)
+                .Where(t => t.SagaId == request.SagaId && t.Type == LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations)
                 .Select(t => t.AccountPayeScheme.AccountId)
                 .Distinct()
                 .ToListAsync(cancellationToken);
             
-            var commands = accountIds.Select(i => new UpdateAccountLevyDeclarationTransactionBalancesCommand(saga.Id, i));
+            var commands = accountIds.Select(i => new UpdateAccountLevyDeclarationTransactionBalancesCommand(request.SagaId, i));
             var tasks = commands.Select(_uniformSession.SendLocal);
 
             await Task.WhenAll(tasks);

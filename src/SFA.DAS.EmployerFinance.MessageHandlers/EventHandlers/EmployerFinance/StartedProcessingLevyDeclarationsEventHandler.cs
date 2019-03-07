@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.EmployerFinance
         public Task Handle(StartedProcessingLevyDeclarationsEvent message, IMessageHandlerContext context)
         {
             return Task.WhenAll(
-                _mediator.Send(new ImportLevyDeclarationsCommand(message.SagaId)),
+                _mediator.Send(new ImportLevyDeclarationsCommand(message.SagaId, message.PayrollPeriod, message.AccountPayeSchemeHighWaterMarkId)),
                 context.SendLocal(new UpdateLevyDeclarationSagaProgressCommand(message.SagaId), LevyDeclarationSaga.Timeout));
         }
     }

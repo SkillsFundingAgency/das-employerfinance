@@ -26,14 +26,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ImportLevyDecla
         [Test]
         public Task Handle_WhenHandlingCommandAndSagaTypeIsScheduled_ThenShouldSendImportCommands()
         {
-            return TestAsync(f => f.SetScheduledSaga(), f => f.Handle(), f =>
+            return TestAsync(f => f.Handle(), f =>
             {
                 f.UniformSession.Verify(s => s.Send(It.IsAny<ImportPayeSchemeLevyDeclarationsCommand>(), It.IsAny<SendOptions>()), Times.Exactly(f.AccountPayeSchemes.Count));
                 
                 f.AccountPayeSchemes.ForEach(aps => f.UniformSession.Verify(s => s.Send(
                     It.Is<ImportPayeSchemeLevyDeclarationsCommand>(c =>
-                        c.SagaId == f.Saga.Id &&
-                        c.PayrollPeriod == f.Saga.PayrollPeriod &&
+                        c.SagaId == f.Command.SagaId &&
+                        c.PayrollPeriod == f.Command.PayrollPeriod &&
                         c.AccountPayeSchemeId == aps.Id),
                     It.IsAny<SendOptions>()), Times.Once));
             });
@@ -52,7 +52,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ImportLevyDecla
         public List<Account> Accounts { get; set; }
         public List<AccountPayeScheme> AccountPayeSchemes { get; set; }
         public AccountPayeScheme ExcludedAccountPayeScheme { get; set; }
-        public LevyDeclarationSaga Saga { get; set; }
         
         public ImportLevyDeclarationsCommandHandlerTestsFixture()
         {
@@ -81,7 +80,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ImportLevyDecla
 
             ExcludedAccountPayeScheme = Fixture.Create<AccountPayeScheme>().Set(aps => aps.Id, 4);
             
-            Command = new ImportLevyDeclarationsCommand(5);
+            Command = new ImportLevyDeclarationsCommand(5, Now, AccountPayeSchemes.Max(aps => aps.Id));
             Db = new EmployerFinanceDbContext(new DbContextOptionsBuilder<EmployerFinanceDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
             UniformSession = new Mock<IUniformSession>();
             
@@ -95,21 +94,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ImportLevyDecla
         {
             await Handler.Handle(Command, CancellationToken.None);
             await Db.SaveChangesAsync();
-        }
-
-        public ImportLevyDeclarationsCommandHandlerTestsFixture SetScheduledSaga()
-        {
-            Saga = ObjectActivator.CreateInstance<LevyDeclarationSaga>()
-                .Set(s => s.Id, Command.SagaId)
-                .Set(s => s.Type, LevyDeclarationSagaType.Scheduled)
-                .Set(s => s.PayrollPeriod, Now)
-                .Set(s => s.AccountPayeSchemeHighWaterMarkId, AccountPayeSchemes.Max(aps => aps.Id))
-                .Set(s => s.ImportPayeSchemeLevyDeclarationsTasksCount, AccountPayeSchemes.Select(aps => aps.EmployerReferenceNumber).Distinct().Count());
-            
-            Db.LevyDeclarationSagas.Add(Saga);
-            Db.SaveChanges();
-            
-            return this;
         }
     }
 }

@@ -24,7 +24,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
         public Task Handle_WhenHandlingEvent_ThenShouldSendCommand()
         {
             return TestAsync(f => f.Handle(),f => f.Mediator.Verify(m => m.Send(
-                It.Is<ImportLevyDeclarationsCommand>(c => c.SagaId == f.Event.SagaId),
+                It.Is<ImportLevyDeclarationsCommand>(c =>
+                    c.SagaId == f.Event.SagaId &&
+                    c.PayrollPeriod == f.Event.PayrollPeriod &&
+                    c.AccountPayeSchemeHighWaterMarkId == f.Event.AccountPayeSchemeHighWaterMarkId),
                 CancellationToken.None), Times.Once));
         }
         
@@ -46,7 +49,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
 
         public StartedProcessingLevyDeclarationsEventHandlerTestsFixture()
         {
-            Event = new StartedProcessingLevyDeclarationsEvent(1, DateTime.UtcNow, DateTime.UtcNow);
+            Event = new StartedProcessingLevyDeclarationsEvent(1, DateTime.UtcNow.AddMonths(-1), 2, DateTime.UtcNow);
             Context = new TestableMessageHandlerContext();
             Mediator = new Mock<IMediator>();
             Handler = new StartedProcessingLevyDeclarationsEventHandler(Mediator.Object);

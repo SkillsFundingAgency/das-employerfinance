@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
                 
                 f.Accounts.ForEach(a => f.UniformSession.Verify(s => s.Send(
                     It.Is<UpdateAccountLevyDeclarationTransactionBalancesCommand>(c =>
-                        c.SagaId == f.Saga.Id &&
+                        c.SagaId == f.Command.SagaId &&
                         c.AccountId == a.Id),
                     It.IsAny<SendOptions>()), Times.Once));
             });
