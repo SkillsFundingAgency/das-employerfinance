@@ -1,6 +1,4 @@
-using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Application.Commands.ImportLevyDeclarations;
 using SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationSagaProgress;
@@ -26,8 +24,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers.Employ
         [Test]
         public Task Handle_WhenHandlingEvent_ThenShouldSendUpdateLevyDeclarationSagaProgressCommand()
         {
-            return TestAsync(f => f.Handle(), f => f.MessageHandlerContext.SentMessages.Select(m => m.Message).SingleOrDefault().Should().NotBeNull()
-                .And.Match<UpdateLevyDeclarationSagaProgressCommand>(c => c.SagaId == f.Message.SagaId));
+            return TestAsync(f => f.Handle(), f => f.AssertSentMessage<UpdateLevyDeclarationSagaProgressCommand>((sm, m) => sm.SagaId == m.SagaId));
         }
     }
 
