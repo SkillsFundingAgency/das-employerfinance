@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.Startup
                     var employerFinanceConfiguration = configuration.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
                     var isDevelopment = hostingEnvironment.IsDevelopment();
                 
-                    var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinanceV2.MessageHandlers")
+                    var endpointConfiguration = new EndpointConfiguration(EndpointName.EmployerFinanceV2MessageHandlers)
                         .UseAzureServiceBusTransport(isDevelopment, () => employerFinanceConfiguration.ServiceBusConnectionString)
                         .UseInstallers()
                         .UseLicense(employerFinanceConfiguration.NServiceBusLicense)
