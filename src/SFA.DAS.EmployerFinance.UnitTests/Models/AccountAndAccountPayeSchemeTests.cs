@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using AutoFixture;
 using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.Testing;
+using SFA.DAS.Testing.Builders;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Models
 {
@@ -82,7 +84,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         {
             TestException(f => f.AddPreExistingPayeScheme(), f => f.AddPayeScheme(), (f, r) => r.Should().Throw<InvalidOperationException>());
         }
-        
+
         #endregion AddPayeScheme
 
         #region RemovePayeScheme
@@ -201,7 +203,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
 
         public AccountTestsFixture AssertPayeSchemeAdded()
         {
-            Account.AccountPayeSchemes.Should().BeEquivalentTo(new AccountPayeScheme(OriginalAccount, EmployerReferenceNumber, ActionDate));
+            //todo: this is getting ugly:
+            // FluentAssestions doesn't support circular references, so we can't do this
+            // we could switch to https://github.com/GregFinzer/Compare-Net-Objects which does support circular references (or manually check individual properties)
+            // but i think the right thing to do is to introduce interfaces for our entities (or make properties virtual)
+            // and properly isolate the entity under test
+            var accountPayeScheme = new AccountPayeScheme(OriginalAccount, EmployerReferenceNumber, ActionDate);
+            accountPayeScheme.Account.Set(aps => aps._accountPayeSchemes, new List<AccountPayeScheme> {accountPayeScheme});
+            Account.AccountPayeSchemes.Should().BeEquivalentTo(accountPayeScheme);
             return this;
         }
 
