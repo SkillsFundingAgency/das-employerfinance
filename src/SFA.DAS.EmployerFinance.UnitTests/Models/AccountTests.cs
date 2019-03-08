@@ -1,27 +1,16 @@
 using System;
-using System.Collections.Generic;
 using AutoFixture;
 using FluentAssertions;
-using Newtonsoft.Json;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.Testing;
-using SFA.DAS.Testing.Builders;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Models
 {
-    /// <summary>
-    /// Tests both Account & AccountPayeScheme models.
-    /// Usually would have an AccountsTest with a mocked AccountPayeScheme, and a separate AccountPayeSchemeTest,
-    /// but it is more convenient in this instance to test them together.
-    ///
-    /// The issue with testing the Account class individually, is that if we use a (Moq) mock AccountPayeScheme, you can't use SetupGet on the properties,
-    /// as they aren't virtual (and we don't use interfaces for our entities). We should be verifying that Delete() was called on a mocked AccountPayeScheme,
-    /// rather than white-boxing it and peeking inside a real AccountPayeScheme!
-    /// </summary>
     [TestFixture]
     [Parallelizable]
-    public class AccountAndAccountPayeSchemeTests : FluentTest<AccountTestsFixture>
+    public class AccountTests : FluentTest<AccountTestsFixture>
     {
         #region UpdateName
 
@@ -67,29 +56,29 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
 
         #region AddPayeScheme
         
-        [Test, Ignore("todo: fix following changes introduced in merge")]
+        [Test]
         public void AddPayeScheme_WhenPayeSchemeIsNewToTheAccount_ThenPayeSchemeShouldBeAddedToTheAccount()
         {
             Test(f => f.AddPayeScheme(), f => f.AssertPayeSchemeAdded());
         }
 
-        [Test, Ignore("todo: fix following changes introduced in merge")]
-        public void AddPayeScheme_WhenPayeSchemeIsNewToTheAccount_ThenPayeSchemeShouldBeReturnedAndBeSameAsPayeSchemeAddedToAccount()
+        [Test]
+        public void AddPayeScheme_WhenPayeSchemeIsNewToTheAccount_ThenPayeSchemeShouldBeReturned()
         {
-            Test(f => f.AddPayeScheme(), (f, r) => f.AssertPayeSchemeIsReturnedAndSameAsPayeSchemeAdded(r));
+            Test(f => f.AddPayeScheme(), (f, r) => f.AssertCorrectPayeSchemeIsReturned(r));
         }
         
-        [Test, Ignore("todo: fix following changes introduced in merge")]
+        [Test]
         public void AddPayeScheme_WhenPayeSchemeHasAlreadyBeenAddedToTheAccount_ThenShouldThrowInvalidOperationException()
         {
             TestException(f => f.AddPreExistingPayeScheme(), f => f.AddPayeScheme(), (f, r) => r.Should().Throw<InvalidOperationException>());
         }
-
+        
         #endregion AddPayeScheme
 
         #region RemovePayeScheme
 
-        [Test, Ignore("todo: fix following changes introduced in merge")]
+        [Test]
         public void RemovePayeScheme_WhenPayeSchemeHasAlreadyBeenAddedToTheAccount_ThenPayeSchemeShouldBeSoftDeletedFromTheAccount()
         {
             Test(f => f.AddPreExistingPayeScheme(), f => f.RemovePayeScheme(), f => f.AssertPayeSchemeSoftDeleted());
@@ -111,8 +100,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         public const string NewName = "NewName";
         public const string EmployerReferenceNumber = "ABC/123456";
         public DateTime ActionDate { get; set; }
-        public AccountPayeScheme AccountPayeScheme { get; set; }
-        public AccountPayeScheme OriginalAccountPayeScheme { get; set; }
+        public Mock<AccountPayeScheme> AccountPayeScheme { get; set; }
         private readonly Fixture _fixture;
         
         #region Arrange
@@ -122,7 +110,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
             _fixture = new Fixture();
             Account = _fixture.Create<Account>();
             ActionDate = _fixture.Create<DateTime>();
-            AccountPayeScheme = new AccountPayeScheme(Account, EmployerReferenceNumber, ActionDate.AddMinutes(-1));
+            AccountPayeScheme = new Mock<AccountPayeScheme>();
+            AccountPayeScheme.SetupGet(aps => aps.AccountId).Returns(Account.Id);
+            AccountPayeScheme.SetupGet(aps => aps.EmployerReferenceNumber).Returns(EmployerReferenceNumber);
         }
         
         public AccountTestsFixture UpdatedPreviously()
@@ -139,24 +129,26 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
             return this;
         }
 
-        public AccountTestsFixture CloneOriginalAccount()
+        /// <summary>
+        /// Clones public properties. Leaves _accountPayeSchemes alone: it's not public and will contain mock AccountPayeScheme, for which cloning makes no sense.
+        /// </summary>
+        public AccountTestsFixture PartCloneOriginalAccount()
         {
-            OriginalAccount = JsonConvert.DeserializeObject<Account>(JsonConvert.SerializeObject(Account));
-            OriginalAccount.Updated = Account.Updated;
+            OriginalAccount = new Account
+            {
+                Id = Account.Id,
+                Name = Account.Name,
+                Created = Account.Created,
+                Updated = Account.Updated,
+                HashedId = Account.HashedId,
+                PublicHashedId = Account.PublicHashedId
+            };
             return this;
         }
 
-        public AccountTestsFixture CloneOriginalAccountPayeScheme()
-        {
-            //doesn't work for some reason
-            //OriginalAccountPayeScheme = JsonConvert.DeserializeObject<AccountPayeScheme>(JsonConvert.SerializeObject(AccountPayeScheme));
-            OriginalAccountPayeScheme = new AccountPayeScheme(AccountPayeScheme.Account, AccountPayeScheme.EmployerReferenceNumber, AccountPayeScheme.Created);
-            return this;
-        }
-        
         public AccountTestsFixture AddPreExistingPayeScheme()
         {
-            Account._accountPayeSchemes.Add(AccountPayeScheme);
+            Account._accountPayeSchemes.Add(AccountPayeScheme.Object);
             return this;
         }
         
@@ -166,21 +158,20 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         
         public void UpdateName(string name = NewName)
         {
-            CloneOriginalAccount();
+            PartCloneOriginalAccount();
             Account.UpdateName(name, ActionDate);
         }
 
         public AccountPayeScheme AddPayeScheme(string employerReferenceNumber = EmployerReferenceNumber)
         {
-            CloneOriginalAccount();
+            PartCloneOriginalAccount();
             return Account.AddPayeScheme(employerReferenceNumber, ActionDate);
         }
 
         public void RemovePayeScheme()
         {
-            CloneOriginalAccount();
-            CloneOriginalAccountPayeScheme();
-            Account.RemovePayeScheme(AccountPayeScheme, ActionDate);
+            PartCloneOriginalAccount();
+            Account.RemovePayeScheme(AccountPayeScheme.Object, ActionDate);
         }
         
         #endregion Act
@@ -203,28 +194,27 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
 
         public AccountTestsFixture AssertPayeSchemeAdded()
         {
-            //todo: this is getting ugly:
-            // FluentAssestions doesn't support circular references, so we can't do this
-            // we could switch to https://github.com/GregFinzer/Compare-Net-Objects which does support circular references (or manually check individual properties)
-            // but i think the right thing to do is to introduce interfaces for our entities (or make properties virtual)
-            // and properly isolate the entity under test
-            var accountPayeScheme = new AccountPayeScheme(OriginalAccount, EmployerReferenceNumber, ActionDate);
-            accountPayeScheme.Account.Set(aps => aps._accountPayeSchemes, new List<AccountPayeScheme> {accountPayeScheme});
-            Account.AccountPayeSchemes.Should().BeEquivalentTo(accountPayeScheme);
+            // assumes no transformation in AccountPayeScheme c'tor. can we remove that assumption, but still test that the correct AccountPayeScheme is added?
+            Account.AccountPayeSchemes.Should().ContainSingle(aps => aps.AccountId == OriginalAccount.Id
+                                                                     && aps.EmployerReferenceNumber == EmployerReferenceNumber
+                                                                     && aps.Created == ActionDate);
             return this;
         }
-
-        public AccountTestsFixture AssertPayeSchemeIsReturnedAndSameAsPayeSchemeAdded(AccountPayeScheme result)
+        
+        public AccountTestsFixture AssertCorrectPayeSchemeIsReturned(AccountPayeScheme result)
         {
             result.Should().NotBeNull();
-            Account.AccountPayeSchemes.Should().BeEquivalentTo(new AccountPayeScheme(OriginalAccount, EmployerReferenceNumber, ActionDate));
+            result.Should().Match<AccountPayeScheme>(aps => aps.AccountId == OriginalAccount.Id
+                                         && aps.EmployerReferenceNumber == EmployerReferenceNumber
+                                         && aps.Created == ActionDate);
             return this;
         }
-
+        
         public AccountTestsFixture AssertPayeSchemeSoftDeleted()
         {
-            OriginalAccountPayeScheme.Deleted = ActionDate;
-            Account.AccountPayeSchemes.Should().ContainEquivalentOf(OriginalAccountPayeScheme);
+            AccountPayeScheme.Verify(aps => aps.Delete(ActionDate), Times.Once);
+            Account.AccountPayeSchemes.Should().ContainSingle(aps => aps.AccountId == OriginalAccount.Id 
+                                                                     && aps.EmployerReferenceNumber == EmployerReferenceNumber);
             return this;
         }
         

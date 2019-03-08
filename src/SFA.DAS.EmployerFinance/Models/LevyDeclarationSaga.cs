@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerFinance.Models
             Publish(() => new StartedProcessingLevyDeclarationsAdHocEvent(Id, PayrollPeriod, AccountPayeSchemeId.Value, Created));
         }
 
-        private LevyDeclarationSaga()
+        internal LevyDeclarationSaga()
         {
         }
         

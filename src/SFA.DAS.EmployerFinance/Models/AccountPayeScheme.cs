@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerFinance.Models
             Created = created;
         }
 
-        private AccountPayeScheme()
+        internal AccountPayeScheme()
         {
         }
 

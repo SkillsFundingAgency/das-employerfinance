@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerFinance.Models
         public virtual DateTime Created { get; private set; }
         public virtual DateTime? Updated { get; private set; }
 
-        private Provider()
+        internal Provider()
         {
         }
     }

@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.Models
             Created = DateTime.UtcNow;
         }
 
-        private User()
+        internal User()
         {
         }
 

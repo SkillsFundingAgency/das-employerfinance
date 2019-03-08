@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerFinance.Models
             Created = created;
         }
 
-        private Account()
+        internal Account()
         {
         }
         

@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerFinance.Models
             AccountId = accountId;
         }
 
-        private LevyDeclarationSagaTask()
+        internal LevyDeclarationSagaTask()
         {
         }
 
