@@ -16,8 +16,6 @@ We might also want to bundle some or all of the GOV.UK / common DAS / site speci
 * For federated sign-out, looks like we might be able to play with the cookie domain, path etc. and have 1 cookie, so any sub-site auto signs out of main site! see https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-2.2
 * enabling debug logging in AT revealed the following little gem. is it an issue? (oops copied wrong text, but issue is with this filter..)
 Execution plan of action filters (in the following order): Microsoft.AspNetCore.Mvc.Internal.ControllerActionFilter (Order: -2147483648), Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000), SFA.DAS.EmployerFinance.Web.Filters.UrlsViewBagFilter
-* response header contains `X-Powered-By: ASP.NET`, thought we'd blatted that already
-^ need to do it via web.config: https://stackoverflow.com/questions/45882715/how-to-remove-x-powered-by-header-in-net-core-2-0
 * stop non model code constructing non-root entities (surely overkill :-) https://stackoverflow.com/questions/2016719/how-to-create-a-constructor-that-is-only-usable-by-a-specific-class-c-friend
 
 ## Useful Links
