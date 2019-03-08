@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using NUnit.Framework;
-using SFA.DAS.EmployerFinance.Mappings;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Mappings
 {
@@ -9,10 +8,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Mappings
     public class MappingsTests
     {
         [Test]
+        [Ignore("Currently we have no mapping to test")]
         public void AssertConfigurationIsValid_WhenAssertingConfigurationIsValid_ThenShouldNotThrowException()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(HealthCheckMappings)));
-
+            var config = new MapperConfiguration(c => {});
+            
             config.AssertConfigurationIsValid();
         }
     }

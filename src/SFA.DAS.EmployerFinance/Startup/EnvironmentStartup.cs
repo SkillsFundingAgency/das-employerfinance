@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerFinance.Startup
     {
         public static IHostBuilder UseDasEnvironment(this IHostBuilder hostBuilder)
         {
-            var environmentName = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
+            var environmentName = Environment.GetEnvironmentVariable(EnvironmentVariableName.EnvironmentName);
             var mappedEnvironmentName = DasEnvironmentName.Map[environmentName];
             
             return hostBuilder.UseEnvironment(mappedEnvironmentName);
@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.Startup
         
         public static IWebHostBuilder UseDasEnvironment(this IWebHostBuilder hostBuilder)
         {
-            var environmentName = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
+            var environmentName = Environment.GetEnvironmentVariable(EnvironmentVariableName.EnvironmentName);
             var mappedEnvironmentName = DasEnvironmentName.Map[environmentName];
             
             return hostBuilder.UseEnvironment(mappedEnvironmentName);

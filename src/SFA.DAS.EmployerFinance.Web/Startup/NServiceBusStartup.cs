@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                     var configurationSection = configuration.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
                     var isDevelopment = hostingEnvironment.IsDevelopment();
                     
-                    var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinanceV2.Web")
+                    var endpointConfiguration = new EndpointConfiguration(EndpointName.EmployerFinanceV2Web)
                         .UseAzureServiceBusTransport(isDevelopment, () => configurationSection.ServiceBusConnectionString)
                         .UseErrorQueue()
                         .UseInstallers()
