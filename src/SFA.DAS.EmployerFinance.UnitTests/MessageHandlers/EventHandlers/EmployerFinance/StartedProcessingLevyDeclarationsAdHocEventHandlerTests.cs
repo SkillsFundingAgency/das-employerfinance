@@ -19,13 +19,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers.Employ
         [Test]
         public Task Handle_WhenHandlingEvent_ThenShouldSendImportLevyDeclarationsCommand()
         {
-            //todo: VerifySend
-            return TestAsync(f => f.Handle(),f => f.Mediator.Verify(m => m.Send(
-                It.Is<ImportPayeSchemeLevyDeclarationsCommand>(c => 
-                    c.SagaId == f.Message.SagaId &&
-                    c.PayrollPeriod == f.Message.PayrollPeriod &&
-                    c.AccountPayeSchemeId == f.Message.AccountPayeSchemeId),
-                CancellationToken.None), Times.Once));
+            return TestAsync(f => f.Handle(), f => f.VerifySend<ImportPayeSchemeLevyDeclarationsCommand>((c, m) =>
+                c.SagaId == f.Message.SagaId &&
+                c.PayrollPeriod == f.Message.PayrollPeriod &&
+                c.AccountPayeSchemeId == f.Message.AccountPayeSchemeId));
         }
         
         [Test]
