@@ -14,9 +14,7 @@ We might also want to bundle some or all of the GOV.UK / common DAS / site speci
 * [Scope our node package](https://docs.npmjs.com/misc/scope) to Esfa?
 * Move npm & gulp configuration to the project root?
 * For federated sign-out, looks like we might be able to play with the cookie domain, path etc. and have 1 cookie, so any sub-site auto signs out of main site! see https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-2.2
-* authentication: ios on safari and same-site cookies, see https://brockallen.com/2019/01/11/same-site-cookies-asp-net-core-and-external-authentication-providers/
-^^ check fix
-* enabling debug logging in at revealed the following little gem. is it an issue?
+* enabling debug logging in AT revealed the following little gem. is it an issue? (oops copied wrong text, but issue is with this filter..)
 Execution plan of action filters (in the following order): Microsoft.AspNetCore.Mvc.Internal.ControllerActionFilter (Order: -2147483648), Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000), SFA.DAS.EmployerFinance.Web.Filters.UrlsViewBagFilter
 * response header contains `X-Powered-By: ASP.NET`, thought we'd blatted that already
 * stop non model code constructing non-root entities (surely overkill :-) https://stackoverflow.com/questions/2016719/how-to-create-a-constructor-that-is-only-usable-by-a-specific-class-c-friend
