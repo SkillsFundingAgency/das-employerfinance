@@ -1,8 +1,6 @@
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Application.Commands.ImportPayeSchemeLevyDeclarations;
 using SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationSagaProgress;
@@ -20,9 +18,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers.Employ
         public Task Handle_WhenHandlingEvent_ThenShouldSendImportLevyDeclarationsCommand()
         {
             return TestAsync(f => f.Handle(), f => f.VerifySend<ImportPayeSchemeLevyDeclarationsCommand>((c, m) =>
-                c.SagaId == f.Message.SagaId &&
-                c.PayrollPeriod == f.Message.PayrollPeriod &&
-                c.AccountPayeSchemeId == f.Message.AccountPayeSchemeId));
+                c.SagaId == m.SagaId &&
+                c.PayrollPeriod == m.PayrollPeriod &&
+                c.AccountPayeSchemeId == m.AccountPayeSchemeId));
         }
         
         [Test]
