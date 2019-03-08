@@ -6,13 +6,13 @@ namespace SFA.DAS.EmployerFinance.Models
 {
     public class Account : Entity
     {
-        public long Id { get; internal set; }
-        public string HashedId { get; internal set; }
-        public string PublicHashedId { get; internal set; }
-        public string Name { get; internal set; }
-        public DateTime Created { get; internal set; }
-        public DateTime? Updated { get; internal set; }
-        public IEnumerable<AccountPayeScheme> AccountPayeSchemes => _accountPayeSchemes;
+        public virtual long Id { get; internal set; }
+        public virtual string HashedId { get; internal set; }
+        public virtual string PublicHashedId { get; internal set; }
+        public virtual string Name { get; internal set; }
+        public virtual DateTime Created { get; internal set; }
+        public virtual DateTime? Updated { get; internal set; }
+        public virtual IEnumerable<AccountPayeScheme> AccountPayeSchemes => _accountPayeSchemes;
         
         internal readonly List<AccountPayeScheme> _accountPayeSchemes = new List<AccountPayeScheme>();
 
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Models
         {
         }
         
-        public void UpdateName(string name, DateTime updated)
+        public virtual void UpdateName(string name, DateTime updated)
         {
             if (IsUpdatedNameDateChronological(updated) && IsUpdatedNameDifferent(name))
             {
@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerFinance.Models
             }
         }
 
-        public AccountPayeScheme AddPayeScheme(string employerReferenceNumber, DateTime created)
+        public virtual AccountPayeScheme AddPayeScheme(string employerReferenceNumber, DateTime created)
         {
             EnsurePayeSchemeHasNotAlreadyBeenAdded(employerReferenceNumber);
             
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerFinance.Models
             return accountPayeScheme;
         }
 
-        public void RemovePayeScheme(AccountPayeScheme accountPayeScheme, DateTime removed)
+        public virtual void RemovePayeScheme(AccountPayeScheme accountPayeScheme, DateTime removed)
         {
             EnsureAccountPayeSchemeHasBeenAdded(accountPayeScheme);
             

@@ -4,12 +4,12 @@ namespace SFA.DAS.EmployerFinance.Models
 {
     public class User : Entity
     {
-        public Guid Ref { get; internal set; }
-        public string Email { get; internal set; }
-        public string FirstName { get; internal set; }
-        public string LastName { get; internal set; }
-        public DateTime Created { get; internal set; }
-        public DateTime? Updated { get; internal set; }
+        public virtual Guid Ref { get; internal set; }
+        public virtual string Email { get; internal set; }
+        public virtual string FirstName { get; internal set; }
+        public virtual string LastName { get; internal set; }
+        public virtual DateTime Created { get; internal set; }
+        public virtual DateTime? Updated { get; internal set; }
 
         public User(Guid @ref, string email, string firstName, string lastName)
         {
@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerFinance.Models
         {
         }
 
-        public void Update(string email, string firstName, string lastName)
+        public virtual void Update(string email, string firstName, string lastName)
         {
             if (email != Email || firstName != FirstName || lastName != LastName)
             {

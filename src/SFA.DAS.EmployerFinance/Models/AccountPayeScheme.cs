@@ -4,12 +4,12 @@ namespace SFA.DAS.EmployerFinance.Models
 {
     public class AccountPayeScheme : Entity
     {
-        public long Id { get; internal set; }
-        public Account Account { get; internal set; }
-        public long AccountId { get; internal set; }
-        public string EmployerReferenceNumber { get; internal set; }
-        public DateTime Created { get; internal set; }
-        public DateTime? Deleted { get; internal set; }
+        public virtual long Id { get; internal set; }
+        public virtual Account Account { get; internal set; }
+        public virtual long AccountId { get; internal set; }
+        public virtual string EmployerReferenceNumber { get; internal set; }
+        public virtual DateTime Created { get; internal set; }
+        public virtual DateTime? Deleted { get; internal set; }
         
         internal AccountPayeScheme(Account account, string employerReferenceNumber, DateTime created)
         {
@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerFinance.Models
         {
         }
 
-        internal void Delete(DateTime deleted)
+        internal virtual void Delete(DateTime deleted)
         {
             EnsureHasNotBeenDeleted();
             

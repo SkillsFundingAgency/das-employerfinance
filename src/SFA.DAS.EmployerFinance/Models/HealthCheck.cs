@@ -6,19 +6,19 @@ namespace SFA.DAS.EmployerFinance.Models
 {
     public class HealthCheck : Entity
     {
-        public int Id { get; private set; }
-        public DateTime SentEmployerFinanceApiRequest { get; private set; }
-        public DateTime? ReceivedEmployerFinanceApiResponse { get; private set; }
-        public DateTime PublishedEmployerFinanceEvent { get; private set; }
-        public DateTime? ReceivedEmployerFinanceEvent { get; private set; }
+        public virtual int Id { get; private set; }
+        public virtual DateTime SentEmployerFinanceApiRequest { get; private set; }
+        public virtual DateTime? ReceivedEmployerFinanceApiResponse { get; private set; }
+        public virtual DateTime PublishedEmployerFinanceEvent { get; private set; }
+        public virtual DateTime? ReceivedEmployerFinanceEvent { get; private set; }
         
-        public async Task Run(Func<Task> employerFinanceApiRequest)
+        public virtual async Task Run(Func<Task> employerFinanceApiRequest)
         {
             await SendEmployerFinanceApiRequest(employerFinanceApiRequest);
             PublishEmployerFinanceEvent();
         }
 
-        public void ReceiveEmployerFinanceEvent()
+        public virtual void ReceiveEmployerFinanceEvent()
         {
             ReceivedEmployerFinanceEvent = DateTime.UtcNow;
         }
