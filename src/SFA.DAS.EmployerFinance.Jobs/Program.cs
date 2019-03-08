@@ -18,6 +18,7 @@ namespace SFA.DAS.EmployerFinance.Jobs
                 .ConfigureDasWebJobs()
                 .ConfigureDasAppConfiguration(args)
                 .ConfigureDasLogging()
+                .UseApplicationInsights()
                 .UseDasEnvironment()
                 .UseStructureMap()
                 .UseConsoleLifetime()

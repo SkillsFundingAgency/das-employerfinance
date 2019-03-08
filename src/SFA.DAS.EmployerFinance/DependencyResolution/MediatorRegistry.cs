@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
@@ -12,6 +12,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             
             Scan(s =>
             {
+                s.ConnectImplementationsToTypesClosing(typeof(IPipelineBehavior<,>));
                 s.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
             });
         }

@@ -15,9 +15,9 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
 
         private static IHostBuilder CreateHostBuilder(string[] args) => 
             new HostBuilder()
-                .ConfigureDasWebJobs()
                 .ConfigureDasAppConfiguration(args)
                 .ConfigureDasLogging()
+                .UseApplicationInsights()
                 .UseDasEnvironment()
                 .UseStructureMap()
                 .UseConsoleLifetime()
