@@ -9,7 +9,7 @@ using SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.EmployerFinance;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
+namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers.EmployerFinance
 {
     [TestFixture]
     [Parallelizable]
