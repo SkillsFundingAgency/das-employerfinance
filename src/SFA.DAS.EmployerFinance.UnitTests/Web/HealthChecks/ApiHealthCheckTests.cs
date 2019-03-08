@@ -48,6 +48,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
 
     public class ApiHealthCheckTestsFixture
     {
+        public HealthCheckContext HealthCheckContext { get; set; }
         public Mock<IEmployerFinanceApiClient> ApiClient { get; set; }
         public Mock<ILogger<ApiHealthCheck>> Logger { get; set; }
         public ApiHealthCheck ApiHealthCheck { get; set; }
@@ -56,6 +57,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
 
         public ApiHealthCheckTestsFixture()
         {
+            HealthCheckContext = new HealthCheckContext
+            {
+                Registration = new HealthCheckRegistration("Foo", Mock.Of<IHealthCheck>(), null, null)
+            };
+            
             ApiClient = new Mock<IEmployerFinanceApiClient>();
             Logger = new Mock<ILogger<ApiHealthCheck>>();
             ApiHealthCheck = new ApiHealthCheck(ApiClient.Object, Logger.Object);
@@ -71,7 +77,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
 
         public Task<HealthCheckResult> CheckHealthAsync()
         {
-            return ApiHealthCheck.CheckHealthAsync(new HealthCheckContext(), CancellationToken.None);
+            return ApiHealthCheck.CheckHealthAsync(HealthCheckContext);
         }
 
         public ApiHealthCheckTestsFixture SetPingSuccess()

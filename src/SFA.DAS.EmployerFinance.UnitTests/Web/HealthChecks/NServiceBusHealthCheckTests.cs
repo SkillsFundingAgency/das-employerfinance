@@ -45,6 +45,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
 
     public class NServiceBusHealthCheckTestsFixture
     {
+        public HealthCheckContext HealthCheckContext { get; set; }
         public Mock<IMessageSession> MessageSession { get; set; }
         public Mock<ILogger<NServiceBusHealthCheck>> Logger { get; set; }
         public NServiceBusHealthCheck NServiceBusHealthCheck { get; set; }
@@ -52,6 +53,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
 
         public NServiceBusHealthCheckTestsFixture()
         {
+            HealthCheckContext = new HealthCheckContext
+            {
+                Registration = new HealthCheckRegistration("Foo", Mock.Of<IHealthCheck>(), null, null)
+            };
+            
             MessageSession = new Mock<IMessageSession>();
             Logger = new Mock<ILogger<NServiceBusHealthCheck>>();
             NServiceBusHealthCheck = new NServiceBusHealthCheck(MessageSession.Object, Logger.Object);
@@ -59,7 +65,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Web.HealthChecks
 
         public Task<HealthCheckResult> CheckHealthAsync()
         {
-            return NServiceBusHealthCheck.CheckHealthAsync(new HealthCheckContext());
+            return NServiceBusHealthCheck.CheckHealthAsync(HealthCheckContext);
         }
 
         public NServiceBusHealthCheckTestsFixture SetSendSuccess()

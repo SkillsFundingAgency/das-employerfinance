@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerFinance.Web.HealthChecks
             _logger = logger;
         }
         
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken)
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
         {
             _logger.LogInformation($"Started '{context.Registration.Name}'");
 
