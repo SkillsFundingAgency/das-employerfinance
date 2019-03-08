@@ -20,14 +20,14 @@
         <EmbeddedResource Include="Data\Scripts\Script0010CreateImportProviders.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0011CreateLevyDeclarationSagas.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0012CreateLevyDeclarationSagaTasks.sql" />
-        <EmbeddedResource Remove="Startup\**" />
-        <EmbeddedResource Remove="Application\Queries\**" />
+        <EmbeddedResource Include="Data\Scripts\Script0013DropHealthChecks.sql" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="8.0.0" />
         <PackageReference Include="Hashids.net" Version="1.2.2" />
         <PackageReference Include="MediatR" Version="6.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.HttpsPolicy" Version="2.2.0" />
         <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.3" />
@@ -37,6 +37,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
         <PackageReference Include="NServiceBus.MSDependencyInjection" Version="0.1.3" />
@@ -57,5 +58,4 @@
         <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj" />
         <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj" />
     </ItemGroup>
-
 </Project>

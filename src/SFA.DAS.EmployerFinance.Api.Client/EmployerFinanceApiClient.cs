@@ -12,9 +12,9 @@ namespace SFA.DAS.EmployerFinance.Api.Client
             _restHttpClient = restHttpClient;
         }
         
-        public Task HealthCheck()
+        public Task Ping()
         {
-            return _restHttpClient.Get("healthcheck");
+            return _restHttpClient.Get("ping");
         }
     }
 }

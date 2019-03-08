@@ -4,6 +4,6 @@ namespace SFA.DAS.EmployerFinance.Api.Client
 {
     public interface IEmployerFinanceApiClient
     {
-        Task HealthCheck();
+        Task Ping();
     }
 }

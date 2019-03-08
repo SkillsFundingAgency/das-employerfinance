@@ -6,6 +6,11 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
     {
         public static string ToHumanReadableString(this TimeSpan timeSpan)
         {
+            if (timeSpan.TotalSeconds <= 1)
+            {
+                return $"{timeSpan:%fff} ms";
+            }
+            
             if (timeSpan.TotalMinutes <= 1)
             {
                 return $"{timeSpan:%s} seconds";

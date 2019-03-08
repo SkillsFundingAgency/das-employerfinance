@@ -13,6 +13,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
             registry.IncludeRegistry<ConfigurationRegistry>();
             registry.IncludeRegistry<DataRegistry>();
             registry.IncludeRegistry<EntityFrameworkCoreUnitOfWorkRegistry<EmployerFinanceDbContext>>();
+            registry.IncludeRegistry<LoggerRegistry>();
             registry.IncludeRegistry<MapperRegistry>();
             registry.IncludeRegistry<MediatorRegistry>();
             registry.IncludeRegistry<NServiceBusUnitOfWorkRegistry>();

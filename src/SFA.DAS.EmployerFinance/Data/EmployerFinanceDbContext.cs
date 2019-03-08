@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerFinance.Data.Configurations;
 using SFA.DAS.EmployerFinance.Models;
@@ -9,7 +9,6 @@ namespace SFA.DAS.EmployerFinance.Data
     {
         public DbSet<Account> Accounts { get; set; }
         public DbSet<AccountPayeScheme> AccountPayeSchemes { get; set; }
-        public DbSet<HealthCheck> HealthChecks { get; set; }
         public DbSet<LevyDeclarationSaga> LevyDeclarationSagas { get; set; }
         public DbSet<LevyDeclarationSagaTask> LevyDeclarationSagaTasks { get; set; }
         public DbSet<Provider> Providers { get; set; }
@@ -32,7 +31,6 @@ namespace SFA.DAS.EmployerFinance.Data
         {
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
             modelBuilder.ApplyConfiguration(new AccountPayeSchemeConfiguration());
-            modelBuilder.ApplyConfiguration(new HealthCheckConfiguration());
             modelBuilder.ApplyConfiguration(new LevyDeclarationSagaConfiguration());
             modelBuilder.ApplyConfiguration(new LevyDeclarationSagaTaskConfiguration());
             modelBuilder.ApplyConfiguration(new ProviderConfiguration());

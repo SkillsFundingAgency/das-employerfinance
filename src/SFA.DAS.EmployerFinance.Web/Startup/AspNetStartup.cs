@@ -11,19 +11,20 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
 {
     public class AspNetStartup
     {
-        private readonly OidcConfiguration _oidcConfiguration;
+		private readonly EmployerFinanceConfiguration _employerFinanceConfiguration;
 
         public AspNetStartup(IConfiguration configuration)
         {
-            _oidcConfiguration = configuration.GetEmployerFinanceSection<OidcConfiguration>("Oidc");
+			_employerFinanceConfiguration = configuration.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
         }
         
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDasCookiePolicy()
+                .AddDasHealthChecks(_employerFinanceConfiguration.DatabaseConnectionString)
                 .AddDasMvc()
                 .AddDasNServiceBus()
-                .AddDasOidcAuthentication(_oidcConfiguration)
+                .AddDasOidcAuthentication(_employerFinanceConfiguration.Oidc)
                 .AddHttpsRedirection(o => o.HttpsPort = 5001);
         }
 
@@ -39,6 +40,7 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 .UseHttpsRedirection()
                 .UseDasHsts()
                 .UseStaticFiles()
+                .UseDasHealthChecks()
                 .UseCookiePolicy()
                 .UseAuthentication()
                 .UseUnitOfWork()
