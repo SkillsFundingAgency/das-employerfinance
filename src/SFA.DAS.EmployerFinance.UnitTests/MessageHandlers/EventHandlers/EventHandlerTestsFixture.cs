@@ -5,6 +5,7 @@ using AutoFixture;
 using MediatR;
 using Moq;
 using NServiceBus;
+using NServiceBus.Testing;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
 {
@@ -13,9 +14,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
         public Mock<IMediator> Mediator { get; set; }
         public TEvent Message { get; set; }
         public IHandleMessages<TEvent> Handler { get; set; }
-        public string MessageId { get; set; }
-        public Mock<IMessageHandlerContext> MessageHandlerContext { get; set; }
-        
+        public TestableMessageHandlerContext MessageHandlerContext { get; set; }
+
         public EventHandlerTestsFixture(Func<IMediator, IHandleMessages<TEvent>> constructHandler = null)
         {
             Mediator = new Mock<IMediator>();
@@ -23,17 +23,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
             var fixture = new Fixture();
             Message = fixture.Create<TEvent>();
 
-            MessageId = fixture.Create<string>();
-            MessageHandlerContext = new Mock<IMessageHandlerContext>();
+            MessageHandlerContext = new TestableMessageHandlerContext();
 
-            MessageHandlerContext.Setup(c => c.MessageId).Returns(MessageId);
-            
             Handler = constructHandler != null ? constructHandler(Mediator.Object) : ConstructHandler();
         }
 
         public virtual Task Handle()
         {
-            return Handler.Handle(Message, MessageHandlerContext.Object);
+            return Handler.Handle(Message, MessageHandlerContext);
         }
 
         private TEventHandler ConstructHandler()
