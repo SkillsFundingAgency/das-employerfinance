@@ -1,11 +1,14 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
+using FluentAssertions;
 using MediatR;
 using Moq;
 using NServiceBus;
 using NServiceBus.Testing;
+using SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationSagaProgress;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
 {
@@ -41,6 +44,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
         public void VerifySend<TCommand>(Func<TCommand,TEvent,bool> verifyCommand) where TCommand : IRequest
         {
             Mediator.Verify(m => m.Send(It.Is<TCommand>(c => verifyCommand(c,Message)), CancellationToken.None), Times.Once);
+        }
+
+        public void AssertSentMessage<TMessage>(Func<TMessage,TEvent,bool> verifySentMessage)
+        {
+            MessageHandlerContext.SentMessages.Select(m => m.Message).SingleOrDefault().Should().NotBeNull()
+                .And.Match<TMessage>(sentMessage => verifySentMessage(sentMessage, Message));
         }
     }
 }
