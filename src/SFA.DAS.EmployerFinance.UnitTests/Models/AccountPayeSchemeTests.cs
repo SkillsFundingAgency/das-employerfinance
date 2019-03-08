@@ -7,6 +7,8 @@ using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Models
 {
+    [TestFixture]
+    [Parallelizable]
     public class AccountPayeSchemeTests : FluentTest<AccountPayeSchemeTestsFixture>
     {
         [Test]
