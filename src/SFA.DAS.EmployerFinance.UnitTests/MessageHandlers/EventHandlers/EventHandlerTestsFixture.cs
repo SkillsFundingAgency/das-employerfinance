@@ -8,7 +8,6 @@ using MediatR;
 using Moq;
 using NServiceBus;
 using NServiceBus.Testing;
-using SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationSagaProgress;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.MessageHandlers.EventHandlers
 {
