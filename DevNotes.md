@@ -17,6 +17,7 @@ We might also want to bundle some or all of the GOV.UK / common DAS / site speci
 * enabling debug logging in AT revealed the following little gem. is it an issue? (oops copied wrong text, but issue is with this filter..)
 Execution plan of action filters (in the following order): Microsoft.AspNetCore.Mvc.Internal.ControllerActionFilter (Order: -2147483648), Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000), SFA.DAS.EmployerFinance.Web.Filters.UrlsViewBagFilter
 * stop non model code constructing non-root entities (surely overkill :-) https://stackoverflow.com/questions/2016719/how-to-create-a-constructor-that-is-only-usable-by-a-specific-class-c-friend
+* check that our non-idempotent message handlers are ok
 
 ## Useful Links
 
