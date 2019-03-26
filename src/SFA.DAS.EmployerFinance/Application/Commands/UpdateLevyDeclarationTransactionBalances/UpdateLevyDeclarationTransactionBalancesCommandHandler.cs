@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using NServiceBus;
 using NServiceBus.UniformSession;
 using SFA.DAS.EmployerFinance.Application.Commands.UpdateAccountLevyDeclarationTransactionBalances;
 using SFA.DAS.EmployerFinance.Data;
@@ -30,7 +31,17 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.UpdateLevyDeclarationTran
                 .ToListAsync(cancellationToken);
             
             var commands = accountIds.Select(i => new UpdateAccountLevyDeclarationTransactionBalancesCommand(request.SagaId, i));
-            var tasks = commands.Select(_uniformSession.SendLocal);
+            
+            var tasks = commands.Select(c =>
+            {
+                var sendOptions = new SendOptions();
+                
+                sendOptions.RequireImmediateDispatch();
+                sendOptions.RouteToThisEndpoint();
+                sendOptions.SetMessageId($"{nameof(UpdateAccountLevyDeclarationTransactionBalancesCommand)}-{c.SagaId}-{c.AccountId}");
+                
+                return _uniformSession.Send(c, sendOptions);
+            });
 
             await Task.WhenAll(tasks);
         }

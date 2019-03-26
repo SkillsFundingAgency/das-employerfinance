@@ -35,7 +35,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ImportLevyDecla
                         c.SagaId == f.Command.SagaId &&
                         c.PayrollPeriod == f.Command.PayrollPeriod &&
                         c.AccountPayeSchemeId == aps.Id),
-                    It.IsAny<SendOptions>()), Times.Once));
+                    It.Is<SendOptions>(o =>
+                        o.RequiredImmediateDispatch() &&
+                        o.IsRoutingToThisEndpoint() &&
+                        o.GetMessageId() == $"{nameof(ImportPayeSchemeLevyDeclarationsCommand)}-{f.Command.SagaId}-{aps.Id}")), Times.Once));
             });
         }
     }
