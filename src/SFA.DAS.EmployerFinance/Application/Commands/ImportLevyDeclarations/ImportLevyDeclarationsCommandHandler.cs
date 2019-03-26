@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using NServiceBus;
 using NServiceBus.UniformSession;
 using SFA.DAS.EmployerFinance.Application.Commands.ImportPayeSchemeLevyDeclarations;
 using SFA.DAS.EmployerFinance.Data;
@@ -28,7 +29,18 @@ namespace SFA.DAS.EmployerFinance.Application.Commands.ImportLevyDeclarations
                 .ToListAsync(cancellationToken);
             
             var commands = accountPayeSchemeIds.Select(i => new ImportPayeSchemeLevyDeclarationsCommand(request.SagaId, request.PayrollPeriod, i));
-            var tasks = commands.Select(_uniformSession.SendLocal);
+            
+            var tasks = commands
+                .Select(c =>
+                {
+                    var sendOptions = new SendOptions();
+                    
+                    sendOptions.RequireImmediateDispatch();
+                    sendOptions.RouteToThisEndpoint();
+                    sendOptions.SetMessageId($"{nameof(ImportPayeSchemeLevyDeclarationsCommand)}-{c.SagaId}-{c.AccountPayeSchemeId}");
+                    
+                    return _uniformSession.Send(c, sendOptions);
+                });
             
             await Task.WhenAll(tasks);
         }

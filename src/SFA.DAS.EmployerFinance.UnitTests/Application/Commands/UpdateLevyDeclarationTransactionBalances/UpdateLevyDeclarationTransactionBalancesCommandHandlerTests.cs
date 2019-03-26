@@ -34,7 +34,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
                     It.Is<UpdateAccountLevyDeclarationTransactionBalancesCommand>(c =>
                         c.SagaId == f.Command.SagaId &&
                         c.AccountId == a.Id),
-                    It.IsAny<SendOptions>()), Times.Once));
+                    It.Is<SendOptions>(o =>
+                        o.RequiredImmediateDispatch() &&
+                        o.IsRoutingToThisEndpoint() &&
+                        o.GetMessageId() == $"{nameof(UpdateAccountLevyDeclarationTransactionBalancesCommand)}-{f.Command.SagaId}-{a.Id}")), Times.Once));
             });
         }
     }
