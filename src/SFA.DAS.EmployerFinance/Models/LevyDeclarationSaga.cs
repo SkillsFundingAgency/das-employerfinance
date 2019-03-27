@@ -7,22 +7,22 @@ namespace SFA.DAS.EmployerFinance.Models
 {
     public class LevyDeclarationSaga : Entity
     {
-        public int Id { get; private set; }
-        public LevyDeclarationSagaType Type { get; private set; }
-        public DateTime PayrollPeriod { get; private set; }
-        public AccountPayeScheme AccountPayeSchemeHighWaterMark { get; private set; }
-        public long? AccountPayeSchemeHighWaterMarkId { get; private set; }
-        public AccountPayeScheme AccountPayeScheme { get; private set; }
-        public long? AccountPayeSchemeId { get; private set; }
-        public DateTime Created { get; private set; }
-        public DateTime? Updated { get; private set; }
-        public int ImportPayeSchemeLevyDeclarationsTasksCount { get; private set; }
-        public int ImportPayeSchemeLevyDeclarationsTasksCompleteCount { get; private set; }
-        public bool IsStage1Complete => ImportPayeSchemeLevyDeclarationsTasksCompleteCount == ImportPayeSchemeLevyDeclarationsTasksCount;
-        public int UpdateAccountTransactionBalancesTasksCount { get; private set; }
-        public int UpdateAccountTransactionBalancesTasksCompleteCount { get; private set; }
-        public bool IsStage2Complete => UpdateAccountTransactionBalancesTasksCompleteCount == UpdateAccountTransactionBalancesTasksCount;
-        public bool IsComplete { get; private set; }
+        public virtual int Id { get; private set; }
+        public virtual LevyDeclarationSagaType Type { get; private set; }
+        public virtual DateTime PayrollPeriod { get; private set; }
+        public virtual AccountPayeScheme AccountPayeSchemeHighWaterMark { get; private set; }
+        public virtual long? AccountPayeSchemeHighWaterMarkId { get; private set; }
+        public virtual AccountPayeScheme AccountPayeScheme { get; private set; }
+        public virtual long? AccountPayeSchemeId { get; private set; }
+        public virtual DateTime Created { get; private set; }
+        public virtual DateTime? Updated { get; private set; }
+        public virtual int ImportPayeSchemeLevyDeclarationsTasksCount { get; private set; }
+        public virtual int ImportPayeSchemeLevyDeclarationsTasksCompleteCount { get; private set; }
+        public virtual bool IsStage1Complete => ImportPayeSchemeLevyDeclarationsTasksCompleteCount == ImportPayeSchemeLevyDeclarationsTasksCount;
+        public virtual int UpdateAccountTransactionBalancesTasksCount { get; private set; }
+        public virtual int UpdateAccountTransactionBalancesTasksCompleteCount { get; private set; }
+        public virtual bool IsStage2Complete => UpdateAccountTransactionBalancesTasksCompleteCount == UpdateAccountTransactionBalancesTasksCount;
+        public virtual bool IsComplete { get; private set; }
         public static TimeSpan Timeout => TimeSpan.FromMinutes(2);
 
         public LevyDeclarationSaga(DateTime payrollPeriod, IReadOnlyCollection<AccountPayeScheme> accountPayeSchemes)
@@ -49,11 +49,11 @@ namespace SFA.DAS.EmployerFinance.Models
             Publish(() => new StartedProcessingLevyDeclarationsAdHocEvent(Id, PayrollPeriod, AccountPayeSchemeId.Value, Created));
         }
 
-        private LevyDeclarationSaga()
+        internal LevyDeclarationSaga()
         {
         }
         
-        public void UpdateProgress(IReadOnlyCollection<LevyDeclarationSagaTask> tasks)
+        public virtual void UpdateProgress(IReadOnlyCollection<LevyDeclarationSagaTask> tasks)
         {
             if (IsComplete)
             {

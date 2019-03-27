@@ -4,22 +4,38 @@ namespace SFA.DAS.EmployerFinance.Models
 {
     public class AccountPayeScheme : Entity
     {
-        public long Id { get; private set; }
-        public Account Account { get; private set; }
-        public long AccountId { get; private set; }
-        public string EmployerReferenceNumber { get; private set; }
-        public DateTime Created { get; private set; }
-        public DateTime? Deleted { get; private set; }
-
-        public AccountPayeScheme(Account account, string employerReferenceNumber)
+        public virtual long Id { get; internal set; }
+        public virtual Account Account { get; internal set; }
+        public virtual long AccountId { get; internal set; }
+        public virtual string EmployerReferenceNumber { get; internal set; }
+        public virtual DateTime Created { get; internal set; }
+        public virtual DateTime? Deleted { get; internal set; }
+        
+        internal AccountPayeScheme(Account account, string employerReferenceNumber, DateTime created)
         {
             Account = account;
             AccountId = account.Id;
             EmployerReferenceNumber = employerReferenceNumber;
+            Created = created;
         }
 
-        private AccountPayeScheme()
+        internal AccountPayeScheme()
         {
+        }
+
+        internal virtual void Delete(DateTime deleted)
+        {
+            EnsureHasNotBeenDeleted();
+            
+            Deleted = deleted;
+        }
+
+        private void EnsureHasNotBeenDeleted()
+        {
+            if (Deleted != null)
+            {
+                throw new InvalidOperationException("Requires account payee scheme has not been deleted");
+            }
         }
     }
 }

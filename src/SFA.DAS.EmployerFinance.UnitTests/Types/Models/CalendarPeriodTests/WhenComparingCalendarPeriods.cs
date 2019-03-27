@@ -1,11 +1,14 @@
 ﻿using System;
+using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Types.Models;
+using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.CalendarPeriodTests
 {
+    [TestFixture]
     [Parallelizable]
-    public class WhenComparingCalendarPeriods
+    public class WhenComparingCalendarPeriods : FluentTest<WhenComparingCalendarPeriodsFixture>
     {
         [TestCase(2018,01,true)]
         [TestCase(2018,02,true)]
@@ -13,14 +16,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.CalendarPeriodTests
         [TestCase(2019,12,true)]
         public void Then_The_Greater_Than_Or_Equals_Comparison_Is_Correct(int year, int month, bool expected)
         {
-            //Arrange
-            var calendarPeriod1 = new CalendarPeriod(year, month);
-            var calendarPeriod2 = new CalendarPeriod(2018, 01);
-
-            var actual = calendarPeriod1 >= calendarPeriod2;
-
-            //Assert
-            Assert.AreEqual(expected,actual);
+            Test(f => f.SetCalendarPeriod1(year, month), f => f.CalendarPeriod1 >= f.CalendarPeriod2, (f, r) => r.Should().Be(expected));
         }
 
         [TestCase(2018, 01, false)]
@@ -29,14 +25,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.CalendarPeriodTests
         [TestCase(2019, 12, true)]
         public void Then_The_Greater_Than_Comparison_Is_Correct(int year, int month, bool expected)
         {
-            //Arrange
-            var calendarPeriod1 = new CalendarPeriod(year, month);
-            var calendarPeriod2 = new CalendarPeriod(2018, 01);
-
-            var actual = calendarPeriod1 > calendarPeriod2;
-
-            //Assert
-            Assert.AreEqual(expected, actual);
+            Test(f => f.SetCalendarPeriod1(year, month), f => f.CalendarPeriod1 > f.CalendarPeriod2, (f, r) => r.Should().Be(expected));
         }
 
         [TestCase(2018, 01, true)]
@@ -45,16 +34,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.CalendarPeriodTests
         [TestCase(2016, 12, true)]
         public void Then_The_Less_Than_Or_Equals_Comparison_Is_Correct(int year, int month, bool expected)
         {
-            //Arrange
-            var calendarPeriod1 = new CalendarPeriod(year, month);
-            var calendarPeriod2 = new CalendarPeriod(2018, 01);
-
-            var actual = calendarPeriod1 <= calendarPeriod2;
-
-            //Assert
-            Assert.AreEqual(expected, actual);
+            Test(f => f.SetCalendarPeriod1(year, month), f => f.CalendarPeriod1 <= f.CalendarPeriod2, (f, r) => r.Should().Be(expected));
         }
-
 
         [TestCase(2018, 01, false)]
         [TestCase(2018, 02, false)]
@@ -62,14 +43,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.CalendarPeriodTests
         [TestCase(2016, 12, true)]
         public void Then_The_Less_Than_Comparison_Is_Correct(int year, int month, bool expected)
         {
-            //Arrange
-            var calendarPeriod1 = new CalendarPeriod(year, month);
-            var calendarPeriod2 = new CalendarPeriod(2018, 01);
-
-            var actual = calendarPeriod1 < calendarPeriod2;
-
-            //Assert
-            Assert.AreEqual(expected, actual);
+            Test(f => f.SetCalendarPeriod1(year, month), f => f.CalendarPeriod1 < f.CalendarPeriod2, (f, r) => r.Should().Be(expected));
         }
 
         [TestCase("2018-1", "2017-12", true)]
@@ -88,6 +62,22 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.CalendarPeriodTests
 
             //Assert
             Assert.AreEqual(expected, actual);
+        }
+    }
+
+    public class WhenComparingCalendarPeriodsFixture
+    {
+        public CalendarPeriod CalendarPeriod1 { get; set; }
+        public CalendarPeriod CalendarPeriod2 { get; set; }
+
+        public WhenComparingCalendarPeriodsFixture()
+        {
+            CalendarPeriod2 = new CalendarPeriod(2018, 01);
+        }
+
+        public void SetCalendarPeriod1(int year, int month)
+        {
+            CalendarPeriod1 = new CalendarPeriod(year, month);
         }
     }
 }

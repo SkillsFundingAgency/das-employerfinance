@@ -4,16 +4,16 @@ namespace SFA.DAS.EmployerFinance.Models
 {
     public class LevyDeclarationSagaTask : Entity
     {
-        public long Id { get; private set; }
-        public LevyDeclarationSaga Saga { get; private set; }
-        public int SagaId { get; private set; }
-        public LevyDeclarationSagaTaskType Type { get; private set; }
-        public AccountPayeScheme AccountPayeScheme { get; private set; }
-        public long? AccountPayeSchemeId { get; private set; }
-        public Account Account { get; private set; }
-        public long? AccountId { get; private set; }
-        public DateTime Started { get; private set; }
-        public DateTime? Finished { get; private set; }
+        public virtual long Id { get; private set; }
+        public virtual LevyDeclarationSaga Saga { get; private set; }
+        public virtual int SagaId { get; private set; }
+        public virtual LevyDeclarationSagaTaskType Type { get; private set; }
+        public virtual AccountPayeScheme AccountPayeScheme { get; private set; }
+        public virtual long? AccountPayeSchemeId { get; private set; }
+        public virtual Account Account { get; private set; }
+        public virtual long? AccountId { get; private set; }
+        public virtual DateTime Started { get; private set; }
+        public virtual DateTime? Finished { get; private set; }
 
         public static LevyDeclarationSagaTask CreateImportPayeSchemeLevyDeclarationsTask(int sagaId, long accountPayeSchemeId)
         {
@@ -33,16 +33,16 @@ namespace SFA.DAS.EmployerFinance.Models
             AccountId = accountId;
         }
 
-        private LevyDeclarationSagaTask()
+        internal LevyDeclarationSagaTask()
         {
         }
 
-        public void Start()
+        public virtual void Start()
         {
             Started = DateTime.UtcNow;
         }
 
-        public void Finish()
+        public virtual void Finish()
         {
             Finished = DateTime.UtcNow;
         }

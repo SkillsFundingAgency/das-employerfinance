@@ -73,12 +73,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ImportLevyDecla
             
             AccountPayeSchemes = new List<AccountPayeScheme>
             {
-                new AccountPayeScheme(Accounts[0], EmployerReferenceNumbers[0]).Set(aps => aps.Id, 1),
-                new AccountPayeScheme(Accounts[0], EmployerReferenceNumbers[1]).Set(aps => aps.Id, 2),
-                new AccountPayeScheme(Accounts[1], EmployerReferenceNumbers[2]).Set(aps => aps.Id, 3)
+                new AccountPayeScheme(Accounts[0], EmployerReferenceNumbers[0], Now).Set(aps => aps.Id, 1),
+                new AccountPayeScheme(Accounts[0], EmployerReferenceNumbers[1], Now).Set(aps => aps.Id, 2),
+                new AccountPayeScheme(Accounts[1], EmployerReferenceNumbers[2], Now).Set(aps => aps.Id, 3)
             };
 
-            ExcludedAccountPayeScheme = Fixture.Create<AccountPayeScheme>().Set(aps => aps.Id, 4);
+            //todo: not sure why this doesn't work
+            //ExcludedAccountPayeScheme = Fixture.Create<AccountPayeScheme>().Set(aps => aps.Id, 4);
+            ExcludedAccountPayeScheme = new AccountPayeScheme(Fixture.Create<Account>(), "DDD444", Fixture.Create<DateTime>()).Set(aps => aps.Id, 4);
             
             Command = new ImportLevyDeclarationsCommand(5, Now, AccountPayeSchemes.Max(aps => aps.Id));
             Db = new EmployerFinanceDbContext(new DbContextOptionsBuilder<EmployerFinanceDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);

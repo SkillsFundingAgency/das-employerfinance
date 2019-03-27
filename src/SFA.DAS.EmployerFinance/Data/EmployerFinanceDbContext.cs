@@ -11,6 +11,8 @@ namespace SFA.DAS.EmployerFinance.Data
         public DbSet<AccountPayeScheme> AccountPayeSchemes { get; set; }
         public DbSet<LevyDeclarationSaga> LevyDeclarationSagas { get; set; }
         public DbSet<LevyDeclarationSagaTask> LevyDeclarationSagaTasks { get; set; }
+        public DbSet<Provider> Providers { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public EmployerFinanceDbContext(DbContextOptions<EmployerFinanceDbContext> options) : base(options)
         {
@@ -31,6 +33,8 @@ namespace SFA.DAS.EmployerFinance.Data
             modelBuilder.ApplyConfiguration(new AccountPayeSchemeConfiguration());
             modelBuilder.ApplyConfiguration(new LevyDeclarationSagaConfiguration());
             modelBuilder.ApplyConfiguration(new LevyDeclarationSagaTaskConfiguration());
+            modelBuilder.ApplyConfiguration(new ProviderConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
         }
     }
 }

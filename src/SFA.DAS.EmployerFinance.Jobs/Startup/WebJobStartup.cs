@@ -18,6 +18,8 @@ namespace SFA.DAS.EmployerFinance.Jobs.Startup
             builder.ConfigureServices(s => s.AddSingleton<ProcessClientOutboxMessagesJob>());
             builder.ConfigureServices(s => s.AddSingleton<ProcessLevyDeclarationsJob>());
 
+            builder.ConfigureServices(s => s.AddSingleton<ImportProvidersJob>());
+
             return builder;
         }
     }

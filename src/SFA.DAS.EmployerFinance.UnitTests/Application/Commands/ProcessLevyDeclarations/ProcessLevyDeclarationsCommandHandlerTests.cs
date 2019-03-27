@@ -91,9 +91,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
             
             AccountPayeSchemes = new List<AccountPayeScheme>
             {
-                new AccountPayeScheme(Accounts[0], EmployerReferenceNumbers[0]).Set(aps => aps.Id, 1),
-                new AccountPayeScheme(Accounts[0], EmployerReferenceNumbers[1]).Set(aps => aps.Id, 2),
-                new AccountPayeScheme(Accounts[1], EmployerReferenceNumbers[2]).Set(aps => aps.Id, 3)
+                new AccountPayeScheme(Accounts[0], EmployerReferenceNumbers[0], Now).Set(aps => aps.Id, 1),
+                new AccountPayeScheme(Accounts[0], EmployerReferenceNumbers[1], Now).Set(aps => aps.Id, 2),
+                new AccountPayeScheme(Accounts[1], EmployerReferenceNumbers[2], Now).Set(aps => aps.Id, 3)
             };
             
             Command = new ProcessLevyDeclarationsCommand(Now);

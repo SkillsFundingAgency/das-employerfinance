@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Types.Configuration;
 
 namespace SFA.DAS.EmployerFinance.Startup
@@ -14,8 +15,8 @@ namespace SFA.DAS.EmployerFinance.Startup
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{c.HostingEnvironment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables()
-                .AddCommandLine(args)
-                .AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base));
+                .AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base, ConfigurationKeys.ApprenticeshipInfoService)
+                .AddCommandLine(args));
         }
         
         public static IWebHostBuilder ConfigureDasAppConfiguration(this IWebHostBuilder hostBuilder)

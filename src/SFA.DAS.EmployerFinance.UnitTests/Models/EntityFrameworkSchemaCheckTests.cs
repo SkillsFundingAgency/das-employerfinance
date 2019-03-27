@@ -22,6 +22,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
         [Ignore("To be run adhoc (but could live in an integration test)")]
         public void CheckDatabaseSchemaAgainstEntityFrameworkExpectedSchema()
         {
+            const string databaseName = "SFA.DAS.EmployerFinanceV2.Database";
+            
             var configuration = new ConfigurationBuilder().AddAzureTableStorage(EmployerFinanceConfigurationKeys.Base).Build();
             var employerFinanceConfiguration = configuration.GetEmployerFinanceSection<EmployerFinanceConfiguration>();
             
@@ -35,11 +37,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Models
                     {
                         TablesToIgnoreCommaDelimited = "ClientOutboxData,OutboxData,SchemaVersions,Users"
                     };
-                    
+
                     config.IgnoreTheseErrors(
-                        "EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Column 'Users', column name. Found = Id" + Environment.NewLine +
-                        "EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Index 'LevyDeclarationSagas', index constraint name. Found = UK_LevyDeclarationSagas_PayrollPeriod" + Environment.NewLine +
-                        "EXTRA IN DATABASE: SFA.DAS.EmployerFinance.Database->Index 'LevyDeclarationSagas', index constraint name. Found = UK_LevyDeclarationSagas_PayrollPeriod_AccountPayeSchemeId");
+                        $"EXTRA IN DATABASE: {databaseName}->Index 'AccountPayeSchemes', index constraint name. Found = AK_AccountPayeSchemes_AccountId_EmployerReferenceNumber{Environment.NewLine}" +
+                        $"EXTRA IN DATABASE: {databaseName}->Index 'LevyDeclarationSagas', index constraint name. Found = UK_LevyDeclarationSagas_PayrollPeriod{Environment.NewLine}" +
+                        $"EXTRA IN DATABASE: {databaseName}->Index 'LevyDeclarationSagas', index constraint name. Found = UK_LevyDeclarationSagas_PayrollPeriod_AccountPayeSchemeId");
                     
                     var comparer = new CompareEfSql(config);
                     var hasErrors = comparer.CompareEfWithDb(context);

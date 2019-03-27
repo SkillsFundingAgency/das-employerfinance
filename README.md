@@ -156,6 +156,12 @@ As part of the update the default gulp task will run which will:
 * Compile `content/styles/govuk-frontend.scss` to `wwwroot/css/govuk-frontend.css`.
 * Copy `node_modules/govuk-frontend/all.js` to `content/javascript/govuk-frontend/all.js`.
 
+## Architecture
+
+### Levy Declaration Saga
+
+![Levy Declaration Saga Architecture](LevyDeclarationSaga.png)
+
 [.NET Core]: https://dotnet.microsoft.com/download
 [Azure Storage Explorer]: http://storageexplorer.com
 [Azurite]: https://github.com/azure/azurite

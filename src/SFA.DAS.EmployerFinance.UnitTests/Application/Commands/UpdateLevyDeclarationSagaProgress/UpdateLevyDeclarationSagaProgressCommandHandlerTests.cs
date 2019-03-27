@@ -289,9 +289,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.UpdateLevyDecla
             
             AccountPayeSchemes = new List<AccountPayeScheme>
             {
-                new AccountPayeScheme(Accounts[0], PayeSchemeRefs[0]).Set(aps => aps.Id, 1),
-                new AccountPayeScheme(Accounts[0], PayeSchemeRefs[1]).Set(aps => aps.Id, 2),
-                new AccountPayeScheme(Accounts[1], PayeSchemeRefs[2]).Set(aps => aps.Id, 3)
+                new AccountPayeScheme(Accounts[0], PayeSchemeRefs[0], Now).Set(aps => aps.Id, 1),
+                new AccountPayeScheme(Accounts[0], PayeSchemeRefs[1], Now).Set(aps => aps.Id, 2),
+                new AccountPayeScheme(Accounts[1], PayeSchemeRefs[2], Now).Set(aps => aps.Id, 3)
             };
             
             Saga = ObjectActivator.CreateInstance<LevyDeclarationSaga>()

@@ -4,19 +4,23 @@
         <LangVersion>latest</LangVersion>
         <TargetFramework>netstandard2.0</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <AzureFunctionsVersion>v2</AzureFunctionsVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Data\Scripts\Script0003CreateAccounts.sql" />
-        <EmbeddedResource Include="Data\Scripts\Script0002CreateClientOutboxData.sql" />
-        <EmbeddedResource Include="Data\Scripts\Script0005CreateHealthChecks.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0001CreateOutboxData.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0002CreateClientOutboxData.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0003CreateAccounts.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0004CreateUsers.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0005CreateHealthChecks.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0006DropHealthChecksUserRef.sql" />
-        <EmbeddedResource Include="Data\Scripts\Script0013DropHealthChecks.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0007CreateProviders.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0008CreateAccountPayeSchemes.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0009CreateProvidersType.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0010CreateImportProviders.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0011CreateLevyDeclarationSagas.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0012CreateLevyDeclarationSagaTasks.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0013DropHealthChecks.sql" />
     </ItemGroup>
 
     <ItemGroup>

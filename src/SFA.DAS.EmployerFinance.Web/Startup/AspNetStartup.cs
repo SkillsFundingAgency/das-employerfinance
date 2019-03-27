@@ -24,7 +24,8 @@ namespace SFA.DAS.EmployerFinance.Web.Startup
                 .AddDasHealthChecks(_employerFinanceConfiguration.DatabaseConnectionString)
                 .AddDasMvc()
                 .AddDasNServiceBus()
-                .AddDasOidcAuthentication(_employerFinanceConfiguration.Oidc);
+                .AddDasOidcAuthentication(_employerFinanceConfiguration.Oidc)
+                .AddHttpsRedirection(o => o.HttpsPort = 5001);
         }
 
         public void ConfigureContainer(Registry registry)

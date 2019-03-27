@@ -72,7 +72,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
             Fixture = new Fixture();
             Now = DateTime.UtcNow;
             UnitOfWorkContext = new UnitOfWorkContext();
-            AccountPayeScheme = Fixture.Create<AccountPayeScheme>().Set(aps => aps.Id, 1);
+            //todo:
+            //AccountPayeScheme = Fixture.Create<AccountPayeScheme>().Set(aps => aps.Id, 1);
+            AccountPayeScheme = new AccountPayeScheme(Fixture.Create<Account>(), "AAA111", Fixture.Create<DateTime>()).Set(aps => aps.Id, 1);
             Command = new ProcessLevyDeclarationsAdHocCommand(Now, AccountPayeScheme.Id);
             Db = new EmployerFinanceDbContext(new DbContextOptionsBuilder<EmployerFinanceDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
             
