@@ -17,6 +17,8 @@
         <EmbeddedResource Include="Data\Scripts\Script0008CreateAccountPayeSchemes.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0011CreateLevyDeclarationSagas.sql" />
         <EmbeddedResource Include="Data\Scripts\Script0012CreateLevyDeclarationSagaTasks.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0014AlterLevyDeclarationSagaTasks.sql" />
+        <EmbeddedResource Include="Data\Scripts\Script0015AlterLevyDeclarationSagas.sql" />
     </ItemGroup>
 
     <ItemGroup>

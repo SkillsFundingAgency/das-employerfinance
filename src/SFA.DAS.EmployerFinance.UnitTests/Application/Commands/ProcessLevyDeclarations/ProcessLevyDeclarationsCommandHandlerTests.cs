@@ -31,10 +31,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
                     j.AccountPayeSchemeHighWaterMarkId == f.AccountPayeSchemes.Max(aps => aps.Id) &&
                     j.AccountPayeSchemeId == null &&
                     j.ImportPayeSchemeLevyDeclarationsTasksCount == f.EmployerReferenceNumbers.Count &&
-                    j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == 0 &&
+                    j.ImportPayeSchemeLevyDeclarationsTasksFinishedCount == 0 &&
                     !j.IsStage1Complete &&
                     j.UpdateAccountTransactionBalancesTasksCount == f.Accounts.Count &&
-                    j.UpdateAccountTransactionBalancesTasksCompleteCount == 0 &&
+                    j.UpdateAccountTransactionBalancesTasksFinishedCount == 0 &&
                     !j.IsStage2Complete &&
                     j.Created >= f.Now &&
                     j.Updated == null &&

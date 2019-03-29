@@ -17,11 +17,13 @@ namespace SFA.DAS.EmployerFinance.Models
         public DateTime Created { get; private set; }
         public DateTime? Updated { get; private set; }
         public int ImportPayeSchemeLevyDeclarationsTasksCount { get; private set; }
-        public int ImportPayeSchemeLevyDeclarationsTasksCompleteCount { get; private set; }
-        public bool IsStage1Complete => ImportPayeSchemeLevyDeclarationsTasksCompleteCount == ImportPayeSchemeLevyDeclarationsTasksCount;
+        public int ImportPayeSchemeLevyDeclarationsTasksFinishedCount { get; private set; }
+        public int ImportPayeSchemeLevyDeclarationsTasksErroredCount { get; private set; }
+        public bool IsStage1Complete => ImportPayeSchemeLevyDeclarationsTasksFinishedCount == ImportPayeSchemeLevyDeclarationsTasksCount;
         public int UpdateAccountTransactionBalancesTasksCount { get; private set; }
-        public int UpdateAccountTransactionBalancesTasksCompleteCount { get; private set; }
-        public bool IsStage2Complete => UpdateAccountTransactionBalancesTasksCompleteCount == UpdateAccountTransactionBalancesTasksCount;
+        public int UpdateAccountTransactionBalancesTasksFinishedCount { get; private set; }
+        public int UpdateAccountTransactionBalancesTasksErroredCount { get; private set; }
+        public bool IsStage2Complete => UpdateAccountTransactionBalancesTasksFinishedCount == UpdateAccountTransactionBalancesTasksCount;
         public bool IsComplete { get; private set; }
         public static TimeSpan Timeout => TimeSpan.FromMinutes(2);
 
@@ -62,17 +64,28 @@ namespace SFA.DAS.EmployerFinance.Models
 
             if (!IsStage1Complete)
             {
-                UpdateStage1Progress(tasks);
+                UpdateStage1Progress(tasks.Where(t => t.Type == LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations));
             }
             else
             {
-                UpdateStage2Progress(tasks);
+                UpdateStage2Progress(tasks.Where(t => t.Type == LevyDeclarationSagaTaskType.UpdateAccountTransactionBalances));
             }
         }
 
         private void UpdateStage1Progress(IEnumerable<LevyDeclarationSagaTask> tasks)
         {
-            ImportPayeSchemeLevyDeclarationsTasksCompleteCount = tasks.Count(t => t.Type == LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations);
+            foreach (var task in tasks)
+            {
+                if (task.Finished != null)
+                {
+                    ImportPayeSchemeLevyDeclarationsTasksFinishedCount++;
+                }
+                else if (task.Errored != null)
+                {
+                    ImportPayeSchemeLevyDeclarationsTasksErroredCount++;
+                }
+            }
+            
             Updated = DateTime.UtcNow;
 
             if (IsStage1Complete)
@@ -85,7 +98,18 @@ namespace SFA.DAS.EmployerFinance.Models
 
         private void UpdateStage2Progress(IEnumerable<LevyDeclarationSagaTask> tasks)
         {
-            UpdateAccountTransactionBalancesTasksCompleteCount = tasks.Count(t => t.Type == LevyDeclarationSagaTaskType.UpdateAccountTransactionBalances);
+            foreach (var task in tasks)
+            {
+                if (task.Finished != null)
+                {
+                    UpdateAccountTransactionBalancesTasksFinishedCount++;
+                }
+                else if (task.Errored != null)
+                {
+                    UpdateAccountTransactionBalancesTasksErroredCount++;
+                }
+            }
+            
             Updated = DateTime.UtcNow;
 
             if (IsStage2Complete)
@@ -110,7 +134,7 @@ namespace SFA.DAS.EmployerFinance.Models
 
         private void EnsureImportPayeSchemeLevyDeclarationsTaskCountsBalance()
         {
-            if (ImportPayeSchemeLevyDeclarationsTasksCompleteCount > ImportPayeSchemeLevyDeclarationsTasksCount)
+            if (ImportPayeSchemeLevyDeclarationsTasksFinishedCount + ImportPayeSchemeLevyDeclarationsTasksErroredCount > ImportPayeSchemeLevyDeclarationsTasksCount)
             {
                 throw new InvalidOperationException($"Requires {nameof(LevyDeclarationSagaTaskType.ImportPayeSchemeLevyDeclarations)} task counts balance");
             }
@@ -118,7 +142,7 @@ namespace SFA.DAS.EmployerFinance.Models
 
         private void EnsureUpdateAccountTransactionBalancesTaskCountsBalance()
         {
-            if (UpdateAccountTransactionBalancesTasksCompleteCount > UpdateAccountTransactionBalancesTasksCount)
+            if (UpdateAccountTransactionBalancesTasksFinishedCount + UpdateAccountTransactionBalancesTasksErroredCount > UpdateAccountTransactionBalancesTasksCount)
             {
                 throw new InvalidOperationException($"Requires {nameof(LevyDeclarationSagaTaskType.UpdateAccountTransactionBalances)} task counts balance");
             }

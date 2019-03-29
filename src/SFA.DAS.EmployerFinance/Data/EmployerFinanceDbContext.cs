@@ -30,7 +30,6 @@ namespace SFA.DAS.EmployerFinance.Data
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
             modelBuilder.ApplyConfiguration(new AccountPayeSchemeConfiguration());
             modelBuilder.ApplyConfiguration(new LevyDeclarationSagaConfiguration());
-            modelBuilder.ApplyConfiguration(new LevyDeclarationSagaTaskConfiguration());
         }
     }
 }

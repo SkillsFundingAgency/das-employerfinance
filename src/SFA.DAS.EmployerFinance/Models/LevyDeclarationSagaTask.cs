@@ -1,4 +1,5 @@
 using System;
+using SFA.DAS.EmployerFinance.Extensions;
 
 namespace SFA.DAS.EmployerFinance.Models
 {
@@ -14,6 +15,8 @@ namespace SFA.DAS.EmployerFinance.Models
         public long? AccountId { get; private set; }
         public DateTime Started { get; private set; }
         public DateTime? Finished { get; private set; }
+        public DateTime? Errored { get; private set; }
+        public string ErrorMessage { get; private set; }
 
         public static LevyDeclarationSagaTask CreateImportPayeSchemeLevyDeclarationsTask(int sagaId, long accountPayeSchemeId)
         {
@@ -31,20 +34,44 @@ namespace SFA.DAS.EmployerFinance.Models
             Type = type;
             AccountPayeSchemeId = accountPayeSchemeId;
             AccountId = accountId;
+            Started = DateTime.UtcNow;
         }
 
         private LevyDeclarationSagaTask()
         {
         }
 
-        public void Start()
-        {
-            Started = DateTime.UtcNow;
-        }
-
         public void Finish()
         {
+            EnsureNotFinished();
+            EnsureNotErrored();
+            
             Finished = DateTime.UtcNow;
+        }
+
+        public void Error(Exception ex)
+        {
+            EnsureNotFinished();
+            EnsureNotErrored();
+            
+            Errored = DateTime.UtcNow;
+            ErrorMessage = ex.GetAggregateMessage();
+        }
+
+        private void EnsureNotFinished()
+        {
+            if (Finished != null)
+            {
+                throw new InvalidOperationException("Requires task is not finished");
+            }
+        }
+
+        private void EnsureNotErrored()
+        {
+            if (Errored != null)
+            {
+                throw new InvalidOperationException("Requires task has not errored");
+            }
         }
     }
 }

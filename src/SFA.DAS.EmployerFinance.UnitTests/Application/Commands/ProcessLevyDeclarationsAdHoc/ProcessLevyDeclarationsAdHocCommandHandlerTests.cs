@@ -30,10 +30,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Application.Commands.ProcessLevyDecl
                     j.AccountPayeSchemeHighWaterMarkId == null &&
                     j.AccountPayeSchemeId == f.AccountPayeScheme.Id &&
                     j.ImportPayeSchemeLevyDeclarationsTasksCount == 1 &&
-                    j.ImportPayeSchemeLevyDeclarationsTasksCompleteCount == 0 &&
+                    j.ImportPayeSchemeLevyDeclarationsTasksFinishedCount == 0 &&
                     !j.IsStage1Complete &&
                     j.UpdateAccountTransactionBalancesTasksCount == 1 &&
-                    j.UpdateAccountTransactionBalancesTasksCompleteCount == 0 &&
+                    j.UpdateAccountTransactionBalancesTasksFinishedCount == 0 &&
                     !j.IsStage2Complete &&
                     j.Created >= f.Now &&
                     j.Updated == null &&
