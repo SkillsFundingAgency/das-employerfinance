@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerFinance.Types.Models
 {
-    public class CalendarPeriod : IComparable<CalendarPeriod>
+    public class CalendarPeriod : IComparable<CalendarPeriod>, IEquatable<CalendarPeriod>
     {
         public CalendarPeriod(int year, int month)
         {
@@ -36,6 +36,16 @@ namespace SFA.DAS.EmployerFinance.Types.Models
         public static bool operator >=(CalendarPeriod period1, CalendarPeriod period2)
         {
             return Compare(period1, period2) >= 0;
+        }
+
+        public static bool operator ==(CalendarPeriod period1, CalendarPeriod period2)
+        {
+            return Equals(period1, period2);
+        }
+
+        public static bool operator !=(CalendarPeriod period1, CalendarPeriod period2)
+        {
+            return !Equals(period1, period2);
         }
 
         public bool AreSameTaxYear(CalendarPeriod compareTo)
@@ -98,6 +108,21 @@ namespace SFA.DAS.EmployerFinance.Types.Models
             }
 
             return 0;
+        }
+
+        public bool Equals(CalendarPeriod other)
+        {
+            return other != null && other.Year == Year && other.Month == Month;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as CalendarPeriod);
+        }
+
+        public override int GetHashCode()
+        {
+            return Year.GetHashCode() ^ Month.GetHashCode();
         }
     }
 }
