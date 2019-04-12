@@ -10,10 +10,55 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.CalendarPeriodTests
     [Parallelizable]
     public class WhenComparingCalendarPeriods : FluentTest<WhenComparingCalendarPeriodsFixture>
     {
-        [TestCase(2018,01,true)]
-        [TestCase(2018,02,true)]
-        [TestCase(2017,12,false)]
-        [TestCase(2019,12,true)]
+        [TestCase(2018, 01, true)]
+        [TestCase(2018, 02, false)]
+        [TestCase(2017, 12, false)]
+        [TestCase(2019, 12, false)]
+        public void Then_The_Equals_Operator_Comparison_Is_Correct(int year, int month, bool expected)
+        {
+            Test(f => f.SetCalendarPeriod1(year, month), f => f.CalendarPeriod1 == f.CalendarPeriod2, (f, r) => r.Should().Be(expected));
+        }
+        
+        [TestCase(2018, 01, true)]
+        [TestCase(2018, 02, false)]
+        [TestCase(2017, 12, false)]
+        [TestCase(2019, 12, false)]
+        public void Then_The_Equals_Comparison_Is_Correct(int year, int month, bool expected)
+        {
+            Test(f => f.SetCalendarPeriod1(year, month), f => f.CalendarPeriod1.Equals(f.CalendarPeriod2), (f, r) => r.Should().Be(expected));
+        }
+        
+        [TestCase(2018, 01, true)]
+        [TestCase(2018, 02, false)]
+        [TestCase(2017, 12, false)]
+        [TestCase(2019, 12, false)]
+        public void Then_The_Equals_Object_Comparison_Is_Correct(int year, int month, bool expected)
+        {
+            Test(f => f.SetCalendarPeriod1(year, month), f => f.CalendarPeriod1.Equals((object)f.CalendarPeriod2), (f, r) => r.Should().Be(expected));
+        }
+        
+        [TestCase(2018, 01, false)]
+        [TestCase(2018, 02, true)]
+        [TestCase(2017, 12, true)]
+        [TestCase(2019, 12, true)]
+        public void Then_The_Not_Equals_Operator_Comparison_Is_Correct(int year, int month, bool expected)
+        {
+            Test(f => f.SetCalendarPeriod1(year, month), f => f.CalendarPeriod1 != f.CalendarPeriod2, (f, r) => r.Should().Be(expected));
+        }
+        
+        [TestCase(2018, 01, true)]
+        [TestCase(2018, 02, false)]
+        [TestCase(2017, 12, false)]
+        [TestCase(2019, 12, false)]
+        public void Then_The_GetHasCode_Comparison_Is_Correct(int year, int month, bool expected)
+        {
+            Test(f => f.SetCalendarPeriod1(year, month), f => f.CalendarPeriod1.GetHashCode() == f.CalendarPeriod2.GetHashCode(), (f, r) => r.Should().Be(expected));
+        }
+        
+        [TestCase(2018, 01, true)]
+        [TestCase(2018, 02, true)]
+        [TestCase(2017, 12, false)]
+        [TestCase(2019, 12, true)]
         public void Then_The_Greater_Than_Or_Equals_Comparison_Is_Correct(int year, int month, bool expected)
         {
             Test(f => f.SetCalendarPeriod1(year, month), f => f.CalendarPeriod1 >= f.CalendarPeriod2, (f, r) => r.Should().Be(expected));
