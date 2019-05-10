@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerFinance.Types.Models
                 throw new ArgumentNullException(nameof(fundsOut));
             }
             
-            CalculateAndApplyExpiredFundsToFundsOut(fundsOut, expired);
+            CalculateAndApplyExpiredFundsToFundsOut(fundsOut, expired, fundsIn, expiryPeriod);
             
             CalculateAndApplyAdjustmentsToTotals(fundsOut);
 
@@ -90,16 +90,21 @@ namespace SFA.DAS.EmployerFinance.Types.Models
 
         private static void CalculateAndApplyExpiredFundsToFundsOut(
             IDictionary<CalendarPeriod, decimal> fundsOut, 
-            IDictionary<CalendarPeriod, decimal> expired)
+            IDictionary<CalendarPeriod, decimal> expired,
+            IDictionary<CalendarPeriod, decimal> fundsIn,
+                int expiryPeriod)
         {
-            if (expired == null || !expired.Any(c => c.Value > 0))
+            if (expired == null)
             {
                 return;
             }
            
             foreach (var expiredAmount in expired)
             {
-                var amount = expiredAmount.Value;
+                var levyPeriodForExpiry =
+                    new DateTime(expiredAmount.Key.Year, expiredAmount.Key.Month, 1).AddMonths(expiryPeriod * -1);
+                var amount = fundsIn.FirstOrDefault(c => c.Key.Equals(new CalendarPeriod(levyPeriodForExpiry.Year, levyPeriodForExpiry.Month))).Value - expiredAmount.Value;
+
 
                 var fundsOutAvailable = fundsOut
                     .Where(c => c.Value > 0 && c.Key < expiredAmount.Key)

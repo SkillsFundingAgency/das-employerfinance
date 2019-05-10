@@ -479,8 +479,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
             Assert.AreEqual(4, actual.Count);
             Assert.AreEqual(9, actual.First().Value);
             Assert.AreEqual(4, actual.Skip(1).First().Value);
-            Assert.AreEqual(5, actual.Skip(2).First().Value);
-            Assert.AreEqual(5, actual.Last().Value);
+            Assert.AreEqual(0, actual.Skip(2).First().Value);
+            Assert.AreEqual(4, actual.Last().Value);
         }
 
         [Test]
@@ -499,7 +499,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
             };
             var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
-                {new CalendarPeriod(2018, 11), 12}, 
+                {new CalendarPeriod(2018, 11), 10}, 
                 {new CalendarPeriod(2019, 1), 2} 
             };
             var expiredFunds = new Dictionary<CalendarPeriod, decimal>
@@ -516,9 +516,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
             Assert.AreEqual(6, actual.Count);
             Assert.AreEqual(9, actual.First().Value);
             Assert.AreEqual(4, actual.Skip(1).First().Value);
-            Assert.AreEqual(2, actual.Skip(2).First().Value);
+            Assert.AreEqual(0, actual.Skip(2).First().Value);
             Assert.AreEqual(0, actual.Skip(3).First().Value);
-            Assert.AreEqual(1, actual.Skip(4).First().Value);
+            Assert.AreEqual(0, actual.Skip(4).First().Value);
             Assert.AreEqual(0, actual.Last().Value);
         }
 
@@ -556,9 +556,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
             Assert.AreEqual(6, actual.Count);
             Assert.AreEqual(10, actual.First().Value);
             Assert.AreEqual(9, actual.Skip(1).First().Value);
-            Assert.AreEqual(1, actual.Skip(2).First().Value);
+            Assert.AreEqual(0, actual.Skip(2).First().Value);
             Assert.AreEqual(0, actual.Skip(3).First().Value);
-            Assert.AreEqual(1, actual.Skip(4).First().Value);
+            Assert.AreEqual(0, actual.Skip(4).First().Value);
             Assert.AreEqual(0, actual.Last().Value);
         }
 
@@ -589,6 +589,134 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
 
             //Assert
             Assert.AreEqual(11554.93m, actual.Skip(2).First().Value);
+        }
+
+        [Test]
+        public void Then_The_Next_Months_Expiry_Is_Calculated_Correctly_When_All_Payments_Have_Been_Used_And_There_Is_An_Expiry()
+        {
+            var expiryPeriod = 4;
+            _fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 5), 539},
+                {new CalendarPeriod(2017, 6), 539},
+                {new CalendarPeriod(2017, 7), 539},
+                {new CalendarPeriod(2017, 8), 539}
+            };
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 6), 200},
+                {new CalendarPeriod(2017, 7), 200}
+            };
+            var expired = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017,9),139  }
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, expired, expiryPeriod);
+
+            //Assert
+            Assert.AreEqual(139, actual.First().Value);
+            Assert.AreEqual(539, actual.Skip(1).First().Value);
+            Assert.AreEqual(539, actual.Last().Value);
+        }
+
+        [Test]
+        public void Then_The_Next_Months_Expiry_Is_Calculated_Correctly_When_All_Payments_Have_Been_Used_And_There_Is_No_Expiry()
+        {
+            var expiryPeriod = 4;
+            _fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 5), 400},
+                {new CalendarPeriod(2017, 6), 539},
+                {new CalendarPeriod(2017, 7), 539},
+                {new CalendarPeriod(2017, 8), 539}
+            };
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 6), 200},
+                {new CalendarPeriod(2017, 7), 200},
+                {new CalendarPeriod(2017, 8), 100}
+            };
+            var expired = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017,9),0  }
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, expired, expiryPeriod);
+
+            //Assert
+            Assert.AreEqual(0, actual.First().Value);
+            Assert.AreEqual(439, actual.Skip(1).First().Value);
+            Assert.AreEqual(539, actual.Last().Value);
+        }
+
+
+        [Test]
+        public void Then_The_Next_Months_Expiry_Is_Calculated_Correctly_When_All_Payments_Have_Been_Used_And_There_Is_Expiry()
+        {
+            var expiryPeriod = 4;
+            _fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 5), 400},
+                {new CalendarPeriod(2017, 6), 539},
+                {new CalendarPeriod(2017, 7), 539},
+                {new CalendarPeriod(2017, 8), 539}
+            };
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 6), 100},
+                {new CalendarPeriod(2017, 7), 200},
+                {new CalendarPeriod(2017, 10), 100},
+                {new CalendarPeriod(2017, 12), 100},
+            };
+            var expired = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017,9),100  },
+                {new CalendarPeriod(2017,10),439  }
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, expired, expiryPeriod);
+
+            //Assert
+            Assert.AreEqual(100, actual.First().Value);
+            Assert.AreEqual(439, actual.Skip(1).First().Value);
+            Assert.AreEqual(439, actual.Skip(2).First().Value);
+            Assert.AreEqual(439, actual.Last().Value);
+        }
+
+
+        [Test]
+        public void Then_The_Next_Months_Expiry_Is_Calculated_Correctly_When_All_Payments_Have_Been_Used_And_There_Are_Multiple_Expiries()
+        {
+            var expiryPeriod = 4;
+            _fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 5), 539},
+                {new CalendarPeriod(2017, 6), 539},
+                {new CalendarPeriod(2017, 7), 539},
+                {new CalendarPeriod(2017, 8), 539}
+            };
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 6), 200},
+                {new CalendarPeriod(2017, 7), 200}
+            };
+            var expired = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017,9),139  },
+                {new CalendarPeriod(2017,10),539  }
+            };
+
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, expired, expiryPeriod);
+
+            //Assert
+            Assert.AreEqual(139, actual.First().Value);
+            Assert.AreEqual(539, actual.Skip(1).First().Value);
+            Assert.AreEqual(539, actual.Last().Value);
         }
 
         [Test]
