@@ -103,7 +103,7 @@ namespace SFA.DAS.EmployerFinance.Types.Models
             {
                 var levyPeriodForExpiry =
                     new DateTime(expiredAmount.Key.Year, expiredAmount.Key.Month, 1).AddMonths(expiryPeriod * -1);
-                var amount = fundsIn.FirstOrDefault(c => c.Key.Equals(new CalendarPeriod(levyPeriodForExpiry.Year, levyPeriodForExpiry.Month))).Value - expiredAmount.Value;
+                var amount = fundsIn.Single(c => c.Key.Equals(new CalendarPeriod(levyPeriodForExpiry.Year, levyPeriodForExpiry.Month))).Value - expiredAmount.Value;
 
 
                 var fundsOutAvailable = fundsOut
@@ -165,7 +165,7 @@ namespace SFA.DAS.EmployerFinance.Types.Models
                 
                 var amountDueToExpire = fundsInPair.Value;
 
-                var alreadyExpiredAmount = expired?.Keys.FirstOrDefault(c => c.Year.Equals(expiryDateOfFundsIn.Year)
+                var alreadyExpiredAmount = expired?.Keys.SingleOrDefault(c => c.Year.Equals(expiryDateOfFundsIn.Year)
                                                                              && c.Month.Equals(expiryDateOfFundsIn.Month));
 
                 if (alreadyExpiredAmount != null)
