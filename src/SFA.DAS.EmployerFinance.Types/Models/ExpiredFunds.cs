@@ -38,11 +38,10 @@ namespace SFA.DAS.EmployerFinance.Types.Models
             {
                 throw new ArgumentNullException(nameof(fundsOut));
             }
+            CalculateAndApplyAdjustmentsToTotals(fundsOut);
             
             CalculateAndApplyExpiredFundsToFundsOut(fundsOut, expired, fundsIn, expiryPeriod);
             
-            CalculateAndApplyAdjustmentsToTotals(fundsOut);
-
             CalculateAndApplyAdjustmentsToTotals(fundsIn);
             
             var expiredFunds = CalculatedExpiredFunds(fundsIn, fundsOut, expired, expiryPeriod);
@@ -107,7 +106,7 @@ namespace SFA.DAS.EmployerFinance.Types.Models
 
 
                 var fundsOutAvailable = fundsOut
-                    .Where(c => c.Value > 0 && c.Key < expiredAmount.Key)
+                    .Where(c => c.Value > 0 && c.Key <= expiredAmount.Key)
                     .ToList();
 
                 foreach (var fundOut in fundsOutAvailable)
