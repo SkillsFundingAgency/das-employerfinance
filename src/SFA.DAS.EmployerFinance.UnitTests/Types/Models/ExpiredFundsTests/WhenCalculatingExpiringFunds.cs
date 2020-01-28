@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -717,6 +717,46 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
             Assert.AreEqual(139, actual.First().Value);
             Assert.AreEqual(539, actual.Skip(1).First().Value);
             Assert.AreEqual(539, actual.Last().Value);
+        }
+
+        [Test]
+        public void Then_If_There_Has_Been_A_Previous_Adjustment_On_An_Already_Expired_Amount_It_Is_Not_Double_Counted()
+        {
+            //Arrange
+            var expiryPeriod = 5;
+            _fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 5), 75},
+                {new CalendarPeriod(2017, 6), 75},
+                {new CalendarPeriod(2017, 7), 75},
+                {new CalendarPeriod(2017, 8), 75},
+                {new CalendarPeriod(2017, 9), 75},
+                {new CalendarPeriod(2017, 10), 75},
+                {new CalendarPeriod(2017, 11), 75},
+                {new CalendarPeriod(2017, 12), 75}
+            };
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017,6), 25},
+                {new CalendarPeriod(2017,7), 25},
+                {new CalendarPeriod(2017,8), 50},
+                {new CalendarPeriod(2017,9), -25},
+                {new CalendarPeriod(2017,10), 50},
+                {new CalendarPeriod(2017,11), 25},
+                {new CalendarPeriod(2017,12), 25},
+            };
+            var expired = new Dictionary<CalendarPeriod, decimal>
+            {
+                 {new CalendarPeriod(2017, 10), 0},
+                 {new CalendarPeriod(2017, 11), 0}
+            };
+            
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, expired, expiryPeriod);
+            
+            //Assert
+            Assert.AreEqual(50, actual.Skip(2).First().Value);
+            Assert.AreEqual(75, actual.Skip(3).First().Value);
         }
 
         [Test]
