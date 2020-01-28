@@ -683,7 +683,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
             //Assert
             Assert.AreEqual(100, actual.First().Value);
             Assert.AreEqual(439, actual.Skip(1).First().Value);
-            Assert.AreEqual(439, actual.Skip(2).First().Value);
+            Assert.AreEqual(539, actual.Skip(2).First().Value);
             Assert.AreEqual(439, actual.Last().Value);
         }
 
