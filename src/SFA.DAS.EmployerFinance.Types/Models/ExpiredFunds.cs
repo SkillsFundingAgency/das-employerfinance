@@ -40,9 +40,9 @@ namespace SFA.DAS.EmployerFinance.Types.Models
             }
             CalculateAndApplyAdjustmentsToTotals(fundsOut);
             
-            CalculateAndApplyExpiredFundsToFundsOut(fundsOut, expired, fundsIn, expiryPeriod);
-            
             CalculateAndApplyAdjustmentsToTotals(fundsIn);
+            
+            CalculateAndApplyExpiredFundsToFundsOut(fundsOut, expired, fundsIn, expiryPeriod);
             
             var expiredFunds = CalculatedExpiredFunds(fundsIn, fundsOut, expired, expiryPeriod);
 
@@ -102,8 +102,13 @@ namespace SFA.DAS.EmployerFinance.Types.Models
             {
                 var levyPeriodForExpiry =
                     new DateTime(expiredAmount.Key.Year, expiredAmount.Key.Month, 1).AddMonths(expiryPeriod * -1);
-                var amount = fundsIn.Single(c => c.Key.Equals(new CalendarPeriod(levyPeriodForExpiry.Year, levyPeriodForExpiry.Month))).Value - expiredAmount.Value;
-
+                var fundsInAmount = fundsIn.SingleOrDefault(c => c.Key.Equals(new CalendarPeriod(levyPeriodForExpiry.Year, levyPeriodForExpiry.Month))).Value;
+                var amount = (fundsInAmount >= 0 ? fundsInAmount : 0)  - expiredAmount.Value;
+                
+                if (amount <= 0)
+                {
+                    continue;
+                }
 
                 var fundsOutAvailable = fundsOut
                     .Where(c => c.Value > 0 && c.Key <= expiredAmount.Key)
@@ -161,8 +166,8 @@ namespace SFA.DAS.EmployerFinance.Types.Models
             {
                 var expiryDateOfFundsIn = new DateTime(fundsInPair.Key.Year, fundsInPair.Key.Month, 1)
                                                     .AddMonths(expiryPeriod);
-                
-                var amountDueToExpire = fundsInPair.Value;
+
+                var amountDueToExpire = fundsInPair.Value >= 0 ? fundsInPair.Value : 0;
 
                 var alreadyExpiredAmount = expired?.Keys.SingleOrDefault(c => c.Year.Equals(expiryDateOfFundsIn.Year)
                                                                              && c.Month.Equals(expiryDateOfFundsIn.Month));

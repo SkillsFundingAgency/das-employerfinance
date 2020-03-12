@@ -526,26 +526,32 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
         public void Then_When_I_Already_Have_Expired_Funds_And_Adjustments_And_Refunds_They_Are_Applied_To_The_None_Expired_FundsIn()
         {
             //Arrange
-            var expiryPeriod = 4;
+            var expiryPeriod = 8;
             _fundsIn = new Dictionary<CalendarPeriod, decimal>
             {
                 {new CalendarPeriod(2018, 10), 10},
                 {new CalendarPeriod(2018, 11), 9},
                 {new CalendarPeriod(2018, 12), 8},
-                {new CalendarPeriod(2019, 1), -5},
+                {new CalendarPeriod(2019, 1), -26},
                 {new CalendarPeriod(2019, 2), 5},
-                {new CalendarPeriod(2019, 3), -4}
+                {new CalendarPeriod(2019, 3), -4},
+                {new CalendarPeriod(2019, 4), 5},
+                {new CalendarPeriod(2019, 5), 5},
+                {new CalendarPeriod(2019, 6), 5}
             };
             var fundsOut = new Dictionary<CalendarPeriod, decimal>
             {
-                {new CalendarPeriod(2018, 11), 12}, 
-                {new CalendarPeriod(2019, 1), 10}, 
-                {new CalendarPeriod(2019, 2), -1} 
+                {new CalendarPeriod(2018, 11), 1}, 
+                {new CalendarPeriod(2018, 12), 1}, 
+                {new CalendarPeriod(2019, 1), 1}, 
+                {new CalendarPeriod(2019, 2), 1} 
             };
             var expiredFunds = new Dictionary<CalendarPeriod, decimal>
             {
-                {new CalendarPeriod(2019, 2), 10},
-                {new CalendarPeriod(2019, 3), 9},
+                 {new CalendarPeriod(2019, 2), 0},
+                 {new CalendarPeriod(2019, 3), 0},
+                 {new CalendarPeriod(2019, 4), 0},
+                 //{new CalendarPeriod(2019, 5), 0},
             };
 
             //Act
@@ -553,13 +559,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
 
             //Assert
             Assert.IsNotNull(actual);
-            Assert.AreEqual(6, actual.Count);
-            Assert.AreEqual(10, actual.First().Value);
-            Assert.AreEqual(9, actual.Skip(1).First().Value);
+            Assert.AreEqual(9, actual.Count);
+            Assert.AreEqual(0, actual.First().Value);
+            Assert.AreEqual(0, actual.Skip(1).First().Value);
             Assert.AreEqual(0, actual.Skip(2).First().Value);
             Assert.AreEqual(0, actual.Skip(3).First().Value);
             Assert.AreEqual(0, actual.Skip(4).First().Value);
-            Assert.AreEqual(0, actual.Last().Value);
+            Assert.AreEqual(5, actual.Last().Value);
         }
 
         [Test]
