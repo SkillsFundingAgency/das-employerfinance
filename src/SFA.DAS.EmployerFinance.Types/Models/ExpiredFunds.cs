@@ -38,6 +38,7 @@ namespace SFA.DAS.EmployerFinance.Types.Models
             {
                 throw new ArgumentNullException(nameof(fundsOut));
             }
+
             CalculateAndApplyAdjustmentsToTotals(fundsOut);
             
             CalculateAndApplyAdjustmentsToTotals(fundsIn);
