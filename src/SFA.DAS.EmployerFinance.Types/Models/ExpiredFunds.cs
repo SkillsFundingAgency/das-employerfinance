@@ -102,7 +102,7 @@ namespace SFA.DAS.EmployerFinance.Types.Models
             foreach (var expiredAmount in expired)
             {
                 var levyPeriodForExpiry =
-                    new DateTime(expiredAmount.Key.Year, expiredAmount.Key.Month, 1).AddMonths(expiryPeriod * -1);
+                    new DateTime(expiredAmount.Key.Year, expiredAmount.Key.Month, 1).AddMonths(expiredAmount.Key.ExpiryPeriod * -1);
                 var fundsInAmount = fundsIn.SingleOrDefault(c => c.Key.Equals(new CalendarPeriod(levyPeriodForExpiry.Year, levyPeriodForExpiry.Month))).Value;
                 var amount = (fundsInAmount >= 0 ? fundsInAmount : 0)  - expiredAmount.Value;
                 
@@ -166,16 +166,24 @@ namespace SFA.DAS.EmployerFinance.Types.Models
             foreach (var fundsInPair in fundsIn.OrderBy(c => c.Key))
             {
                 var expiryDateOfFundsIn = new DateTime(fundsInPair.Key.Year, fundsInPair.Key.Month, 1)
-                                                    .AddMonths(expiryPeriod);
+                                                    .AddMonths(fundsInPair.Key.ExpiryPeriod);
 
                 var amountDueToExpire = fundsInPair.Value >= 0 ? fundsInPair.Value : 0;
 
                 var alreadyExpiredAmount = expired?.Keys.SingleOrDefault(c => c.Year.Equals(expiryDateOfFundsIn.Year)
                                                                              && c.Month.Equals(expiryDateOfFundsIn.Month));
-
+                
+                var calendarPeriod = new CalendarPeriod(expiryDateOfFundsIn.Year, expiryDateOfFundsIn.Month);
+                
                 if (alreadyExpiredAmount != null)
                 {
                     amountDueToExpire = expired[alreadyExpiredAmount];
+                    if (!expiredFunds.ContainsKey(calendarPeriod))
+                    {
+                        expiredFunds.Add(calendarPeriod, amountDueToExpire);
+                    }
+
+                    continue;
                 }
                 else
                 {
@@ -183,8 +191,15 @@ namespace SFA.DAS.EmployerFinance.Types.Models
                         ? CalculateExpiryAmount(fundsOut, expiryDateOfFundsIn, amountDueToExpire)
                         : 0;
                 }
-
-                expiredFunds.Add(new CalendarPeriod(expiryDateOfFundsIn.Year, expiryDateOfFundsIn.Month), amountDueToExpire);
+                
+                if(!expiredFunds.ContainsKey(calendarPeriod))
+                {
+                    expiredFunds.Add(calendarPeriod, amountDueToExpire);
+                }
+                else
+                {
+                    expiredFunds[calendarPeriod] += amountDueToExpire;
+                }
             }
 
             return expiredFunds;

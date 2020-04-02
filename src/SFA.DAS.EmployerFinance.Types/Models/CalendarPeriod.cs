@@ -4,14 +4,16 @@ namespace SFA.DAS.EmployerFinance.Types.Models
 {
     public class CalendarPeriod : IComparable<CalendarPeriod>, IEquatable<CalendarPeriod>
     {
-        public CalendarPeriod(int year, int month)
+        public CalendarPeriod(int year, int month, int expiryPeriod = 24)
         {
             Year = year;
             Month = month;
+            ExpiryPeriod = expiryPeriod;
         }
 
         public int Year { get; }
         public int Month { get; }
+        public int ExpiryPeriod { get; }
 
         public int CompareTo(CalendarPeriod compareTo)
         {

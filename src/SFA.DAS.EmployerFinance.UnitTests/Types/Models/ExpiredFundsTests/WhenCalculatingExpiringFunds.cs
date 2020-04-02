@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Types.Models;
 
@@ -765,6 +766,34 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Types.Models.ExpiredFundsTests
             Assert.AreEqual(75, actual.Skip(3).First().Value);
         }
 
+        [Test]
+        public void Then_The_Expiry_Period_Can_Be_Different_For_Each_Fund_In()
+        {
+            //Arrange
+            _fundsIn = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 5,5), 100},
+                {new CalendarPeriod(2017, 6,4), 100},
+                {new CalendarPeriod(2017, 7, 3), 100},
+                {new CalendarPeriod(2017, 8,3), 100},
+                {new CalendarPeriod(2017, 9,4), 100}
+            };
+            var fundsOut = new Dictionary<CalendarPeriod, decimal>();
+            var expired = new Dictionary<CalendarPeriod, decimal>
+            {
+                {new CalendarPeriod(2017, 10),300}
+            };
+            
+            //Act
+            var actual = _expiredFunds.GetExpiringFunds(_fundsIn, fundsOut, expired, 24);
+            
+            //Assert
+            actual.First().Should().BeEquivalentTo(new KeyValuePair<CalendarPeriod,decimal>(new CalendarPeriod(2017, 10),300));
+            actual.Skip(1).First().Should().BeEquivalentTo(new KeyValuePair<CalendarPeriod,decimal>(new CalendarPeriod(2017, 11),100));
+            actual.Skip(2).First().Should().BeEquivalentTo(new KeyValuePair<CalendarPeriod,decimal>(new CalendarPeriod(2018, 1),100));
+            
+        }
+        
         [Test]
         public void Then_The_Balance_Is_Correctly_Calculated_Over_A_Large_Expiry_Period_Just_Funds_In()
         {
