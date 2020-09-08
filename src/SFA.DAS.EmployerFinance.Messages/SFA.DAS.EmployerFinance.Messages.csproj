@@ -7,7 +7,7 @@
 
         <Authors>DAS</Authors>
         <Description>SFA.DAS.EmployerFinance.Messages library</Description>
-        <PackageLicenseUrl>https://github.com/SkillsFundingAgency/das-employerfinance/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageLicense>https://github.com/SkillsFundingAgency/das-employerfinance/blob/master/LICENSE</PackageLicense>
         <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-employerfinance</PackageProjectUrl>
 
         <EmbedUntrackedSources>false</EmbedUntrackedSources>
