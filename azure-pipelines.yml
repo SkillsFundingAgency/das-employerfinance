@@ -1,15 +1,36 @@
-name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
-resources:
-- repo: self
-queue:
-  name: Continuous Integration 02 - SSD - 160ACU
+trigger:
+  batch: true
+  branches:
+    include:
+      - "*"
+
+pr: none
+
 variables:
-  BuildConfiguration: release
+  - group: 'Prod Management Resources'
+  - name: buildConfiguration
+    value: 'release'
+
+resources:
+  repositories:
+  - repository: das-platform-building-blocks
+    type: github
+    name: SkillsFundingAgency/das-platform-building-blocks
+    ref: refs/heads/master
+    endpoint: "GitHub (SFA)"
+
+pool:
+  name: 'DAS - Continuous Integration'
+  demands: Agent.OS -equals Windows_NT
+
+workspace:
+    clean: all  
 
 steps:
-- task: gittools.gitversion.gitversion-task.GitVersion@4
+- task: gittools.gitversion.gitversion-task.GitVersion@5
   displayName: GitVersion
   inputs:
+    configFilePath: GitVersion.yml
     updateAssemblyInfo: true
 
 
@@ -33,6 +54,8 @@ steps:
     command: test
     projects: '*\**\*UnitTests.csproj'
     arguments: '--configuration $(BuildConfiguration)'
+
+- template: azure-pipelines-templates/dependency-check.yml@das-platform-building-blocks
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish DB Job'
