@@ -18,7 +18,6 @@ resources:
     name: SkillsFundingAgency/das-platform-building-blocks
     ref: refs/heads/master
     endpoint: "GitHub (SFA)"
-  - repository: self
 
 pool:
   name: 'DAS - Continuous Integration'
