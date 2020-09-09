@@ -21,10 +21,9 @@ resources:
 
 pool:
   name: 'DAS - Continuous Integration'
-  demands: Agent.OS -equals Windows_NT
 
 workspace:
-    clean: all  
+    clean: all
 
 steps:
 - task: gittools.gitversion.gitversion-task.GitVersion@5
@@ -38,14 +37,13 @@ steps:
   displayName: 'dotnet restore'
   inputs:
     command: restore
-    projects: '**/*.sln'
+    projects: 'src/**/*.csproj'
 
-- task: VSBuild@1
-  displayName: 'Build solution'
+- task: DotNetCoreCLI@2
+  displayName: Build
   inputs:
-    solution: '**/*.sln'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
-    configuration: '$(BuildConfiguration)'
+    projects: 'src/**/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
 
 
 - task: DotNetCoreCLI@2
